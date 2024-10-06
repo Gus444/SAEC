@@ -1,0 +1,38 @@
+.layout {
+    display: flex; /* Usa Flexbox para criar a sidebar e o conteúdo principal */
+    height: 100vh; /* Altura de toda a janela */
+}
+
+/* Estilos da sidebar */
+.sidebar {
+    width: 250px; /* Define a largura da sidebar */
+    background-color: #343434; /* Cor de fundo da sidebar */
+    padding: 20px; /* Espaçamento interno */
+    color: white; /* Cor do texto */
+}
+
+.sidebar ul {
+    list-style-type: none; /* Remove os marcadores da lista */
+    padding: 0; /* Remove o padding padrão da lista */
+}
+
+.sidebar ul li {
+    margin: 15px 0; /* Espaçamento entre os itens da lista */
+}
+
+.sidebar ul li a {
+    color: white; /* Cor do texto */
+    text-decoration: none; /* Remove o sublinhado */
+    font-size: 18px; /* Tamanho da fonte */
+}
+
+.sidebar ul li a:hover {
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+}
+
+/* Estilos para o conteúdo principal */
+.main-content {
+    flex-grow: 1; /* Faz o conteúdo principal ocupar o espaço restante */
+    padding: 20px; /* Espaçamento interno */
+    background-color: #f4f4f4; /* Cor de fundo do conteúdo */
+}

@@ -68,7 +68,7 @@ export default function Login() {
                     <img src="/img/primus.png" className="img-format"></img>
                 </div>
 
-                <div className="alert alert-primary" ref={msgRef}>
+                <div ref={msgRef}>
 
                 </div>
 

@@ -330,7 +330,36 @@ export default function FormEmpresa(props) {
                 <div className="d-flex mt-2">
                     <input defaultValue={empresa.empBairro} ref={bairro} type="text" className="form-control me-2" placeholder="Bairro"/>
                     <input defaultValue={empresa.empCidade} ref={cidade} type="text" className="form-control me-2" placeholder="Cidade"/>
-                    <input defaultValue={empresa.empUf} ref={uf} type="text" className="form-control me-2" placeholder="UF" maxlength="2"/>
+                    <select defaultValue={empresa.empUf} ref={uf} className="form-control me-2" placeholder="UF">
+                        <option value="">Selecione o estado</option>
+                        <option value="AC">Acre (AC)</option>
+                        <option value="AL">Alagoas (AL)</option>
+                        <option value="AP">Amapá (AP)</option>
+                        <option value="AM">Amazonas (AM)</option>
+                        <option value="BA">Bahia (BA)</option>
+                        <option value="CE">Ceará (CE)</option>
+                        <option value="DF">Distrito Federal (DF)</option>
+                        <option value="ES">Espírito Santo (ES)</option>
+                        <option value="GO">Goiás (GO)</option>
+                        <option value="MA">Maranhão (MA)</option>
+                        <option value="MT">Mato Grosso (MT)</option>
+                        <option value="MS">Mato Grosso do Sul (MS)</option>
+                        <option value="MG">Minas Gerais (MG)</option>
+                        <option value="PA">Pará (PA)</option>
+                        <option value="PB">Paraíba (PB)</option>
+                        <option value="PR">Paraná (PR)</option>
+                        <option value="PE">Pernambuco (PE)</option>
+                        <option value="PI">Piauí (PI)</option>
+                        <option value="RJ">Rio de Janeiro (RJ)</option>
+                        <option value="RN">Rio Grande do Norte (RN)</option>
+                        <option value="RS">Rio Grande do Sul (RS)</option>
+                        <option value="RO">Rondônia (RO)</option>
+                        <option value="RR">Roraima (RR)</option>
+                        <option value="SC">Santa Catarina (SC)</option>
+                        <option value="SP">São Paulo (SP)</option>
+                        <option value="SE">Sergipe (SE)</option>
+                        <option value="TO">Tocantins (TO)</option>
+                    </select>
                     <input defaultValue={empresa.empCep} ref={cep} type="text" className="form-control" placeholder="CEP" maxlength="8"/>
                 </div>
             </div>

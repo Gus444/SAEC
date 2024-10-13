@@ -182,6 +182,9 @@
     },
     "/empresa/": {
       "get": {
+        "tags": [
+          "Empresa"
+        ],
         "summary": "Lista de empresas do sistema",
         "description": "",
         "responses": {
@@ -194,7 +197,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -226,7 +234,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/usuarioModel"
+                "$ref": "#/components/schemas/empresaModel"
               }
             }
           }

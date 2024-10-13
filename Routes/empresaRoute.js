@@ -9,7 +9,11 @@ let ctrl = new EmpresaController();
 let auth = new Autenticar();
 
 router.get('/', auth.validar, (req,res) =>{
+    // #swagger.tags = ['Empresa']
     // #swagger.summary = 'Lista de empresas do sistema'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     ctrl.listarEmpresas(req,res)
 })
 router.delete('/excluir/:id', auth.validar,(req,res) =>{
@@ -31,7 +35,7 @@ router.post('/', auth.validar, (req,res) =>{
         content: {
             "application/json": {
                 schema: {
-                    $ref: "#/components/schemas/usuarioModel"
+                    $ref: "#/components/schemas/empresaModel"
                 }
             }
             

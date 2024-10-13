@@ -58,7 +58,7 @@ export default function empresasAdmin() {
                 <Link href="/admin/empresas/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar empresa</Link>
             </div>
             <div>
-                <MontaTabela alteracao={""}  exclusao={excluirEmpresa} lista={listaEmpresas} cabecalhos={["id","Empresa", "CNPJ", "Regime"]} propriedades={["empId" ,'empNome', 'empCnpj', 'empRegime']} ></MontaTabela>
+                <MontaTabela alteracao={""}  exclusao={excluirEmpresa} lista={listaEmpresas} cabecalhos={["id","Empresa", "CNPJ", "Regime"]} propriedades={["empId" ,'empNome', 'empCnpj', 'empRegime', 'empEmail', 'empTelefone']} ></MontaTabela>
             </div>
         </div>
     )

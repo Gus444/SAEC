@@ -9,6 +9,8 @@
     background-color: #343434; /* Cor de fundo da sidebar */
     padding: 20px; /* Espaçamento interno */
     color: white; /* Cor do texto */
+    position: fixed; /* Torna a sidebar fixa */
+    height: 100%; /* Faz a sidebar ocupar toda a altura da tela */
 }
 
 .sidebar ul {
@@ -35,4 +37,5 @@
     flex-grow: 1; /* Faz o conteúdo principal ocupar o espaço restante */
     padding: 20px; /* Espaçamento interno */
     background-color: #f4f4f4; /* Cor de fundo do conteúdo */
+    margin-left: 250px; /* Deixa espaço para a sidebar fixa */
 }

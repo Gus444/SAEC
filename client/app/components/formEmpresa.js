@@ -1,8 +1,11 @@
 'use client'
 import { useEffect, useRef, useState } from "react"
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function FormEmpresa(props) {
+
+    let router = useRouter();
 
     let empresa = 
     props.empresa != null ? 
@@ -32,6 +35,24 @@ export default function FormEmpresa(props) {
     let cep = useRef("");
     let uf = useRef("");
 
+    let msgRef = useRef(null);
+
+    let [erroCNPJ, setErroCNPJ] = useState("");
+    let [erroNome, setErroNome] = useState(false);
+    let [erroRegime, setErroRegime] = useState(false);
+    let [erroIe, setErroIe] = useState(false);
+    let [erroTelefone, setErroTelefone] = useState(false);
+    let [erroResponsavel, setErroResponsavel] = useState(false);
+    let [erroProprietario, setErroProprietario] = useState(false);
+    let [erroInicio, setErroInicio] = useState(false);
+    let [erroEmail, setErroEmail] = useState(false);
+    let [erroEndereco, setErroEndereco] = useState(false);
+    let [erroBairro, setErroBairro] = useState(false);
+    let [erroCidade, setErroCidade] = useState(false);
+    let [erroCep, setErroCep] = useState(false);
+    let [erroUf, setErroUf] = useState(false);
+    
+
     function alterarEmpresa(id) {
         let ok = false;
         if( cnpj.current.value != "" &&
@@ -39,7 +60,6 @@ export default function FormEmpresa(props) {
             regime.current.value != "" &&
             ie.current.value != "" &&
             telefone.current.value != "" &&
-            descricao.current.value != "" &&
             responsavel.current.value != "" &&
             proprietario.current.value != "" &&
             inicio.current.value != "" &&
@@ -118,23 +138,110 @@ export default function FormEmpresa(props) {
 
     function gravarEmpresa() {
 
-        let ok = false;
-        if(cnpj.current.value != "" &&
-            nome.current.value != "" &&
-            regime.current.value != "" &&
-            ie.current.value != "" &&
-            telefone.current.value != "" &&
-            descricao.current.value != "" &&
-            responsavel.current.value != "" &&
-            proprietario.current.value != "" &&
-            inicio.current.value != "" &&
-            email.current.value != "" &&
-            endereco.current.value != "" &&
-            bairro.current.value != "" &&
-            cidade.current.value != "" &&
-            cep.current.value != "" &&
-            uf.current.value != "") 
-        {
+        let ok = true;
+
+        if(cnpj.current.value == ""){
+            setErroCNPJ(true);
+            ok = false
+        } else{
+            setErroCNPJ(false)
+        }
+
+        if(nome.current.value == ""){
+            setErroNome(true);
+            ok = false
+        } else{
+            setErroNome(false)
+        }
+
+        if(regime.current.value == ""){
+            setErroRegime(true);
+            ok = false
+        } else{
+            setErroRegime(false)
+        }
+
+        if(ie.current.value == ""){
+            setErroIe(true);
+            ok = false
+        } else{
+            setErroIe(false)
+        }
+
+        if(telefone.current.value == ""){
+            setErroTelefone(true);
+            ok = false
+        } else{
+            setErroTelefone(false)
+        }
+
+        if(responsavel.current.value == ""){
+            setErroResponsavel(true);
+            ok = false
+        } else{
+            setErroResponsavel(false)
+        }
+
+        if(proprietario.current.value == ""){
+            setErroProprietario(true);
+            ok = false
+        } else{
+            setErroProprietario(false)
+        }
+
+        if(inicio.current.value == ""){
+            setErroInicio(true);
+            ok = false
+        } else{
+            setErroInicio(false)
+        }
+
+        if(email.current.value == ""){
+            setErroEmail(true);
+            ok = false
+        } else{
+            setErroEmail(false)
+        }
+
+        if(endereco.current.value == ""){
+            setErroEndereco(true);
+            ok = false
+        } else{
+            setErroEndereco(false)
+        }
+
+        if(bairro.current.value == ""){
+            setErroBairro(true);
+            ok = false
+        } else{
+            setErroBairro(false)
+        }
+
+        if(cidade.current.value == ""){
+            setErroCidade(true);
+            ok = false
+        } else{
+            setErroCidade(false)
+        }
+
+        if(cep.current.value == ""){
+            setErroCep(true);
+            ok = false
+        } else{
+            setErroCep(false)
+        }
+
+        if(uf.current.value == ""){
+            setErroUf(true);
+            ok = false
+        } else{
+            setErroUf(false)
+        }
+
+        msgRef.current.className = '';
+        msgRef.current.innerHTML = '';
+
+        if(ok){
             let empresa = {
                 empCnpj: cnpj.current.value,
                 empNome: nome.current.value,
@@ -164,67 +271,71 @@ export default function FormEmpresa(props) {
                 body: JSON.stringify(empresa)
             })
             .then(r => {
-                ok = r.status == 200;
+                ok = r.status == 201;
                 return r.json();
             })
             .then(r=> {
                 if(ok) {
-
-                    cnpj.current.value = "";
-                    nome.current.value = "";
-                    regime.current.value = "";
-                    ie.current.value = "";
-                    telefone.current.value = "";
-                    descricao.current.value = "";
-                    responsavel.current.value = "";
-                    proprietario.current.value = "";
-                    inicio.current.value = "";
-                    fim.current.value = "";
-                    email.current.value = "";
-                    endereco.current.value = "";
-                    bairro.current.value = "";
-                    cidade.current.value = "";
-                    cep.current.value = "";
-                    uf.current.value = "";
-                    
                     router.push("/admin/empresas");
-                    return alert(r.msg);
-                    
                 }
                 else {
-                    return alert(r.msg);
+                    msgRef.current.className = "msgError";
+                    msgRef.current.innerHTML = r.msg;
                 }
             })
         }
         else
         {
-            alert("Preencha os campos corretamente!");
+            msgRef.current.className = "msgError";
+            msgRef.current.innerHTML = "Preencha todos os campos";
         }
     }
 
+    useEffect(() => {
+    // Adiciona a máscara de CNPJ no campo
+    const inputCnpj = cnpj.current;
+    const applyCnpjMask = (e) => {
+        var x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2})/);
+        e.target.value = !x[2]
+        ? x[1]
+        : x[1] + '.' + x[2] + '.' + x[3] + '/' + x[4] + (x[5] ? '-' + x[5] : '');
+    };
 
+    // Adiciona o listener de evento
+    inputCnpj.addEventListener('input', applyCnpjMask);
 
-    let [erroCNPJ, setErroCNPJ] = useState("");
+    // Remove o listener ao desmontar o componente
+    return () => {
+        inputCnpj.removeEventListener('input', applyCnpjMask);
+    };
+    }, []);
 
     useEffect(() => {
-        // Adiciona a máscara de CNPJ no campo
-        const inputCnpj = cnpj.current;
-        const applyCnpjMask = (e) => {
-          var x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2})/);
-          e.target.value = !x[2]
-            ? x[1]
-            : x[1] + '.' + x[2] + '.' + x[3] + '/' + x[4] + (x[5] ? '-' + x[5] : '');
+        const inputTelefone = telefone.current;
+    
+        const applyTelefoneMask = (e) => {
+            let value = e.target.value.replace(/\D/g, "");
+            value = value.replace(/^(\d{2})(\d)/g, "($1) $2");
+            value = value.replace(/(\d{5})(\d)/, "$1-$2");
+            
+            e.target.value = value;
         };
     
-        // Adiciona o listener de evento
-        inputCnpj.addEventListener('input', applyCnpjMask);
+        const preventNonNumericInput = (e) => {
+            // Previne a entrada de qualquer tecla que não seja numérica
+            if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "Tab") {
+                e.preventDefault();
+            }
+        };
     
-        // Remove o listener ao desmontar o componente
+        inputTelefone.addEventListener("input", applyTelefoneMask);
+        inputTelefone.addEventListener("keydown", preventNonNumericInput);
+    
         return () => {
-          inputCnpj.removeEventListener('input', applyCnpjMask);
+            inputTelefone.removeEventListener("input", applyTelefoneMask);
+            inputTelefone.removeEventListener("keydown", preventNonNumericInput);
         };
-      }, []);
-
+    }, []);
 
     function validarCNPJ(cnpj){
  
@@ -293,17 +404,21 @@ export default function FormEmpresa(props) {
 
     <div className="container mt-1">
         <div className="card p-4 shadow">
+        <div ref={msgRef}>
+
+        </div>
             <h2 className="mb-4">{isAlteracao ? "Alterar Empresa" : "Cadastrar Empresa"}</h2>
 
             <div className="row">
                 <div className="col-md-2 form-group mb-3">
                     <label htmlFor="cnpj">CNPJ</label>
-                    <input onBlur={handleBlur} defaultValue={empresa.empCnpj} ref={cnpj} type="text" className="form-control" maxlength="18" placeholder="Digite o CNPJ"/>
-                    {erroCNPJ && <small className="text-danger">{erroCNPJ}</small>}
+                    <input onBlur={handleBlur} defaultValue={empresa.empCnpj} ref={cnpj} type="text" className={`form-control ${erroCNPJ ? 'is-invalid' : ''}`} maxlength="18" placeholder="Digite o CNPJ"/>
+                    {/* {erroCNPJ && <small className="text-danger">CNPJ é obrigatório</small>} */}
                 </div>
                 <div className="col-md-6 form-group mb-3">
                     <label htmlFor="nome">Nome da Empresa</label>
-                    <input defaultValue={empresa.empNome} ref={nome} type="text" className="form-control" placeholder="Digite o nome da empresa"/>
+                    <input defaultValue={empresa.empNome} ref={nome} type="text" className={`form-control ${erroNome ? 'is-invalid' : ''}`} placeholder="Digite o nome da empresa" onChange={() => setErroNome(false)} />
+                    {/* {erroNome && <small className="text-danger">Nome é obrigatório</small>} */}
                 </div>
             </div>
             
@@ -312,11 +427,13 @@ export default function FormEmpresa(props) {
                 <label htmlFor="telefone">Contato</label>
                 <div className="row">
                     <div className="col-md-3 form-group mb-3">
-                        <input defaultValue={empresa.empTelefone} ref={telefone} type="text" className="form-control" placeholder="Telefone"/>
+                        <input defaultValue={empresa.empTelefone} ref={telefone} type="text" className={`form-control ${erroTelefone ? 'is-invalid' : ''}`} onChange={() => setErroTelefone(false)} maxLength="15" placeholder="Telefone"/>
+                        {/* {erroTelefone && <small className="text-danger">Telefone é obrigatório</small>} */}
                     </div>
 
                     <div className="col-md-7 form-group mb-3">
-                        <input defaultValue={empresa.empEmail} ref={email} type="email" className="form-control" placeholder="E-mail"/>
+                        <input defaultValue={empresa.empEmail} ref={email} type="email" className={`form-control ${erroEmail ? 'is-invalid' : ''}`} onChange={() => setErroEmail(false)} placeholder="E-mail"/>
+                        {/* {erroEmail && <small className="text-danger">Email é obrigatório</small>} */}
                     </div>
                 </div>
                 
@@ -326,11 +443,15 @@ export default function FormEmpresa(props) {
 
             <div className="form-group mb-3">
                 <label>Endereço Completo</label>
-                <input defaultValue={empresa.empEndereco} ref={endereco} type="text" className="form-control" placeholder="Endereço"/>
+                <input defaultValue={empresa.empEndereco} ref={endereco} type="text" className={`form-control ${erroEndereco ? 'is-invalid' : ''}`} onChange={() => setErroEndereco(false)} placeholder="Endereço"/>
+                {/* {erroEndereco && <small className="text-danger">Endereço é obrigatório</small>} */}
+
                 <div className="d-flex mt-2">
-                    <input defaultValue={empresa.empBairro} ref={bairro} type="text" className="form-control me-2" placeholder="Bairro"/>
-                    <input defaultValue={empresa.empCidade} ref={cidade} type="text" className="form-control me-2" placeholder="Cidade"/>
-                    <select defaultValue={empresa.empUf} ref={uf} className="form-control me-2" placeholder="UF">
+                    <input defaultValue={empresa.empBairro} ref={bairro} type="text" className={`form-control ${erroBairro ? 'is-invalid' : ''}`} onChange={() => setErroBairro(false)} placeholder="Bairro"/>
+                    {/* {erroBairro && <small className="text-danger">Bairro é obrigatório</small>} */}
+                    <input defaultValue={empresa.empCidade} ref={cidade} type="text" className={`form-control ${erroCidade ? 'is-invalid' : ''}`} onChange={() => setErroCidade(false)} placeholder="Cidade"/>
+                    {/* {erroCidade && <small className="text-danger">Cidade é obrigatório</small>} */}
+                    <select defaultValue={empresa.empUf} ref={uf} className={`form-control ${erroUf ? 'is-invalid' : ''}`} onChange={() => setErroUf(false)} placeholder="UF">
                         <option value="">Selecione o estado</option>
                         <option value="AC">Acre (AC)</option>
                         <option value="AL">Alagoas (AL)</option>
@@ -360,19 +481,24 @@ export default function FormEmpresa(props) {
                         <option value="SE">Sergipe (SE)</option>
                         <option value="TO">Tocantins (TO)</option>
                     </select>
-                    <input defaultValue={empresa.empCep} ref={cep} type="text" className="form-control" placeholder="CEP" maxlength="8"/>
+                    {/* {erroUf && <small className="text-danger">Uf é obrigatório</small>} */}
+
+                    <input defaultValue={empresa.empCep} ref={cep} type="text" className={`form-control ${erroCep ? 'is-invalid' : ''}`} onChange={() => setErroCep(false)} placeholder="CEP" maxlength="8"/>
+                    {/* {erroCep && <small className="text-danger">CEP é obrigatório</small>} */}
                 </div>
             </div>
 
             <div className = "row">
                 <div className="form-group mb-3 col-md-3">
                     <label>Regime</label>
-                    <input defaultValue={empresa.empRegime} ref={regime} type="text" className="form-control" placeholder="Digite o regime da empresa"/>
+                    <input defaultValue={empresa.empRegime} ref={regime} type="text" className={`form-control ${erroRegime ? 'is-invalid' : ''}`} onChange={() => setErroRegime(false)} placeholder="Digite o regime da empresa"/>
+                    {/* {erroRegime && <small className="text-danger">Regime é obrigatório</small>} */}
                 </div>
 
                 <div className="form-group mb-3 col-md-3">
                     <label htmlFor="ie">Inscrição Estadual (IE)</label>
-                    <input defaultValue={empresa.empIe} ref={ie} type="text" className="form-control" placeholder="Digite a IE da empresa"/>
+                    <input defaultValue={empresa.empIe} ref={ie} type="text" className={`form-control ${erroIe ? 'is-invalid' : ''}`} onChange={() => setErroIe(false)} placeholder="Digite a IE da empresa"/>
+                    {/* {erroIe && <small className="text-danger">Ie é obrigatório</small>} */}
                 </div>
             </div>
             
@@ -380,7 +506,8 @@ export default function FormEmpresa(props) {
             <div className="row">
                 <div className="col-md-2 form-group mb-3">
                     <label htmlFor="inicio">Início</label>
-                    <input defaultValue={empresa.empInicio} ref={inicio} type="date" className="form-control" id="inicio"/>
+                    <input defaultValue={empresa.empInicio} ref={inicio} type="date" className={`form-control ${erroInicio ? 'is-invalid' : ''}`} onChange={() => setErroInicio(false)} id="inicio"/>
+                    {/* {erroInicio && <small className="text-danger">inicio é obrigatório</small>} */}
                 </div>
                 <div className="col-md-2 form-group mb-3">
                     <label htmlFor="fim">Fim</label>
@@ -391,12 +518,14 @@ export default function FormEmpresa(props) {
             <div className = "row">
                 <div className="col-md-3 form-group mb-3">
                     <label htmlFor="cnpj">Responsavel</label>
-                    <input defaultValue={empresa.empCnpj} ref={responsavel} type="text" className="form-control" placeholder="Nome do responsavel"/>
+                    <input defaultValue={empresa.empCnpj} ref={responsavel} type="text" className={`form-control ${erroResponsavel ? 'is-invalid' : ''}`} onChange={() => setErroResponsavel(false)} placeholder="Nome do responsavel"/>
+                    {/* {erroResponsavel && <small className="text-danger">Responsavel é obrigatório</small>} */}
                 </div>
 
                 <div className="col-md-3 form-group mb-3">
                     <label htmlFor="nome">Proprietário</label>
-                    <input defaultValue={empresa.empNome} ref={proprietario} type="text" className="form-control" placeholder="Nome do proprietário"/>
+                    <input defaultValue={empresa.empNome} ref={proprietario} type="text" className={`form-control ${erroProprietario ? 'is-invalid' : ''}`} onChange={() => setErroProprietario(false)} placeholder="Nome do proprietário"/>
+                    {/* {erroProprietario && <small className="text-danger">Proprietário é obrigatório</small>} */}
                 </div>
             </div>
             

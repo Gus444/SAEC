@@ -183,4 +183,16 @@ export default class EmpresaModel{
 
         return result
     }
+
+    async verificaCnpj(empCnpj, empId) {
+        let sqlVerificaCnpj = "SELECT COUNT(*) AS total FROM tb_empresa WHERE emp_cnpj = ? AND emp_id != ?";
+        let valoresVerifica = [empCnpj, empId];
+        let resultVerifica = await banco.ExecutaComando(sqlVerificaCnpj, valoresVerifica);
+    
+        if (resultVerifica[0].total > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

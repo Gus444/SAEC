@@ -17,37 +17,45 @@ export default class EmpresaController{
             if(req.body){
                 let { empCnpj ,empNome, empRegime, empIe, empTelefone, empDescricao, empResponsavel, empProprietario, empInicio,
                     empFim, empEmail, empEndereco, empBairro, empCidade, empCep, empUf} = req.body;
-                if(empCnpj != "" && empNome != "" && empRegime != "" && empIe != "" && empTelefone != "" && empDescricao != "" &&
+                if(empCnpj != "" && empNome != "" && empRegime != "" && empIe != "" && empTelefone != "" &&
                     empResponsavel != "" && empProprietario != "" && empInicio != "" && empEmail != "" &&
                     empEndereco != "" && empBairro != "" && empCidade != "" && empCep != "" && empUf != "" 
                 ){
-                    
                     let empresa = new EmpresaModel();
-                    empresa.empId = 0;
-                    empresa.empCnpj = empCnpj;
-                    empresa.empNome = empNome;
-                    empresa.empRegime = empRegime;
-                    empresa.empIe = empIe;
-                    empresa.empTelefone = empTelefone;
-                    empresa.empDescricao = empDescricao;
-                    empresa.empResponsavel = empResponsavel;
-                    empresa.empProprietario = empProprietario;
-                    empresa.empInicio = empInicio;
-                    empresa.empFim = empFim;
-                    empresa.empEmail = empEmail;
-                    empresa.empEndereco = empEndereco;
-                    empresa.empBairro = empBairro;
-                    empresa.empCidade = empCidade;
-                    empresa.empCep = empCep;
-                    empresa.empUf = empUf;
+                    let cnpjDuplicado = await empresa.verificaCnpj(empCnpj, 0);
+                    
+                    if(!cnpjDuplicado){
+                        
+                        let result
+                        empresa.empId = 0;
+                        empresa.empCnpj = empCnpj;
+                        empresa.empNome = empNome;
+                        empresa.empRegime = empRegime;
+                        empresa.empIe = empIe;
+                        empresa.empTelefone = empTelefone;
+                        empresa.empDescricao = empDescricao;
+                        empresa.empResponsavel = empResponsavel;
+                        empresa.empProprietario = empProprietario;
+                        empresa.empInicio = empInicio;
+                        empresa.empFim = empFim;
+                        empresa.empEmail = empEmail;
+                        empresa.empEndereco = empEndereco;
+                        empresa.empBairro = empBairro;
+                        empresa.empCidade = empCidade;
+                        empresa.empCep = empCep;
+                        empresa.empUf = empUf;
 
-                    let result = await empresa.gravarEmpresa();
+                        result = await empresa.gravarEmpresa();
 
-                    if(result){
-                        res.status(201).json({msg: "Empresa cadastrada"});
+                        if(result){
+                            res.status(201).json({msg: "Empresa cadastrada"});
+                        }
+                        else{
+                            res.status(500).json({msg: "Erro ao gravar empresa"})
+                        }
                     }
                     else{
-                        res.status(500).json({msg: "Erro ao gravar empresa"})
+                        res.status(400).json({msg: "Este CNPJ já esta cadastrado"})
                     }
                 }
                 else{

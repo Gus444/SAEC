@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react"
 
 export default function empresasAdmin() {
 
+    let msgRef = useRef(null)
+
     let [listaEmpresas, setListaEmpresas] = useState([]);
     useEffect((e) => {
         carregarEmpresas();
@@ -26,6 +28,8 @@ export default function empresasAdmin() {
 
     function excluirEmpresa(id) {
 
+        msgRef.current.className = ''
+        msgRef.current.innerHTML = ''
         if(confirm("Tem certeza que deseja excluir esta empresa?")) {
             if(id > 0) {
                 let ok = false;
@@ -40,7 +44,8 @@ export default function empresasAdmin() {
                 })
                 .then(r=> {
                     if(ok) {
-                        alert(r.msg)
+                        msgRef.current.className = "msgError";
+                        msgRef.current.innerHTML = r.msg;
                         carregarEmpresas();
                     }
                     else{
@@ -57,6 +62,9 @@ export default function empresasAdmin() {
             <div>
                 <Link href="/admin/empresas/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar empresa</Link>
             </div>
+            <div ref={msgRef}>
+
+                </div>
             <div>
                 <MontaTabela alteracao={""}  exclusao={excluirEmpresa} lista={listaEmpresas} cabecalhos={["id","Empresa", "CNPJ", "Regime"]} propriedades={["empId" ,'empNome', 'empCnpj', 'empRegime', 'empEmail', 'empTelefone']} ></MontaTabela>
             </div>

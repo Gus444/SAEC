@@ -47,9 +47,20 @@ export default function empresasAdmin() {
                         msgRef.current.className = "msgError";
                         msgRef.current.innerHTML = r.msg;
                         carregarEmpresas();
+
+                        setTimeout(() => {
+                            msgRef.current.innerHTML = '';
+                            msgRef.current.className = '';
+                        }, 3000);
                     }
                     else{
-                        alert(r.msg);
+                        msgRef.current.className = "msgError";
+                        msgRef.current.innerHTML = r.msg;
+
+                        setTimeout(() => {
+                            msgRef.current.innerHTML = '';
+                            msgRef.current.className = '';
+                        }, 5000);
                     }
                 })
             }
@@ -66,7 +77,7 @@ export default function empresasAdmin() {
 
                 </div>
             <div>
-                <MontaTabela alteracao={""}  exclusao={excluirEmpresa} lista={listaEmpresas} cabecalhos={["id","Empresa", "CNPJ", "Regime"]} propriedades={["empId" ,'empNome', 'empCnpj', 'empRegime', 'empEmail', 'empTelefone']} ></MontaTabela>
+                <MontaTabela alteracao={""}  exclusao={excluirEmpresa} lista={listaEmpresas} cabecalhos={["id","Empresa", "CNPJ", "Regime", "Email", "Telefone"]} propriedades={["empId" ,'empNome', 'empCnpj', 'empRegime', 'empEmail', 'empTelefone']} ></MontaTabela>
             </div>
         </div>
     )

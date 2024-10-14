@@ -1,4 +1,4 @@
-import '../../public/template/css/naoAutorizado.css'
+
 
 export default function naoAutorizado() {
     return (

@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react"
 import Link from "next/link";
 import UserContext from "../context/userContext.js"
 import Loading from "../components/loading.js";
+import NaoAutorizado from "../components/naoAutorizado.js";
 
 export default function adminPage({children}){
 
@@ -20,6 +21,12 @@ export default function adminPage({children}){
     const isAdmin = user && user.usuNivel === 0;
     if (loading) {
         return <Loading></Loading>
+    }
+
+    if(isClient) {
+        if(user == null) {
+            return <NaoAutorizado></NaoAutorizado>
+        }
     }
 
     return(

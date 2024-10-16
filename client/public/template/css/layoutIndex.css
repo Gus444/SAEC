@@ -1,6 +1,6 @@
 .layout {
     display: flex; /* Usa Flexbox para criar a sidebar e o conteúdo principal */
-    height: 100vh; /* Altura de toda a janela */
+    min-height: 100vh; /* Faz o layout ocupar no mínimo a altura da janela */
 }
 
 /* Estilos da sidebar */
@@ -39,3 +39,8 @@
     background-color: #f4f4f4; /* Cor de fundo do conteúdo */
     margin-left: 250px; /* Deixa espaço para a sidebar fixa */
 }
+
+.main-content {
+    overflow-y: auto;
+}
+

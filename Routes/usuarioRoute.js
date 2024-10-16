@@ -42,7 +42,7 @@ router.post('/', auth.validar, (req,res) =>{
     }*/
     ctrl.cadastrarUsuario(req,res);
 });
-router.delete('/:id', auth.validar,(req,res) =>{
+router.delete('/excluir/:id', auth.validar,(req,res) =>{
     // #swagger.tags = ['Usuários']
     // #swagger.summary = 'Excluir um usuario por id' 
     /* #swagger.security = [{

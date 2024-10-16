@@ -319,6 +319,7 @@ export default function FormEmpresa(props) {
             value = value.replace(/(\d{5})(\d)/, "$1-$2");
             
             e.target.value = value;
+            setErroTelefone(false);
         };
     
         const preventNonNumericInput = (e) => {
@@ -336,6 +337,21 @@ export default function FormEmpresa(props) {
             inputTelefone.removeEventListener("keydown", preventNonNumericInput);
         };
     }, []);
+
+    function salvarTelefone(telefone) {
+        if (typeof telefone !== 'string') {
+            console.error('Erro: telefone deve ser uma string');
+            return false;
+        }
+    
+        telefone = telefone.replace(/[^\d]+/g,'');
+        
+        if(telefone === '') {
+            return false;
+        }
+    
+        return true;
+    }
 
     function validarCNPJ(cnpj){
  
@@ -410,10 +426,10 @@ export default function FormEmpresa(props) {
             <h2 className="mb-4">{isAlteracao ? "Alterar Empresa" : "Cadastrar Empresa"}</h2>
 
             <div className="row">
-                <div className="col-md-2 form-group mb-3">
+                <div className="col-md-3 form-group mb-3">
                     <label htmlFor="cnpj">CNPJ</label>
                     <input onBlur={handleBlur} defaultValue={empresa.empCnpj} ref={cnpj} type="text" className={`form-control ${erroCNPJ ? 'is-invalid' : ''}`} maxlength="18" placeholder="Digite o CNPJ"/>
-                    {/* {erroCNPJ && <small className="text-danger">CNPJ é obrigatório</small>} */}
+                    {erroCNPJ && <small className="text-danger">{erroCNPJ}</small>}
                 </div>
                 <div className="col-md-6 form-group mb-3">
                     <label htmlFor="nome">Nome da Empresa</label>
@@ -427,7 +443,7 @@ export default function FormEmpresa(props) {
                 <label htmlFor="telefone">Contato</label>
                 <div className="row">
                     <div className="col-md-3 form-group mb-3">
-                        <input defaultValue={empresa.empTelefone} ref={telefone} type="text" className={`form-control ${erroTelefone ? 'is-invalid' : ''}`} onChange={() => setErroTelefone(false)} maxLength="15" placeholder="Telefone"/>
+                        <input onBlur={salvarTelefone} defaultValue={empresa.empTelefone} ref={telefone} type="text" className={`form-control ${erroTelefone ? 'is-invalid' : ''}`} onChange={() => setErroTelefone(false)} maxLength="15" placeholder="Telefone"/>
                         {/* {erroTelefone && <small className="text-danger">Telefone é obrigatório</small>} */}
                     </div>
 

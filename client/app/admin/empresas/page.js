@@ -44,14 +44,14 @@ export default function empresasAdmin() {
                 })
                 .then(r=> {
                     if(ok) {
-                        msgRef.current.className = "msgError";
+                        msgRef.current.className = "msgSucess";
                         msgRef.current.innerHTML = r.msg;
                         carregarEmpresas();
 
                         setTimeout(() => {
                             msgRef.current.innerHTML = '';
                             msgRef.current.className = '';
-                        }, 3000);
+                        }, 5000);
                     }
                     else{
                         msgRef.current.className = "msgError";

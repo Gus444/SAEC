@@ -78,13 +78,13 @@ export default function Login() {
                         
                         <div className="form-label p-2">
                             <i className="fa-solid fa-envelope fa-xl" style={{color: "#ffffff"}}></i>
-                            <input ref={email} type="email" className="form-control form-control-lg" placeholder="digite seu email"></input>
+                            <input ref={email} type="email" className="form-control form-control-lg" style={{fontSize:'1rem', width: '320px'}} placeholder="digite seu email"></input>
                         </div>
                         
                         
                         <div className="form-label p-2 pb-5">
                             <i className="fa-solid fa-lock fa-xl" style={{color: "#ffffff"}}></i>
-                            <input ref={senha} type="password" className="form-control form-control-lg" placeholder="digite sua senha"></input>
+                            <input ref={senha} type="password" className="form-control form-control-lg" style={{fontSize:'1rem', width: '320px'}} placeholder="digite sua senha"></input>
                         </div>
 
                         <button className="buttonLogin" type="button" onClick={validar}>

@@ -202,7 +202,7 @@ export default function FormUsuario(props){
                 <div className="row">
                     <div className="col-md-5 form-group mb-3">
                         <label htmlFor="senha">Senha</label>
-                        <input defaultValue={usuario.usuSenha} ref={senha} type="password" className={`form-control ${erroSenha ? 'is-invalid' : ''}`} placeholder="Digite a senha"/>
+                        <input defaultValue={usuario.usuSenha} ref={senha} type="password" className={`form-control ${erroSenha ? 'is-invalid' : ''}`} onChange={() => setErroSenha(false)} placeholder="Digite a senha"/>
                         {/* {erroCNPJ && <small className="text-danger">CNPJ é obrigatório</small>} */}
                     </div>
                 </div>  

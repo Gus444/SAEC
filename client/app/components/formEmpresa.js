@@ -26,8 +26,8 @@ export default function FormEmpresa(props) {
     let descricao = useRef("");
     let responsavel = useRef("");
     let proprietario = useRef("");
-    let inicio = useRef("");
-    let fim = useRef("");
+    let inicio = useRef(null);
+    let fim = useRef(null);
     let email = useRef("");
     let endereco = useRef("");
     let bairro = useRef("");
@@ -45,6 +45,7 @@ export default function FormEmpresa(props) {
     let [erroResponsavel, setErroResponsavel] = useState(false);
     let [erroProprietario, setErroProprietario] = useState(false);
     let [erroInicio, setErroInicio] = useState(false);
+    let [erroFim, setErroFim] = useState(false);
     let [erroEmail, setErroEmail] = useState(false);
     let [erroEndereco, setErroEndereco] = useState(false);
     let [erroBairro, setErroBairro] = useState(false);
@@ -416,6 +417,52 @@ export default function FormEmpresa(props) {
         }
       };
 
+    //validacao das datas
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    useEffect(() => {
+        const currentDate = getCurrentDate();
+        
+        // Verifica se os refs estão prontos antes de usar
+        if (inicio.current && fim.current) {
+            inicio.current.max = currentDate;
+            fim.current.max = currentDate;
+
+            const preventTyping = (e) => e.preventDefault();
+
+            inicio.current.addEventListener('keydown', preventTyping);
+            fim.current.addEventListener('keydown', preventTyping);
+
+            // Limpa os event listeners apenas se os elementos existirem
+            return () => {
+                if (inicio.current) {
+                    inicio.current.removeEventListener('keydown', preventTyping);
+                }
+                if (fim.current) {
+                    fim.current.removeEventListener('keydown', preventTyping);
+                }
+            };
+        }
+    }, []);
+
+    const handleFimChange = () => {
+        const inicioDate = new Date(inicio.current.value);
+        const fimDate = new Date(fim.current.value);
+
+        if (fimDate < inicioDate) {
+            setErroFim(true);
+            fim.current.value = ''; // Reseta o valor de fim
+        } else {
+            setErroFim(false);
+        }
+    }
+
     return (
 
     <div className="container mt-1">
@@ -527,7 +574,7 @@ export default function FormEmpresa(props) {
                 </div>
                 <div className="col-md-2 form-group mb-3">
                     <label htmlFor="fim">Fim</label>
-                    <input defaultValue={empresa.empFim} ref={fim} type="date" className="form-control" id="fim"/>
+                    <input defaultValue={empresa.empFim} ref={fim} type="date" className="form-control" id="fim" onChange={handleFimChange}/>
                 </div>
             </div>
 

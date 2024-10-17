@@ -99,6 +99,14 @@ export default class UsuarioModel{
         return lista
     }
 
+    async ContadorDeAdministrador(){
+        let sql = "select count(*) as quantidade_admins from tb_usuario where usu_nivel = 0"
+
+        let quantidade = await banco.ExecutaComando(sql)
+
+        return quantidade[0].quantidade_admins;
+    }
+
     async obter(id){
         let sql = "select * from tb_usuario where usu_id = ?";
         let valores = [id]

@@ -15,7 +15,7 @@ router.get('/', auth.validar, (req,res) => {
     }] */
     ctrl.listarUsuario(req, res);
 })
-router.get('/:id', auth.validar, (req,res) => {
+router.get('/obter/:id', auth.validar, (req,res) => {
     // #swagger.tags = ['Usuários']
     // #swagger.summary = 'Retorna um usuário baseado em um id'
     /* #swagger.security = [{

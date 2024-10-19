@@ -162,13 +162,13 @@ export default function FormUsuario(props){
 
                 <div className="row">
                     <div className="col-md-5 form-group mb-3">
-                        <label htmlFor="nome">Nome</label>
+                        <label htmlFor="nome">Nome*</label>
                         <input defaultValue={usuario.usuNome} ref={nome} type="text" className={`form-control ${erroNome ? 'is-invalid' : ''}`} onChange={() => setErroNome(false)} placeholder="Digite o nome"/>
                         {/* {erroCNPJ && <small className="text-danger">CNPJ é obrigatório</small>} */}
                     </div>
 
                     <div className="col-md-3 form-group mb-3">
-                            <label htmlFor="telefone">Telefone</label>
+                            <label htmlFor="telefone">Telefone*</label>
                             <input defaultValue={usuario.usuTelefone} ref={telefone} type="text" className={`form-control ${erroTelefone ? 'is-invalid' : ''}`} onChange={() => setErroTelefone(false)} maxLength="15" placeholder="Digite o telefone"/>
                             {/* {erroTelefone && <small className="text-danger">Telefone é obrigatório</small>} */}
                     </div>
@@ -176,13 +176,13 @@ export default function FormUsuario(props){
 
 
                 <div className="col-md-7 form-group mb-3">
-                            <label htmlFor="email">Email</label>
+                            <label htmlFor="email">Email*</label>
                             <input defaultValue={usuario.usuEmail} ref={email} type="email" className={`form-control ${erroEmail ? 'is-invalid' : ''}`} onChange={() => setErroEmail(false)} placeholder="Digite o email"/>
                             {/* {erroEmail && <small className="text-danger">Email é obrigatório</small>} */}
                 </div>
 
                 <div className="col-md-5 form-group mb-3">
-                        <label htmlFor="nivel">Nivel de permissão</label>
+                        <label htmlFor="nivel">Nivel de permissão*</label>
                         <select defaultValue={usuario.usuNivel} ref={nivel} className={`form-control ${erroNivel ? 'is-invalid' : ''}`} onChange={() => setErroNivel(false)} placeholder="Nivel de acesso">
                             <option value="">Selecione o nivel</option>
                             <option value="0">Administrador</option>
@@ -191,7 +191,7 @@ export default function FormUsuario(props){
                     </div>
                         
                     <div className="col-md-5 form-group mb-3">
-                        <label htmlFor="status">Usuario ativo</label>
+                        <label htmlFor="status">Usuario ativo*</label>
                         <select defaultValue={usuario.usuStatus} ref={status} className={`form-control ${erroStatus ? 'is-invalid' : ''}`} onChange={() => setErroStatus(false)} placeholder="Usuario ativo">
                             <option value="">Selecione o status</option>
                             <option value="0">Ativo</option>
@@ -201,7 +201,7 @@ export default function FormUsuario(props){
 
                 <div className="row">
                     <div className="col-md-5 form-group mb-3">
-                        <label htmlFor="senha">Senha</label>
+                        <label htmlFor="senha">Senha*</label>
                         <input defaultValue={usuario.usuSenha} ref={senha} type="password" className={`form-control ${erroSenha ? 'is-invalid' : ''}`} onChange={() => setErroSenha(false)} placeholder="Digite a senha"/>
                         {/* {erroCNPJ && <small className="text-danger">CNPJ é obrigatório</small>} */}
                     </div>

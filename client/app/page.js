@@ -43,7 +43,6 @@ export default function Login() {
             }).then(resposta =>{
                 if(ok){
                     router.push("/admin");
-
                     setUser(resposta.usuario);
                     localStorage.setItem("usuario", JSON.stringify(resposta.usuario));
                 }

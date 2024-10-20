@@ -1,6 +1,5 @@
 import Database from "../db/database.js";
 
-
 const banco = new Database()
 
 export default class TipoDespesaModel{
@@ -25,7 +24,5 @@ export default class TipoDespesaModel{
         this.#tipDespId = tipDespId;
         this.#tipDespDescricao = tipDespDescricao;
     }
-
-    
 
 }

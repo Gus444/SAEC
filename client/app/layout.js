@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 //import "../public/template/css/sb-admin-2.css" //css do template
 
 import { UserProvider } from './context/userContext'  //contexto de usuario
+import { EmpProvider } from "./context/empContext";
 export const metadata = {
   title: 'Home',
   description: '',
@@ -11,6 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <UserProvider>
+      <EmpProvider>
       <html lang="pt-BR">
         <head>
           <link rel="stylesheet" href="/template/css/login.css"></link>
@@ -25,6 +27,7 @@ export default function RootLayout({ children }) {
           {children}
         </body>
       </html>
+      </EmpProvider>
     </UserProvider>
   )
 }

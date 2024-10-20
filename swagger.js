@@ -2,6 +2,7 @@ import swaggerAutogen from "swagger-autogen";
 import UsuarioModel from "./Models/usuarioModel.js";
 import LoginModel from "./Models/loginModel.js";
 import EmpresaModel from "./Models/empresaModel.js";
+import ComunicacaoModel from "./Models/comunicacaoModel.js";
 
 const doc = {
     info: {
@@ -19,7 +20,11 @@ const doc = {
         schemas:{
             loginModel: new LoginModel("gustttavosilvasouza44@gmail.com", "admin12345").toJSON(),
             usuarioModel: new UsuarioModel(0, "Teste", "teste@email.com", "teste123", "18999999999", 0, 0).toJSON(),
-            empresaModel: new EmpresaModel(0, )
+            empresaModel: new EmpresaModel(0, "11018395000176", "testeEmpresa", "regimeTeste", "IeTeste", "(18) 99999-9999", 
+            "TesteDescricao", "TesteResp", "TesteProp", new Date(), new Date(), "teste@teste", "testeEnd", "testeBairro", 
+            "TesteCid", "TesteCep", "TesteUf").toJSON(),
+            comunicacaoModel: new ComunicacaoModel(0, "TesteTitulo", "TesteCanal", "testeData", "testeHora", "TesteDescricao", 
+            new UsuarioModel(1), new EmpresaModel(1)).toJSON(),
         }
     } 
 }

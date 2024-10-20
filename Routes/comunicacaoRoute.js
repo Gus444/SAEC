@@ -1,0 +1,38 @@
+import express from 'express'
+import ComunicacaoController from '../Controllers/comunicacaoController.js';
+import Autenticar from '../middlewares/autenticar.js';
+
+let router = express.Router();
+
+let ctrl = new ComunicacaoController();
+let auth = new Autenticar();
+
+router.get('/', auth.validar, (req,res) =>{
+    // #swagger.tags = ['Comunicacao']
+    // #swagger.summary = 'Lista de Comunicacoes'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    ctrl.listarComunicacao(req,res)
+})
+router.post('/', auth.validar, (req,res) =>{
+    // #swagger.tags = ['Comunicacao']
+    // #swagger.summary = 'Cadastrar comunicacao'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    /* #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/comunicacaoModel"
+                }
+            }
+            
+        }
+    }*/
+    ctrl.cadastrarComunicacao(req,res);
+});
+
+export default router

@@ -15,7 +15,7 @@ export default function FormUsuario(props){
             usuNome: "", usuEmail: "", usuSenha: "", usuTelefone: "", usuStatus: "", usuNivel: ""
         }
 
-    let isAlteracao = usuario.empId != null;
+    let isAlteracao = usuario.usuId != null;
 
     let nome = useRef("");
     let email = useRef("");

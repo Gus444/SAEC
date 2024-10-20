@@ -91,4 +91,36 @@ export default class EmpresaController{
         }
     }
 
+    async obterEmpresaAcesso(req, res){ //para acessar no frontend
+        try {
+            let { id } = req.params;
+            let empresa = new EmpresaModel()
+            let empresaEncontrada = await empresa.obter(id);
+            if(empresa != null){
+                res.status(200).json({empresaEncontrada: empresaEncontrada});
+            }
+            else{
+                res.status(404).json({msg: "Usuario não encontrado"});
+            }
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
+    async obterEmpresa(req, res){
+        try {
+            let { id } = req.params;
+            let empresa = new EmpresaModel()
+            let empresaEncontrada = await empresa.obter(id);
+            if(empresa != null){
+                res.status(200).json(empresaEncontrada);
+            }
+            else{
+                res.status(404).json({msg: "Usuario não encontrado"});
+            }
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
 }

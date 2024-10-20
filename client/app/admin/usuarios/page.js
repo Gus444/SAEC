@@ -9,7 +9,6 @@ export default function usuariosAdmin() {
     let msgRef = useRef(null)
 
     let [listaUsuarios, setListaUsuarios] = useState([]);
-    //let [usuarioLogado, setUsuarioLogado] = useState([]);
     let usuarioLogado
     const {user, setUser} = useContext(UserContext)
 

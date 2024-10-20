@@ -43,6 +43,22 @@ router.post('/', auth.validar, (req,res) =>{
     }*/
     ctrl.cadastrarEmpresa(req,res);
 });
+router.get('/obterAcesso/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Empresa']
+    // #swagger.summary = 'Retorna uma empresa baseado em um id'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    ctrl.obterEmpresaAcesso(req, res);
+})
+router.get('/obter/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Empresa']
+    // #swagger.summary = 'Retorna uma empresa baseado em um id'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    ctrl.obterEmpresa(req, res);
+})
 
 
 export default router

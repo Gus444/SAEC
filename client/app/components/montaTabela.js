@@ -40,23 +40,32 @@ export default function MontaTabela(props) {
                             {props.lista.map((value, index) => (
                                 <tr key={index}>
                                     {propriedades.map((prop, index) => {
-                                        if (prop !== "Ações") {
-                                            return <td key={index}>{value[prop]}</td>;
-                                        } else {
-                                            return (
-                                                <td key={index}>
-                                                    <div>
-                                                        <Link href={props.alteracao + `/${value[propriedades[0]]}`} className="btn btn-primary mr-2 mb-2">
-                                                            <i className="fas fa-pen"></i>
-                                                        </Link>
-                                                        <button onClick={() => props.exclusao(value[propriedades[0]])} className="btn btn-danger mr-2 mb-2">
-                                                            <i className="fas fa-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            );
-                                        }
-                                    })}
+                                    if (prop !== "Ações") {
+                                        // Verifica se a propriedade é um objeto aninhado, como "usuario.usuNome"
+                                        const nestedProps = prop.split("."); // Divide a string por "."
+                                        let cellValue = value;
+
+                                        // Percorre as propriedades aninhadas
+                                        nestedProps.forEach(nestedProp => {
+                                            cellValue = cellValue ? cellValue[nestedProp] : null; // Acessa cada nível do objeto
+                                        });
+
+                                        return <td key={index}>{cellValue !== null && cellValue !== undefined ? cellValue : ""}</td>;
+                                    } else {
+                                        return (
+                                            <td key={index}>
+                                                <div>
+                                                    <Link href={props.alteracao + `/${value[propriedades[0]]}`} className="btn btn-primary mr-2 mb-2">
+                                                        <i className="fas fa-pen"></i>
+                                                    </Link>
+                                                    <button onClick={() => props.exclusao(value[propriedades[0]])} className="btn btn-danger mr-2 mb-2">
+                                                        <i className="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        );
+                                    }
+                                })}
                                 </tr>
                             ))}
                         </tbody>

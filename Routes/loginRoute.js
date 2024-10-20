@@ -21,5 +21,10 @@ router.post('/', (req, res) => {
     }*/
     ctrl.autenticar(req, res);
 });
+router.get('/logout',(req,res) => {
+    // #swagger.tags = ['Login']
+    // #swagger.summary = "Limpar token/Deslogar"
+    ctrl.logout(req,res)
+})
 
 export default router;

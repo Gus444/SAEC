@@ -37,4 +37,17 @@ export default class LoginController {
         
     }
 
+    async logout(req,res){
+        try {
+            res.clearCookie("jwt", {
+                httpOnly:true,
+                secure:true,
+                sameSite:'strict'
+            })
+            res.status(200).json({msg: "Logout realizado"})
+        } catch (error) {
+            res.status(500).json({msg: "Erro ao Deslogar"})
+        }
+
+    }
 }

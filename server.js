@@ -1,4 +1,7 @@
 import { createRequire } from "module"
+import path from "path";
+import { fileURLToPath } from "url";
+
 const require = createRequire(import.meta.url);
 
 import express from 'express';
@@ -16,6 +19,10 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(__dirname + "/public"));
+
 app.use(cors({origin: "http://localhost:3000", credentials:true}))
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(outputJson));//pagina docs swagger
@@ -27,7 +34,9 @@ app.use('/comunicacao', comunicacaoRouter);
 
 
 global.COMUNICACAO_IMG_CAMINHO = "/img/Comunicacao/";
-//global.RAIZ_PROJETO = __dirname; //fudeu
+global.RAIZ_PROJETO = __dirname
+
+console.log(global.RAIZ_PROJETO)
 
 app.listen(5000, function() {
     console.log("backend em execução");

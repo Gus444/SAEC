@@ -38,8 +38,8 @@ export default class LoginModel{
 
     toJSON() {
         return {
-            "email": this.#email,
-            "senha": this.#senha
+            "usuEmail": this.#email,
+            "usuSenha": this.#senha
         }
     }
 }

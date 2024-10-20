@@ -5,8 +5,12 @@ import UserContext from "../context/userContext.js";
 import Loading from "../components/loading.js";
 import NaoAutorizado from "../components/naoAutorizado.js";
 import EmpContext from "../context/empContext.js";
+import { useRouter } from "next/navigation";
 
 export default function adminPage({ children }) {
+
+    let router = useRouter();
+
     const { user, setUser } = useContext(UserContext); // usuário que vem do contexto que está logado
     const { emp, setEmp } = useContext(EmpContext); // empresa que vem do localStorage
     const [isClient, setIsClient] = useState(false);
@@ -34,7 +38,28 @@ export default function adminPage({ children }) {
 
     const isAdmin = user && user.usuNivel === 0;
 
-    console.log(isAdmin)
+    const handleLogout = () => {
+        // Remover usuário e empresa do localStorage
+
+        fetch('http://localhost:5000/login/logout', {
+                mode: 'cors',
+                credentials: 'include',
+                method: "GET",
+                headers:{
+                    "Content-type": "application/json",
+                },
+        }).then(r=> {
+            return r.json()
+        })
+
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('empresa');
+        // Atualizar o contexto para remover as informações de user e emp
+        setUser(null);
+        setEmp(null);
+        // Redirecionar o usuário para a página de login ou outra página pública
+        router.push('/');
+    };
 
     if (loading) {
         return <Loading />;
@@ -62,7 +87,7 @@ export default function adminPage({ children }) {
                     <li> <a className="nav-link dropdown-toggle" id="userDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i className="fa-solid fa-users" style={{color: "#ffffff"}}></i>
-                    <span className="mr-2 d-none d-lg-inline text-gray-600 small p-1">{emp != null && isClient ? emp.empNome : "Carregando..."}</span>
+                    <span className="mr-2 d-none d-lg-inline text-gray-600 small p-1">{emp != null && isClient ? emp.empNome : ""}</span>
                     
                     </a></li>
                     <hr></hr>
@@ -70,6 +95,12 @@ export default function adminPage({ children }) {
                     {isAdmin && <li><Link href="/admin/usuarios">Usuarios</Link></li>}
                     <li><a href="/admin/empresas">Empresas</a></li>
                     <li><a href="/admin/comunicacao">Comunicação</a></li>
+                    <li>
+                        {/* Botão de Logout */}
+                        <button onClick={handleLogout} style={{ color: "#ffffff", background: "transparent", border: "none", cursor: "pointer" }}>
+                            <i className="fa-solid fa-sign-out-alt" style={{color: "#ffffff"}}></i> Logout
+                        </button>
+                    </li>
                 </ul>
             </aside>
 

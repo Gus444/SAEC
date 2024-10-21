@@ -61,6 +61,9 @@ export default function MontaTabela(props) {
                                                     <button onClick={() => props.exclusao(value[propriedades[0]])} className="btn btn-danger mr-2 mb-2">
                                                         <i className="fas fa-trash"></i>
                                                     </button>
+                                                    <Link href={props.exibir + `/${value[propriedades[0]]}`} className="btn btn-secondary mr-2 mb-2">
+                                                        <i class="fa-solid fa-scroll"></i>
+                                                    </Link>
                                                 </div>
                                             </td>
                                         );

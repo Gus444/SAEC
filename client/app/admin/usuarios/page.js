@@ -96,7 +96,7 @@ export default function usuariosAdmin() {
 
                 </div>
             <div>
-                <MontaTabela alteracao={""}  exclusao={excluirUsuario} lista={listaUsuarios} cabecalhos={["id","Nome", "Email", "Status", "Nivel", "Telefone"]} propriedades={["usuId" ,'usuNome', 'usuEmail', 'usuStatus', 'usuNivel', 'usuTelefone']} ></MontaTabela>
+                <MontaTabela alteracao={""}  exclusao={excluirUsuario}  lista={listaUsuarios} cabecalhos={["id","Nome", "Email", "Status", "Nivel", "Telefone"]} propriedades={["usuId" ,'usuNome', 'usuEmail', 'usuStatus', 'usuNivel', 'usuTelefone']} ></MontaTabela>
             </div>
         </div>
     )

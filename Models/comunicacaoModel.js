@@ -96,8 +96,49 @@ export default class ComunicacaoModel{
             valores =  [this.#comTitulo, this.#comCanal, this.#comData, this.#comHora, this.#comDescricao, this.#usuario.usuId, this.#empresa.empId, this.#comId];
         }
 
-        let result = await banco.ExecutaComandoNonQuery(sql,valores);
+        let result = await banco.ExecutaComandoLastInserted(sql,valores);
 
         return result;
     }
+
+    async obter(id) {
+        // Consulta SQL para obter informações da comunicação e do documento
+        let sql = `
+            SELECT 
+                u.com_id, 
+                u.com_Titulo, 
+                u.com_Canal, 
+                u.com_Data, 
+                u.com_Hora, 
+                u.com_Descricao, 
+                x.comDocs_id, 
+                x.comDocs_nome 
+            FROM tb_comunicacao u 
+            INNER JOIN tb_docscomunicacao x ON x.tb_comunicacao_com_id = u.com_id 
+            WHERE u.com_id = ?`;
+            
+        let valores = [id];
+    
+        let rows = await banco.ExecutaComando(sql, valores);
+    
+        // Verifica se há resultados
+        if(rows.length > 0){
+            return new ComunicacaoModel(rows[0]["com_id"], rows[0]["com_Titulo"],rows[0]["com_Canal"], rows[0]["com_Data"],rows[0]["com_Hora"], rows[0]["com_Descricao"], rows[0]["comDocs_id"], 
+            rows[0]["comDocs_nome"], rows[0]["emp_proprietario"])
+        }
+    
+        // Retorna null se não encontrar resultados
+        return null;
+    }
+
+    async deletarComunicacao(id){
+        let sql = "delete from tb_comunicacao where com_id = ?";
+
+        let valores = [id];
+
+        let result = await banco.ExecutaComandoNonQuery(sql,valores);
+
+        return result
+    }
+
 }

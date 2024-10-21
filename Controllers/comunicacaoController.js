@@ -64,19 +64,8 @@ export default class ComunicacaoController{
         let { id } = req.params;
         let comunicacao = new ComunicacaoModel();
         let comunicacaoEncontrada = await comunicacao.obter(id);
-
         if (comunicacaoEncontrada != null) {
-            res.status(200).json({
-                comId: comunicacaoEncontrada.comId,
-                comTitulo: comunicacaoEncontrada.comTitulo,
-                comDescricao: comunicacaoEncontrada.comDescricao,
-                comCanal: comunicacaoEncontrada.comCanal,
-                comData: comunicacaoEncontrada.comData,
-                comHora: comunicacaoEncontrada.comHora,
-                usuario: comunicacaoEncontrada.usuario,
-                empresa: comunicacaoEncontrada.empresa
-                // Continue listando os atributos necessários
-            });
+            res.status(200).json(comunicacaoEncontrada);
         } else {
             res.status(404).json({ msg: "Registro não encontrado" });
         }

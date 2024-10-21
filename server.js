@@ -35,7 +35,8 @@ app.use('/comunicacao', comunicacaoRouter);
 app.use('/docsComunicacao', docsComunicacaoRouter);
 
 
-global.COMUNICACAO_IMG_CAMINHO = "/img/Comunicacao/";
+global.COMUNICACAO_IMG_CAMINHO = "http://localhost:5000/img/Comunicacao/";
+console.log(global.COMUNICACAO_IMG_CAMINHO)
 global.RAIZ_PROJETO = __dirname
 
 app.listen(5000, function() {

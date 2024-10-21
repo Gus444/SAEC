@@ -1,35 +1,41 @@
 import Database from "../db/database.js";
-import fs from "fs"
-import ComunicacaoModel from "./comunicacaoModel.js";
 
 const banco =  new Database()
 
 export default class DocsComunicacaoModel{
 
     #comDocsId
-    #comunicacao
+    #comunicacaoId
     #comDocsNome
 
     get comDocsId(){return this.#comDocsId}
     set comDocsId(comDocsId){this.#comDocsId = comDocsId}
 
-    get comunicacao(){return this.#comunicacao}
-    set comunicacao(comunicacao){this.#comunicacao = comunicacao}
+    get comunicacaoId(){return this.#comunicacaoId}
+    set comunicacaoId(comunicacaoId){this.#comunicacaoId = comunicacaoId}
 
     get comDocsNome(){return this.#comDocsNome}
     set comDocsNome(comDocsNome){this.#comDocsNome = comDocsNome}
 
-    constructor(comDocsId, comunicacao, comDocsNome){
+    constructor(comDocsId, comunicacaoId, comDocsNome){
         this.#comDocsId = comDocsId
-        this.#comunicacao = comunicacao
+        this.#comunicacaoId = comunicacaoId
         this.#comDocsNome = comDocsNome
+    }
+
+    toJSON() {
+        return {
+            "comDocsId": this.#comDocsId,
+            "comunicacaoId": this.#comunicacaoId,
+            "comDocsNome": this.#comDocsNome
+        }
     }
 
     async gravar() {
         if(this.#comDocsId == 0){
             let sql = "insert into tb_docscomunicacao (comDocs_id, tb_comunicacao_com_id, comDocs_nome) values (?, ?, ?)";
 
-            let valores = [this.#comDocsId, this.#comunicacao, this.#comDocsNome];
+            let valores = [this.#comDocsId, this.#comunicacaoId, this.#comDocsNome];
 
             return await banco.ExecutaComandoNonQuery(sql, valores);
         }
@@ -64,5 +70,19 @@ export default class DocsComunicacaoModel{
         let result = await banco.ExecutaComandoNonQuery(sql,valores);
 
         return result
+    }
+
+    async obterDocs(id) {
+        let sql = `select * from tb_docscomunicacao where tb_comunicacao_com_id = ?`;
+            
+        let valores = [id];
+    
+        let rows = await banco.ExecutaComando(sql, valores);
+    
+        if(rows.length > 0){
+            return new DocsComunicacaoModel(rows[0]["comDocs_id"], rows[0]["tb_comunicacao_com_id"], rows[0]["comDocs_nome"])
+        }
+
+        return null;
     }
 }

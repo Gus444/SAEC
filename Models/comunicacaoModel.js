@@ -1,5 +1,6 @@
 import Database from "../db/database.js";
 import UsuarioModel from "../Models/usuarioModel.js"
+import DocsComunicacaoModel from "./docsComunicacaoModel.js";
 import EmpresaModel from "./empresaModel.js";
 
 const banco = new Database();
@@ -58,8 +59,8 @@ export default class ComunicacaoModel{
             "comData": this.#comData,
             "comHora": this.#comHora,
             "comDescricao": this.#comDescricao,
-            "usuario": this.#usuario.toJSON(),
-            "empresa": this.#empresa.toJSON(),
+            "usuario": this.#usuario,
+            "empresa": this.#empresa,
         }
     }
 
@@ -102,20 +103,7 @@ export default class ComunicacaoModel{
     }
 
     async obter(id) {
-        // Consulta SQL para obter informações da comunicação e do documento
-        let sql = `
-            SELECT 
-                u.com_id, 
-                u.com_Titulo, 
-                u.com_Canal, 
-                u.com_Data, 
-                u.com_Hora, 
-                u.com_Descricao, 
-                x.comDocs_id, 
-                x.comDocs_nome 
-            FROM tb_comunicacao u 
-            INNER JOIN tb_docscomunicacao x ON x.tb_comunicacao_com_id = u.com_id 
-            WHERE u.com_id = ?`;
+        let sql = `select * from tb_comunicacao where com_id = ?`;
             
         let valores = [id];
     
@@ -123,11 +111,10 @@ export default class ComunicacaoModel{
     
         // Verifica se há resultados
         if(rows.length > 0){
-            return new ComunicacaoModel(rows[0]["com_id"], rows[0]["com_Titulo"],rows[0]["com_Canal"], rows[0]["com_Data"],rows[0]["com_Hora"], rows[0]["com_Descricao"], rows[0]["comDocs_id"], 
-            rows[0]["comDocs_nome"], rows[0]["emp_proprietario"])
+            return new ComunicacaoModel(rows[0]["com_id"], rows[0]["com_titulo"], rows[0]["com_canal"],
+            rows[0]["com_data"],rows[0]["com_hora"],rows[0]["com_descricao"],rows[0]["tb_usuario_usu_Id"],rows[0]["tb_empresa_emp_Id"])
         }
     
-        // Retorna null se não encontrar resultados
         return null;
     }
 

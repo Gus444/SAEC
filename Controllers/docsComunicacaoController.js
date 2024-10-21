@@ -15,11 +15,11 @@ export default class docsComunicacaoController {
 
                 // Valide se a comunicação é válida e o arquivo tem uma extensão permitida
                 const extensaoArquivo = path.extname(req.file.filename);
-                if (comunicacao > 0 && (extensaoArquivo === ".jpg" || extensaoArquivo === ".png")) {
+                if (comunicacao > 0 && (extensaoArquivo === ".jpg" || extensaoArquivo === ".png" || extensaoArquivo === ".pdf" || extensaoArquivo === ".jpeg")) {
 
                     let docsComunicacao = new DocsComunicacaoModel();
                     docsComunicacao.comDocsId = 0; // O ID será gerado automaticamente
-                    docsComunicacao.comunicacao = comunicacao; // Associe o ID da comunicação que foi passada no body
+                    docsComunicacao.comunicacaoId = comunicacao; // Associe o ID da comunicação que foi passada no body
                     docsComunicacao.comDocsNome = comDocsNome; // Nome do arquivo
 
                     // Gravação no banco de dados
@@ -41,6 +41,21 @@ export default class docsComunicacaoController {
                 msg: "Erro interno de servidor!",
                 detalhes: ex.message
             });
+        }
+    }
+
+    async obter(req, res) {
+        try {
+            let { id } = req.params;
+            let docs = new DocsComunicacaoModel();
+            let docsEncontrados = await docs.obterDocs(id);
+            if (docsEncontrados != null) {
+                res.status(200).json({docsEncontrados});
+            } else {
+                res.status(404).json({ msg: "Registro não encontrado" });
+            }
+        } catch (error) {
+            res.status(500).json({ msg: "Erro de servidor", detalhes: error.message });
         }
     }
 

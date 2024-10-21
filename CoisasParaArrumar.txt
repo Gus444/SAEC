@@ -1,0 +1,8 @@
+Backend
+
+- validar imagem(as imagens que o usuario cadastra que nao sao jpg ou png nao cadastram mas o sistema nao avisa erro)
+- se cadastrar imagem que nao for jpg ou png dar roolback na tb_comunicacao
+
+Frontend
+
+- colocar Floatlabels nos campos de cadastro

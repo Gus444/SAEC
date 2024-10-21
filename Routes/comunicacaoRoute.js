@@ -34,5 +34,21 @@ router.post('/', auth.validar, (req,res) =>{
     }*/
     ctrl.cadastrarComunicacao(req,res);
 });
+router.get('/obter/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Comunicacao']
+    // #swagger.summary = 'Retorna baseado em um id'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    ctrl.obterComunicacao(req, res);
+})
+router.delete('/excluir/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Comunicacao']
+    // #swagger.summary = 'Retorna baseado em um id'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    ctrl.excluirComunicacao(req, res);
+})
 
 export default router

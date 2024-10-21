@@ -100,7 +100,7 @@ export default class EmpresaController{
                 res.status(200).json({empresaEncontrada: empresaEncontrada});
             }
             else{
-                res.status(404).json({msg: "Usuario não encontrado"});
+                res.status(404).json({msg: "empresa não encontrado"});
             }
         } catch (error) {
             res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
@@ -116,7 +116,7 @@ export default class EmpresaController{
                 res.status(200).json(empresaEncontrada);
             }
             else{
-                res.status(404).json({msg: "Usuario não encontrado"});
+                res.status(404).json({msg: "Empresa não encontrado"});
             }
         } catch (error) {
             res.status(500).json({msg: "Erro de servidor", detalhes: error.message})

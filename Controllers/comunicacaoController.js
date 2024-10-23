@@ -106,7 +106,7 @@ export default class ComunicacaoController{
                 }
             }
             else{
-                res.status(404).json({msg:"Usuario não encontrado"})
+                res.status(404).json({msg:"Protocolo não encontrado"})
             }
         } catch (error) {
             res.status(500).json({msg:"Erro de servidor", detalhes: error.message})

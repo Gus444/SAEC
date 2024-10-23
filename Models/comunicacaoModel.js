@@ -128,4 +128,19 @@ export default class ComunicacaoModel{
         return result
     }
 
+    async obterEmpresa(id){
+        let sql = 'select * from tb_comunicacao where tb_empresa_emp_Id = ?'
+
+        let valores = [id]
+
+        let rows = await banco.ExecutaComando(sql, valores);
+
+        if(rows.length > 0){
+            return new ComunicacaoModel(rows[0]["com_id"], rows[0]["com_titulo"], rows[0]["com_canal"],
+            rows[0]["com_data"],rows[0]["com_hora"],rows[0]["com_descricao"],rows[0]["tb_usuario_usu_Id"],rows[0]["tb_empresa_emp_Id"])
+        }
+
+        return null
+    }
+
 }

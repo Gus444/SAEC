@@ -1,4 +1,6 @@
+import ComunicacaoModel from "../Models/comunicacaoModel.js";
 import EmpresaModel from "../Models/empresaModel.js";
+import ProtocoloModel from "../Models/protocoloModel.js";
 
 export default class EmpresaController{
 
@@ -75,12 +77,24 @@ export default class EmpresaController{
             let empresa = new EmpresaModel();
             let { id } = req.params;
             if(await empresa.obter(id) != null){
-                let result = await empresa.deletarEmpresa(id);
-                if(result){
-                    res.status(200).json({msg:"Exclusão efetuada com sucesso"});
+                let protocolo = new ProtocoloModel()
+                if(await protocolo.obterEmpresa(id) == null){
+                    let comunicacao = new ComunicacaoModel()
+                    if(await comunicacao.obterEmpresa(id) == null){
+                        let result = await empresa.deletarEmpresa(id);
+                        if(result){
+                            res.status(200).json({msg:"Exclusão efetuada com sucesso"});
+                        }
+                        else{
+                            res.status(500).json({msg:"Erro ao excluir empresa"});
+                        }
+                    }
+                    else{
+                        res.status(400).json({msg:"A empresa possui registro de comunicação"})
+                    }
                 }
                 else{
-                    res.status(500).json({msg:"Erro ao excluir empresa"});
+                    res.status(400).json({msg: "A empresa possui registro de protocolo"})
                 }
             }
             else{

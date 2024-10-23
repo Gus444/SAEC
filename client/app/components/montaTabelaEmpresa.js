@@ -46,15 +46,18 @@ export default function MontaTabela(props) {
                                             return (
                                                 <td key={index}>
                                                     <div>
-                                                        <Link href={props.alteracao + `/${value[propriedades[0]]}`} className="btn btn-primary mr-2 mb-2">
+                                                        <Link href={props.alteracao + `/${value[propriedades[0]]}`} title="ALTERAR" className="btn btn-primary mr-2 mb-2">
                                                             <i className="fas fa-pen"></i>
                                                         </Link>
-                                                        <button onClick={() => props.exclusao(value[propriedades[0]])} className="btn btn-danger mr-2 mb-2">
+                                                        <button onClick={() => props.exclusao(value[propriedades[0]])} title="EXCLUIR" className="btn btn-danger mr-2 mb-2">
                                                             <i className="fas fa-trash"></i>
                                                         </button>
-                                                        <button onClick={() => props.acesso(value[propriedades[0]])} className="btn btn-secondary mr-2 mb-2">
+                                                        <button onClick={() => props.acesso(value[propriedades[0]])} title="ACESSAR" className="btn btn-success mr-2 mb-2">
                                                             <i className="fas fa-share"></i>
                                                         </button>
+                                                        <Link href={props.exibir + `/${value[propriedades[0]]}`} title="EXIBIR" className="btn btn-secondary mr-2 mb-2">
+                                                        <i class="fa-solid fa-scroll"></i>
+                                                        </Link>
                                                     </div>
                                                 </td>
                                             );

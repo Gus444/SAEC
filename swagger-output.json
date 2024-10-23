@@ -185,6 +185,23 @@
         }
       }
     },
+    "/login/logout": {
+      "get": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "Limpar token/Deslogar",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/empresa/": {
       "get": {
         "tags": [
@@ -267,6 +284,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -340,17 +360,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "401": {
             "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         },
         "security": [
@@ -420,6 +431,375 @@
           }
         }
       }
+    },
+    "/comunicacao/obter/{id}": {
+      "get": {
+        "tags": [
+          "Comunicacao"
+        ],
+        "summary": "Retorna baseado em um id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/comunicacao/excluir/{id}": {
+      "delete": {
+        "tags": [
+          "Comunicacao"
+        ],
+        "summary": "Retorna baseado em um id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/docsComunicacao/": {
+      "post": {
+        "tags": [
+          "Documentos Comunicacao"
+        ],
+        "summary": "Cadastrar Imagem Comunicacao",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "comunicacao": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/docsComunicacao/obter/{id}": {
+      "get": {
+        "tags": [
+          "Documentos Comunicacao"
+        ],
+        "summary": "Retorna baseado em um id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/protocolo/": {
+      "get": {
+        "tags": [
+          "Protocolo"
+        ],
+        "summary": "Lista de Protocolos",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Protocolo"
+        ],
+        "summary": "Cadastrar protocolo",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/protocoloModel"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/protocolo/obter/{id}": {
+      "get": {
+        "tags": [
+          "Protocolo"
+        ],
+        "summary": "Retorna baseado em um id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/protocolo/excluir/{id}": {
+      "delete": {
+        "tags": [
+          "Protocolo"
+        ],
+        "summary": "Excluir baseado em um id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/docsProtocolo/": {
+      "post": {
+        "tags": [
+          "Documentos Protocolo"
+        ],
+        "summary": "Cadastrar Imagem Protocolo",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "protocolo": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/docsProtocolo/obter/{id}": {
+      "get": {
+        "tags": [
+          "Documentos Protocolo"
+        ],
+        "summary": "Retorna baseado em um id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -433,11 +813,11 @@
       "loginModel": {
         "type": "object",
         "properties": {
-          "email": {
+          "usuEmail": {
             "type": "string",
             "example": "gustttavosilvasouza44@gmail.com"
           },
-          "senha": {
+          "usuSenha": {
             "type": "string",
             "example": "admin12345"
           }
@@ -578,87 +958,11 @@
           },
           "usuario": {
             "type": "object",
-            "properties": {
-              "usuId": {
-                "type": "number",
-                "example": 1
-              },
-              "usuNome": {
-                "type": "undefined"
-              },
-              "usuEmail": {
-                "type": "undefined"
-              },
-              "usuSenha": {
-                "type": "undefined"
-              },
-              "usuTelefone": {
-                "type": "undefined"
-              },
-              "usuStatus": {
-                "type": "undefined"
-              },
-              "usuNivel": {
-                "type": "undefined"
-              }
-            }
+            "properties": {}
           },
           "empresa": {
             "type": "object",
-            "properties": {
-              "empId": {
-                "type": "number",
-                "example": 1
-              },
-              "empCnpj": {
-                "type": "undefined"
-              },
-              "empNome": {
-                "type": "undefined"
-              },
-              "empRegime": {
-                "type": "undefined"
-              },
-              "empIe": {
-                "type": "undefined"
-              },
-              "empTelefone": {
-                "type": "undefined"
-              },
-              "empDescricao": {
-                "type": "undefined"
-              },
-              "empResponsavel": {
-                "type": "undefined"
-              },
-              "empProprietario": {
-                "type": "undefined"
-              },
-              "empInicio": {
-                "type": "undefined"
-              },
-              "empFim": {
-                "type": "undefined"
-              },
-              "empEmail": {
-                "type": "undefined"
-              },
-              "empEndereco": {
-                "type": "undefined"
-              },
-              "empBairro": {
-                "type": "undefined"
-              },
-              "empCidade": {
-                "type": "undefined"
-              },
-              "empCep": {
-                "type": "undefined"
-              },
-              "empUf": {
-                "type": "undefined"
-              }
-            }
+            "properties": {}
           }
         }
       }

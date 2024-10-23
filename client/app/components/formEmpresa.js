@@ -504,16 +504,26 @@ export default function FormEmpresa(props) {
                 
             </div>
 
-            <div className="form-group mb-3">
-                <label>Endereço Completo*</label>
-                <input defaultValue={empresa.empEndereco} ref={endereco} type="text" className={`form-control ${erroEndereco ? 'is-invalid' : ''}`} onChange={() => setErroEndereco(false)} placeholder="Endereço"/>
+            <div className="form-floating mb-3">
+                <input defaultValue={empresa.empEndereco} ref={endereco} type="text" className={`form-control ${erroEndereco ? 'is-invalid' : ''}`} onChange={() => setErroEndereco(false)} placeholder="Endereço" />
+                <label htmlFor="floatingInput">Endereço completo</label>
                 {/* {erroEndereco && <small className="text-danger">Endereço é obrigatório</small>} */}
+            </div>
 
-                <div className="d-flex mt-2">
-                    <input defaultValue={empresa.empBairro} ref={bairro} type="text" className={`form-control ${erroBairro ? 'is-invalid' : ''}`} onChange={() => setErroBairro(false)} placeholder="Bairro"/>
+            <div className="d-flex gap-2 mb-3">
+                <div className="form-floating flex-grow-1">
+                    <input defaultValue={empresa.empBairro} ref={bairro} type="text" className={`form-control ${erroBairro ? 'is-invalid' : ''}`} onChange={() => setErroBairro(false)} placeholder="Bairro" />
+                    <label htmlFor="floatingInput">Bairro</label>
                     {/* {erroBairro && <small className="text-danger">Bairro é obrigatório</small>} */}
-                    <input defaultValue={empresa.empCidade} ref={cidade} type="text" className={`form-control ${erroCidade ? 'is-invalid' : ''}`} onChange={() => setErroCidade(false)} placeholder="Cidade"/>
+                </div>
+                
+                <div className="form-floating flex-grow-1">
+                    <input defaultValue={empresa.empCidade} ref={cidade} type="text" className={`form-control ${erroCidade ? 'is-invalid' : ''}`} onChange={() => setErroCidade(false)} placeholder="Cidade" />
+                    <label htmlFor="floatingInput">Cidade</label>
                     {/* {erroCidade && <small className="text-danger">Cidade é obrigatório</small>} */}
+                </div>
+
+                <div className="form-floating flex-grow-1">
                     <select defaultValue={empresa.empUf} ref={uf} className={`form-control ${erroUf ? 'is-invalid' : ''}`} onChange={() => setErroUf(false)} placeholder="UF">
                         <option value="">Selecione o estado</option>
                         <option value="AC">Acre (AC)</option>
@@ -544,12 +554,17 @@ export default function FormEmpresa(props) {
                         <option value="SE">Sergipe (SE)</option>
                         <option value="TO">Tocantins (TO)</option>
                     </select>
-                    {/* {erroUf && <small className="text-danger">Uf é obrigatório</small>} */}
+                    <label htmlFor="floatingInput">UF</label>
+                    {/* {erroUf && <small className="text-danger">UF é obrigatório</small>} */}
+                </div>
 
-                    <input defaultValue={empresa.empCep} ref={cep} type="text" className={`form-control ${erroCep ? 'is-invalid' : ''}`} onChange={() => setErroCep(false)} placeholder="CEP" maxlength="8"/>
+                <div className="form-floating flex-grow-1">
+                    <input defaultValue={empresa.empCep} ref={cep} type="text" className={`form-control ${erroCep ? 'is-invalid' : ''}`} onChange={() => setErroCep(false)} placeholder="CEP" maxLength="8" />
+                    <label htmlFor="floatingInput">CEP</label>
                     {/* {erroCep && <small className="text-danger">CEP é obrigatório</small>} */}
                 </div>
             </div>
+
 
             <div className = "row">
                 <div className="form-group mb-3 col-md-3">

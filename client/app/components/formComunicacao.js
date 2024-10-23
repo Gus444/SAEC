@@ -149,8 +149,34 @@ export default function FormComunicacao(props){
             msgRef.current.innerHTML = "Preencha todos os campos";
         }
     }
+
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
     
-    
+    useEffect(() => {
+        const currentDate = getCurrentDate();
+        
+        // Verifica se os refs estão prontos antes de usar
+        if (data.current) {
+            data.current.max = currentDate;
+
+            const preventTyping = (e) => e.preventDefault();
+
+            data.current.addEventListener('keydown', preventTyping);
+
+            // Limpa os event listeners apenas se os elementos existirem
+            return () => {
+                if (data.current) {
+                    data.current.removeEventListener('keydown', preventTyping);
+                }
+            };
+        }
+    }, []);
 
     return(
         <div className="container mt-1 d-flex justify-content-center">
@@ -158,7 +184,7 @@ export default function FormComunicacao(props){
                 <div ref={msgRef}>
 
                 </div>
-                <h2 className="mb-4">{isAlteracao ? "Alterar Comunicação" : "Cadastrar Comunição"}</h2>
+                <h2 className="mb-4">{isAlteracao ? "Alterar Protocolo" : "Cadastrar Protocolo"}</h2>
 
                 <div className="row">
                     <div className="col-md-5 form-group mb-3">
@@ -174,12 +200,12 @@ export default function FormComunicacao(props){
 
 
                 <div className="col-md-7 form-group mb-3">
-                            <label htmlFor="email">Data*</label>
-                            <input defaultValue={comunicacao.comData} ref={data} type="date" className={`form-control ${erroData ? 'is-invalid' : ''}`} onChange={() => setErroData(false)} placeholder="Digite a Data"/>
+                            <label htmlFor="data">Data*</label>
+                            <input defaultValue={comunicacao.comData ? new Date(comunicacao.comData).toISOString().split('T')[0] : ''} ref={data} type="date" className={`form-control ${erroData ? 'is-invalid' : ''}`} onChange={() => setErroData(false)} placeholder="Digite a Data"/>
                 </div>
 
                 <div className="col-md-5 form-group mb-3">
-                        <label htmlFor="hora">Hora*</label>
+                        <label htmlFor="data">Hora*</label>
                         <input defaultValue={comunicacao.comHora} ref={hora} type="time" className={`form-control ${erroHora ? 'is-invalid' : ''}`} onChange={() => setErroHora(false)} placeholder="??"/>
                 </div>
                         

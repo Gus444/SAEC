@@ -10,13 +10,13 @@ export default function comunicacaoAdmin(){
 
     let {emp, setEmp} = useContext(EmpContext)
     let empresaLogada
-    let [listaComunicacao, setListaComunicacao] = useState([]);
+    let [listaProtocolo, setListaProtocolo] = useState([]);
     useEffect((e) => {
-        carregarComunicacao();
+        carregarProtocolo();
     }, [])
 
-    function carregarComunicacao() {
-        fetch("http://localhost:5000/comunicacao", {
+    function carregarProtocolo() {
+        fetch("http://localhost:5000/protocolo", {
             mode: 'cors',
             credentials: 'include',
             method: "GET",
@@ -25,11 +25,11 @@ export default function comunicacaoAdmin(){
             return r.json()
         })
         .then(r=> {
-            setListaComunicacao(r);
+            setListaProtocolo(r);
         })
     }
 
-    async function excluirComunicacao(id){
+    async function excluirProtocolo(id){
 
         msgRef.current.className = ''
         msgRef.current.innerHTML = ''
@@ -37,7 +37,7 @@ export default function comunicacaoAdmin(){
             if(confirm("Tem certeza que deseja excluir este registro?")) {
                 if(id > 0) {
                     let ok = false;
-                    fetch(`http://localhost:5000/comunicacao/excluir/${id}`, {
+                    fetch(`http://localhost:5000/protocolo/excluir/${id}`, {
                         mode: 'cors',
                         credentials: 'include',
                         method: "DELETE",
@@ -50,7 +50,7 @@ export default function comunicacaoAdmin(){
                         if(ok) {
                             msgRef.current.className = "msgSucess";
                             msgRef.current.innerHTML = r.msg;
-                            carregarComunicacao();
+                            carregarProtocolo();
 
                             setTimeout(() => {
                                 msgRef.current.innerHTML = '';
@@ -73,15 +73,15 @@ export default function comunicacaoAdmin(){
 
     return (
         <div>
-            <h1>Lista de comunicação</h1>
+            <h1>Lista de protocolos</h1>
             <div>
-                <Link href="/admin/comunicacao/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar comunicação</Link>
+                <Link href="/admin/protocolo/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar protocolo</Link>
             </div>
             <div ref={msgRef}>
 
             </div>
             <div>
-                <MontaTabela alteracao={""}  exclusao={excluirComunicacao} exibir={"/admin/comunicacao/exibir"} lista={listaComunicacao} cabecalhos={["id","Titulo", "Canal", "Data", "Hora", "Usuario", "Empresa"]} propriedades={['comId', 'comTitulo', 'comCanal', 'comData', 'comHora', "usuario.usuNome", "empresa.empNome"]} ></MontaTabela>
+                <MontaTabela alteracao={""}  exclusao={excluirProtocolo} exibir={"/admin/protocolo/exibir"} lista={listaProtocolo} cabecalhos={["id","Titulo", "Tipo", "Data", "Usuario", "Empresa"]} propriedades={['protId', 'protTitulo', 'protTipo', 'protData', "usuario.usuNome", "empresa.empNome"]} ></MontaTabela>
             </div>
         </div>
     )

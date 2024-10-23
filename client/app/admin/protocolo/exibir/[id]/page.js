@@ -1,33 +1,33 @@
 'use client'
 import { useEffect, useState } from "react";
 
-export default function ExibirComunicacao({ params: { id } }) {
-    let [comunicacao, setComunicacao] = useState(null);
+export default function ExibirProtocolo({ params: { id } }) {
+    let [protocolo, setProtocolo] = useState(null);
     let [docs, setDocs] = useState(null);
     let [loading, setLoading] = useState(true);
-    const COMUNICACAO_IMG_CAMINHO = "http://localhost:5000/img/Comunicacao/";
+    const PROTOCOLO_IMG_CAMINHO = "http://localhost:5000/img/Protocolo/";
 
     // Fazer ambas as requisições ao mesmo tempo com Promise.all
     function carregarDados(id) {
         Promise.all([
-            fetch(`http://localhost:5000/comunicacao/obter/${id}`, {
+            fetch(`http://localhost:5000/protocolo/obter/${id}`, {
                 mode: 'cors',
                 credentials: "include",
                 method: "GET",
             }),
-            fetch(`http://localhost:5000/docsComunicacao/obter/${id}`, {
+            fetch(`http://localhost:5000/docsProtocolo/obter/${id}`, {
                 mode: 'cors',
                 credentials: "include",
                 method: "GET"
             })
         ])
-        .then(async ([resComunicacao, resDocs]) => {
-            const comunicacaoData = await resComunicacao.json();
+        .then(async ([resProtocolo, resDocs]) => {
+            const protocoloData = await resProtocolo.json();
             const docsData = await resDocs.json();
-            console.log(comunicacaoData);
+            console.log(protocoloData);
             console.log(docsData);
             
-            setComunicacao(comunicacaoData);
+            setProtocolo(protocoloData);
             setDocs(docsData.docsEncontrados); // Acesse docsEncontrados diretamente
             setLoading(false);
         })
@@ -49,32 +49,28 @@ export default function ExibirComunicacao({ params: { id } }) {
         );
     }
 
-    console.log("Caminho da imagem:", COMUNICACAO_IMG_CAMINHO);
+    console.log("Caminho da imagem:", PROTOCOLO_IMG_CAMINHO);
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center">Resumo da Comunicação Cadastrada</h2>
+            <h2 className="text-center">Resumo do Protocolo Cadastrada</h2>
             <table className="table table-bordered mt-4">
                 <tbody>
                     <tr>
                         <th>Título</th>
-                        <td>{comunicacao.comTitulo || "Título da Comunicação"}</td>
+                        <td>{protocolo.protTitulo || "Título da Comunicação"}</td>
                     </tr>
                     <tr>
                         <th>Canal</th>
-                        <td>{comunicacao.comCanal || "Canal da Comunicação"}</td>
+                        <td>{protocolo.protTipo || "Canal da Comunicação"}</td>
                     </tr>
                     <tr>
                         <th>Data</th>
-                        <td>{comunicacao.comData || "Data da Comunicação"}</td>
-                    </tr>
-                    <tr>
-                        <th>Hora</th>
-                        <td>{comunicacao.comHora || "Hora da Comunicação"}</td>
+                        <td>{protocolo.protData || "Data da Comunicação"}</td>
                     </tr>
                     <tr>
                         <th>Descrição</th>
-                        <td>{comunicacao.comDescricao || "Descrição da Comunicação"}</td>
+                        <td>{protocolo.protDescricao || "Descrição da Comunicação"}</td>
                     </tr>
                 </tbody>
             </table>
@@ -84,18 +80,18 @@ export default function ExibirComunicacao({ params: { id } }) {
                 <tbody>
                     <tr>
                         <th>ID do Documento</th>
-                        <td>{docs?.comDocsId || "Não possui registro"}</td>
+                        <td>{docs?.protDocsId || "Não possui registro"}</td>
                     </tr>
                     <tr>
                         <th>Documento</th>
                         <td>
                         <a 
-                            href={`${COMUNICACAO_IMG_CAMINHO}${docs?.comDocsNome || "Não há registro"}`} 
-                            download={docs?.comDocsNome || "Não possui registro"} // Define o nome do arquivo a ser baixado
+                            href={`${PROTOCOLO_IMG_CAMINHO}${docs?.protDocsNome || "Não há registro"}`} 
+                            download={docs?.protDocsNome || "Não possui registro"} // Define o nome do arquivo a ser baixado
                             style={{ textDecoration: 'none' }} // Remover sublinhado do link
                             >
                                 <img 
-                                    src={`${COMUNICACAO_IMG_CAMINHO}${docs?.comDocsNome}` || "Não há registro"} 
+                                    src={`${PROTOCOLO_IMG_CAMINHO}${docs?.protDocsNome}` || "Não há registro"} 
                                     alt={docs? "Documento" : "Não possui registro"}
                                     style={{ maxWidth: '100%', height: 'auto' }} 
                                 />
@@ -104,7 +100,7 @@ export default function ExibirComunicacao({ params: { id } }) {
                     </tr>
                     <tr>
                         <th>ID da Comunicação</th>
-                        <td>{docs?.comunicacaoId || ""}</td>
+                        <td>{docs?.protocoloId || ""}</td>
                     </tr>
                 </tbody>
             </table>

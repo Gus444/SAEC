@@ -13,6 +13,8 @@ import loginRouter from './Routes/loginRoute.js'
 import empresaRouter from './Routes/empresaRoute.js'
 import comunicacaoRouter from './Routes/comunicacaoRoute.js'
 import docsComunicacaoRouter from './Routes/docsComunicacaoRoute.js'
+import protocoloRouter from './Routes/protocoloRoute.js'
+import docsProtocoloRouter from './Routes/docsProtocoloRoute.js'
 
 const outputJson = require("./swagger-output.json");
 
@@ -33,10 +35,14 @@ app.use('/login', loginRouter);
 app.use('/empresa', empresaRouter);
 app.use('/comunicacao', comunicacaoRouter);
 app.use('/docsComunicacao', docsComunicacaoRouter);
+app.use('/protocolo', protocoloRouter);
+app.use('/docsProtocolo', docsProtocoloRouter);
+
 
 
 global.COMUNICACAO_IMG_CAMINHO = "http://localhost:5000/img/Comunicacao/";
-console.log(global.COMUNICACAO_IMG_CAMINHO)
+global.PROTOCOLO_IMG_CAMINHO = ""
+
 global.RAIZ_PROJETO = __dirname
 
 app.listen(5000, function() {

@@ -103,9 +103,8 @@
   }
 
 /* CSS do warning*/
-
 .error {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   width: 320px;
   padding: 12px;
   display: flex;
@@ -182,4 +181,8 @@
 .msgSucess:hover{
   background-color: rgb(0, 144, 10);
   transform: scale(1.02);
+}
+
+main, form, div{
+  font-family: 'Montserrat', sans-serif;
 }

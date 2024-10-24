@@ -6,3 +6,6 @@ Backend
 Frontend
 
 - colocar Floatlabels nos campos de cadastro
+
+
+- colocar validar alterar nao deixar colocar como usuario

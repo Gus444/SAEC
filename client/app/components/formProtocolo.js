@@ -147,6 +147,33 @@ export default function FormProtocolo(props){
         }
     }
     
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    useEffect(() => {
+        const currentDate = getCurrentDate();
+        
+        // Verifica se os refs estão prontos antes de usar
+        if (data.current) {
+            data.current.max = currentDate;
+
+            const preventTyping = (e) => e.preventDefault();
+
+            data.current.addEventListener('keydown', preventTyping);
+
+            // Limpa os event listeners apenas se os elementos existirem
+            return () => {
+                if (data.current) {
+                    data.current.removeEventListener('keydown', preventTyping);
+                }
+            };
+        }
+    }, []);
     
 
     return(
@@ -174,7 +201,7 @@ export default function FormProtocolo(props){
                 </div>
 
 
-                <div className="col-md-7 form-group mb-3">
+                <div className="col-md-3 form-group mb-3">
                             <label htmlFor="data">Data*</label>
                             <input defaultValue={protocolo.protData} ref={data} type="date" className={`form-control ${erroData ? 'is-invalid' : ''}`} onChange={() => setErroData(false)} placeholder="Digite a Data"/>
                 </div>

@@ -11,6 +11,28 @@
     color: white; /* Cor do texto */
     position: fixed; /* Torna a sidebar fixa */
     height: 100%; /* Faz a sidebar ocupar toda a altura da tela */
+    transition: width 0.3s ease; /* Transição suave ao minimizar/expandir */
+}
+
+.sidebar img {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    opacity: 1;
+    transform: scale(1); /* Tamanho original */
+}
+
+.sidebar.minimized {
+    width: 80px; /* Largura da sidebar quando minimizada */
+    padding: 10px; /* Reduz o padding quando minimizada */
+}
+
+.sidebar.minimized img {
+    opacity: 0;
+    transform: scale(0.5); /* Diminui o tamanho da imagem */
+}
+
+/* Esconde o conteúdo da sidebar quando minimizada */
+.sidebar.minimized .hidden {
+    display: none;
 }
 
 .sidebar ul {
@@ -26,6 +48,11 @@
     color: white; /* Cor do texto */
     text-decoration: none; /* Remove o sublinhado */
     font-size: 18px; /* Tamanho da fonte */
+    white-space: nowrap; /* Evita que o texto quebre em várias linhas */
+    overflow: hidden; /* Esconde o texto que ultrapassa o limite */
+    text-overflow: ellipsis; /* Mostra '...' no final do texto, se ele for muito longo */
+    max-width: 100%; /* Define um limite de largura para o texto */
+    display: block; /* Garante que o link ocupe o espaço disponível */
 }
 
 .sidebar ul li a:hover {
@@ -38,6 +65,11 @@
     padding: 20px; /* Espaçamento interno */
     background-color: #f4f4f4; /* Cor de fundo do conteúdo */
     margin-left: 250px; /* Deixa espaço para a sidebar fixa */
+    transition: margin-left 0.3s ease; /* Transição suave ao minimizar/expandir */
+}
+
+.sidebar.minimized + .main-content {
+    margin-left: 80px; /* Ajusta a margem do conteúdo quando a sidebar estiver minimizada */
 }
 
 .text-ellipsis {
@@ -47,7 +79,6 @@
     max-width: 180px;            /* Define um limite de largura */
 }
 
-
 .main-content {
     overflow-y: auto;
 }
@@ -56,7 +87,7 @@ main {
     font-family: 'Montserrat', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6, a{
+h1, h2, h3, h4, h5, h6, a {
     font-family: 'Montserrat', sans-serif;
 }
 

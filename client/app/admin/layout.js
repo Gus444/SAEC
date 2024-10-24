@@ -7,13 +7,14 @@ import NaoAutorizado from "../components/naoAutorizado.js";
 import EmpContext from "../context/empContext.js";
 import { useRouter } from "next/navigation";
 
-export default function adminPage({ children }) {
+export default function AdminPage({ children }) {
     let router = useRouter();
 
     const { user, setUser } = useContext(UserContext); // usuário que vem do contexto que está logado
     const { emp, setEmp } = useContext(EmpContext); // empresa que vem do localStorage
     const [isClient, setIsClient] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [isMinimized, setIsMinimized] = useState(false); // Estado para minimizar a sidebar
 
     useEffect(() => {
         setIsClient(true);
@@ -38,13 +39,13 @@ export default function adminPage({ children }) {
     const handleLogout = () => {
         // Remover usuário e empresa do localStorage
         fetch('http://localhost:5000/login/logout', {
-                mode: 'cors',
-                credentials: 'include',
-                method: "GET",
-                headers:{
-                    "Content-type": "application/json",
-                },
-        }).then(r=> r.json());
+            mode: 'cors',
+            credentials: 'include',
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+            },
+        }).then(r => r.json());
 
         localStorage.removeItem('usuario');
         localStorage.removeItem('empresa');
@@ -55,68 +56,82 @@ export default function adminPage({ children }) {
         router.push('/');
     };
 
+    const toggleSidebar = () => {
+        setIsMinimized(!isMinimized); // Alternar estado da sidebar
+    };
+
     if (loading) {
         return <Loading />;
     }
 
-    if (isClient) {
-        if (user == null) {
-            return <NaoAutorizado />;
-        }
+    if (isClient && user == null) {
+        return <NaoAutorizado />;
     }
 
-    return(
+    return (
         <header>
-         <div className="layout">
-            <aside className="sidebar">
-                <ul>
-                    <img src="/img/logotipo primus.png" className="img-format"></img>
-                    <hr></hr>
-                    <li><h2>Bem vindo</h2></li>
-                    <li>
-                        <a className="nav-link dropdown-toggle" id="userDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i className="fa-solid fa-user" style={{color: "#ffffff"}}></i>
-                        <span className="mr-2 d-none d-lg-inline text-gray-600 small text-ellipsis">
-                            {user != null && isClient ? user.usuNome : "Carregando..."}
-                        </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a className="nav-link dropdown-toggle" id="userDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i className="fa-solid fa-users" style={{color: "#ffffff"}}></i>
-                        <span className="mr-2 d-none d-lg-inline text-gray-600 small p-1 text-ellipsis">
-                            {emp != null && isClient ? emp.empNome : ""}
-                        </span>
-                        </a>
-                    </li>
-                    <hr></hr>
-                    <li><a href="/admin">Home</a></li>
-                    {isAdmin && <li><Link href="/admin/usuarios">Usuarios</Link></li>}
-                    <li><a href="/admin/empresas">Empresas</a></li>
+            <div className="layout">
+                <aside className={`sidebar ${isMinimized ? 'minimized' : ''}`}>
+                    <ul>
+                        <img src="/img/logotipo primus.png" className={`img-format ${isMinimized ? 'hidden' : ''}`}></img>
+                        <hr className={isMinimized ? 'hidden' : ''}></hr>
 
-                    {/* Verificar se a empresa foi selecionada antes de acessar Comunicação e Protocolo */}
-                    <li>
-                        {emp ? (<a href="/admin/comunicacao">Comunicação</a>) : (<span style={{color: "red"}}>Selecione uma empresa</span>)}
-                    </li>
-                    <li>
-                        {emp ? (<a href="/admin/protocolo">Protocolo</a>) : (<span style={{color: "red"}}>Selecione uma empresa</span>)}
-                    </li>
-                    
-                    <li>
-                        {/* Botão de Logout */}
-                        <button onClick={handleLogout} style={{ color: "#ffffff", background: "transparent", border: "none", cursor: "pointer" }}>
-                            <i className="fa-solid fa-sign-out-alt" style={{color: "#ffffff"}}></i> Logout
-                        </button>
-                    </li>
-                </ul>
-            </aside>
+                        {/* Botão para minimizar/expandir a sidebar */}
+                        <li>
+                            <button onClick={toggleSidebar} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#fff" }}>
+                                {isMinimized ? <i className="fa-solid fa-chevron-right"></i> : <i className="fa-solid fa-chevron-left"></i>}
+                            </button>
+                        </li>
 
-            <main className="main-content">
-                {children}
-            </main>
-         </div>
+                        {!isMinimized && (
+                            <>
+                                <li><h2>Bem vindo</h2></li>
+                                <li>
+                                    <a className="nav-link dropdown-toggle" id="userDropdown" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i className="fa-solid fa-user" style={{ color: "#ffffff" }}></i>
+                                        <span className="mr-2 d-none d-lg-inline text-gray-600 small text-ellipsis">
+                                            {user != null && isClient ? user.usuNome : "Carregando..."}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a className="nav-link dropdown-toggle" id="userDropdown" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i className="fa-solid fa-users" style={{ color: "#ffffff" }}></i>
+                                        <span className="mr-2 d-none d-lg-inline text-gray-600 small p-1 text-ellipsis">
+                                            {emp != null && isClient ? emp.empNome : ""}
+                                        </span>
+                                    </a>
+                                </li>
+                                <hr></hr>
+                                <li><a href="/admin">Home</a></li>
+                                {isAdmin && <li><Link href="/admin/usuarios">Usuarios</Link></li>}
+                                <li><a href="/admin/empresas">Empresas</a></li>
+                                <li>
+                                {emp ? (
+                                    <a href="/admin/comunicacao">Comunicação</a>) : (<a href="/admin/empresas" onClick={() => {alert("Por favor, selecione uma empresa antes de acessar a Comunicação.");}}
+                                        style={{ color: "red", cursor: "pointer" }}>Comunicação</a>)}
+                                </li>
+                                <li>
+                                {emp ? (
+                                    <a href="/admin/protocolo">Protocolo</a>) : (<a href="/admin/empresas" onClick={() => {alert("Por favor, selecione uma empresa antes de acessar o Protocolo.");}}
+                                        style={{ color: "red", cursor: "pointer" }}>Protocolo</a>)}
+                                </li>
+                                <li>
+                                    <button onClick={handleLogout} style={{ color: "#ffffff", background: "transparent", border: "none", cursor: "pointer" }}>
+                                        <i className="fa-solid fa-sign-out-alt" style={{ color: "#ffffff" }}></i> Logout
+                                    </button>
+                                </li>
+                            </>
+                        )}
+                    </ul>
+                </aside>
+
+                <main className="main-content">
+                    {children}
+                </main>
+            </div>
         </header>
     );
 }

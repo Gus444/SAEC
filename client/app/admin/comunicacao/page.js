@@ -3,17 +3,31 @@ import Link from "next/link";
 import { useContext, useEffect, useRef, useState } from "react"
 import EmpContext from '@/app/context/empContext';
 import MontaTabela from "@/app/components/montaTabela";
+import { useRouter } from "next/navigation";
 
 export default function comunicacaoAdmin(){
 
+    const router = useRouter();
     let msgRef = useRef(null)
 
     let {emp, setEmp} = useContext(EmpContext)
     let empresaLogada
     let [listaComunicacao, setListaComunicacao] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     useEffect((e) => {
         carregarComunicacao();
     }, [])
+
+    useEffect(() => {
+        // Verifica se a empresa está selecionada
+        if (!emp) {
+            // Redireciona para a página de empresas se nenhuma empresa estiver selecionada
+            router.push("/admin/empresas");
+        } else {
+            setLoading(false);
+        }
+    }, [emp, router]);
 
     function carregarComunicacao() {
         fetch("http://localhost:5000/comunicacao", {
@@ -55,7 +69,7 @@ export default function comunicacaoAdmin(){
                             setTimeout(() => {
                                 msgRef.current.innerHTML = '';
                                 msgRef.current.className = '';
-                            }, 5000);
+                            }, 2000);
                         }
                         else{
                             msgRef.current.className = "msgError";
@@ -64,7 +78,7 @@ export default function comunicacaoAdmin(){
                             setTimeout(() => {
                                 msgRef.current.innerHTML = '';
                                 msgRef.current.className = '';
-                            }, 5000);
+                            }, 2000);
                         }
                     })
                 }

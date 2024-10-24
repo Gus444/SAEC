@@ -78,10 +78,10 @@ export default function ExibirProtocolo({ params: { id } }) {
             <h3 className="mt-5">Documentos Relacionados</h3>
             <table className="table table-bordered mt-4">
                 <tbody>
-                    <tr>
+                    {/* <tr>
                         <th>ID do Documento</th>
                         <td>{docs?.protDocsId || "Não possui registro"}</td>
-                    </tr>
+                    </tr> */}
                     <tr>
                         <th>Documento</th>
                         <td>
@@ -99,8 +99,8 @@ export default function ExibirProtocolo({ params: { id } }) {
                         </td>
                     </tr>
                     <tr>
-                        <th>ID da Comunicação</th>
-                        <td>{docs?.protocoloId || ""}</td>
+                        {/* <th>ID da Comunicação</th>
+                        <td>{docs?.protocoloId || ""}</td> */}
                     </tr>
                 </tbody>
             </table>

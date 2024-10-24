@@ -65,7 +65,7 @@ export default function usuariosAdmin() {
                             setTimeout(() => {
                                 msgRef.current.innerHTML = '';
                                 msgRef.current.className = '';
-                            }, 5000);
+                            }, 2000);
                         }
                         else{
                             msgRef.current.className = "msgError";
@@ -74,7 +74,7 @@ export default function usuariosAdmin() {
                             setTimeout(() => {
                                 msgRef.current.innerHTML = '';
                                 msgRef.current.className = '';
-                            }, 5000);
+                            }, 2000);
                         }
                     })
                 }

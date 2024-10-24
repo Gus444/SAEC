@@ -184,7 +184,7 @@ export default function FormComunicacao(props){
                 <div ref={msgRef}>
 
                 </div>
-                <h2 className="mb-4">{isAlteracao ? "Alterar Protocolo" : "Cadastrar Protocolo"}</h2>
+                <h2 className="mb-4">{isAlteracao ? "Alterar Comunicação" : "Cadastrar Comunicação"}</h2>
 
                 <div className="row">
                     <div className="col-md-5 form-group mb-3">
@@ -194,17 +194,28 @@ export default function FormComunicacao(props){
 
                     <div className="col-md-3 form-group mb-3">
                             <label htmlFor="canal">Canal*</label>
-                            <input defaultValue={comunicacao.comCanal} ref={canal} type="text" className={`form-control ${erroCanal ? 'is-invalid' : ''}`} onChange={() => setErroCanal(false)} maxLength="15" placeholder="Digite o Canal"/>
+                            <select defaultValue={comunicacao.comCanal} ref={canal} type="text" className={`form-control ${erroCanal ? 'is-invalid' : ''}`} onChange={() => setErroCanal(false)} maxLength="15" placeholder="Digite o Canal">
+                                <option value="">Selecione o Canal</option>
+                                <option value="Whatsapp">Whatsapp</option>
+                                <option value="Email">Email</option>
+                                <option value="Telegram">Telegram</option>
+                                <option value="Chat Online">Chat Online</option>
+                                <option value="Redes Sociais">Redes Sociais</option>
+                                <option value="Carta">Carta</option>
+                                <option value="Fax">Fax</option>
+                                <option value="Portal Web">Portal Web</option>
+                                <option value="Outros">Outros</option>
+                            </select>
                     </div>
                 </div>
 
 
-                <div className="col-md-7 form-group mb-3">
+                <div className="col-md-3 form-group mb-3">
                             <label htmlFor="data">Data*</label>
                             <input defaultValue={comunicacao.comData ? new Date(comunicacao.comData).toISOString().split('T')[0] : ''} ref={data} type="date" className={`form-control ${erroData ? 'is-invalid' : ''}`} onChange={() => setErroData(false)} placeholder="Digite a Data"/>
                 </div>
 
-                <div className="col-md-5 form-group mb-3">
+                <div className="col-md-2 form-group mb-3">
                         <label htmlFor="data">Hora*</label>
                         <input defaultValue={comunicacao.comHora} ref={hora} type="time" className={`form-control ${erroHora ? 'is-invalid' : ''}`} onChange={() => setErroHora(false)} placeholder="??"/>
                 </div>

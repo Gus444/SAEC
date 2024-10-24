@@ -82,10 +82,10 @@ export default function ExibirComunicacao({ params: { id } }) {
             <h3 className="mt-5">Documentos Relacionados</h3>
             <table className="table table-bordered mt-4">
                 <tbody>
-                    <tr>
+                    {/* <tr>
                         <th>ID do Documento</th>
                         <td>{docs?.comDocsId || "Não possui registro"}</td>
-                    </tr>
+                    </tr> */}
                     <tr>
                         <th>Documento</th>
                         <td>
@@ -102,10 +102,10 @@ export default function ExibirComunicacao({ params: { id } }) {
                         </a>
                         </td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <th>ID da Comunicação</th>
                         <td>{docs?.comunicacaoId || ""}</td>
-                    </tr>
+                    </tr> */}
                 </tbody>
             </table>
         </div>

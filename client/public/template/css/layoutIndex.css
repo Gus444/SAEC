@@ -40,6 +40,14 @@
     margin-left: 250px; /* Deixa espaço para a sidebar fixa */
 }
 
+.text-ellipsis {
+    white-space: nowrap;         /* Evita quebra de linha */
+    overflow: hidden;            /* Esconde o texto que ultrapassa o limite */
+    text-overflow: ellipsis;     /* Mostra '...' no final do texto */
+    max-width: 180px;            /* Define um limite de largura */
+}
+
+
 .main-content {
     overflow-y: auto;
 }

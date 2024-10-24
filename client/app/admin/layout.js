@@ -77,14 +77,18 @@ export default function adminPage({ children }) {
                         <a className="nav-link dropdown-toggle" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i className="fa-solid fa-user" style={{color: "#ffffff"}}></i>
-                        <span className="mr-2 d-none d-lg-inline text-gray-600 small">{user != null && isClient ? user.usuNome : "Carregando..."}</span>
+                        <span className="mr-2 d-none d-lg-inline text-gray-600 small text-ellipsis">
+                            {user != null && isClient ? user.usuNome : "Carregando..."}
+                        </span>
                         </a>
                     </li>
                     <li>
                         <a className="nav-link dropdown-toggle" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i className="fa-solid fa-users" style={{color: "#ffffff"}}></i>
-                        <span className="mr-2 d-none d-lg-inline text-gray-600 small p-1">{emp != null && isClient ? emp.empNome : ""}</span>
+                        <span className="mr-2 d-none d-lg-inline text-gray-600 small p-1 text-ellipsis">
+                            {emp != null && isClient ? emp.empNome : ""}
+                        </span>
                         </a>
                     </li>
                     <hr></hr>

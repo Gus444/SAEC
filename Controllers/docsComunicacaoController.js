@@ -5,42 +5,46 @@ export default class docsComunicacaoController {
 
     async cadastrarDocsComunicacao(req, res) {
         try {
-            // Verifique se o body e o arquivo existem
-            if (req.body && req.file) {
+            // Verifique se o body e os arquivos existem
+            if (req.body && req.files) {
                 // Extraia o ID da comunicação
                 let { comunicacao } = req.body;
                 
-                // Extraia o nome do arquivo da requisição
-                let comDocsNome = req.file.filename;
-
-                // Valide se a comunicação é válida e o arquivo tem uma extensão permitida
-                const extensaoArquivo = path.extname(req.file.filename);
-                if (comunicacao > 0 && (extensaoArquivo === ".jpg" || extensaoArquivo === ".png" || extensaoArquivo === ".pdf" || extensaoArquivo === ".jpeg")) {
-
-                    let docsComunicacao = new DocsComunicacaoModel();
-                    docsComunicacao.comDocsId = 0; // O ID será gerado automaticamente
-                    docsComunicacao.comunicacaoId = comunicacao; // Associe o ID da comunicação que foi passada no body
-                    docsComunicacao.comDocsNome = comDocsNome; // Nome do arquivo
-
-                    // Gravação no banco de dados
-                    let result = await docsComunicacao.gravar();
-                    if (result) {
-                        res.status(201).json({ msg: "Documento cadastrado com sucesso!" });
-                    } else {
-                        res.status(500).json({ msg: "Erro interno de servidor!" });
+                // Verifique se a comunicação é válida
+                if (comunicacao > 0) {
+                    const extensoesPermitidas = [".jpg", ".jpeg", ".png", ".pdf"];
+    
+                    // Processar cada arquivo enviado
+                    for (const file of req.files) {
+                        let comDocsNome = file.filename; // Nome do arquivo
+                        const extensaoArquivo = path.extname(file.filename);
+    
+                        // Valide a extensão do arquivo
+                        if (extensoesPermitidas.includes(extensaoArquivo)) {
+                            let docsComunicacao = new DocsComunicacaoModel();
+                            docsComunicacao.comDocsId = 0; // O ID será gerado automaticamente
+                            docsComunicacao.comunicacaoId = comunicacao; // Associe o ID da comunicação
+                            docsComunicacao.comDocsNome = comDocsNome; // Nome do arquivo
+    
+                            // Gravação no banco de dados
+                            let result = await docsComunicacao.gravar();
+                            if (!result) {
+                                return res.status(500).json({ msg: "Erro interno de servidor ao gravar o documento." });
+                            }
+                        } else {
+                            return res.status(400).json({ msg: `Arquivo ${comDocsNome} tem uma extensão não permitida.` });
+                        }
                     }
-
+                    res.status(201).json({ msg: "Documentos cadastrados com sucesso!" });
                 } else {
-                    res.status(400).json({ msg: "Por favor, preencha todas as informações corretamente e envie um arquivo válido." });
+                    res.status(400).json({ msg: "Comunicação inválida." });
                 }
             } else {
-                res.status(400).json({ msg: "Por favor, informe os dados e o arquivo do registro." });
+                res.status(400).json({ msg: "Nenhuma comunicação ou arquivo enviado." });
             }
-        } catch (ex) {
-            res.status(500).json({
-                msg: "Erro interno de servidor!",
-                detalhes: ex.message
-            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Erro interno de servidor." });
         }
     }
 

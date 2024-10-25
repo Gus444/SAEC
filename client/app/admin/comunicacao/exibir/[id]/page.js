@@ -49,6 +49,7 @@ export default function ExibirComunicacao({ params: { id } }) {
         );
     }
 
+    
     console.log("Caminho da imagem:", COMUNICACAO_IMG_CAMINHO);
 
     return (
@@ -78,34 +79,35 @@ export default function ExibirComunicacao({ params: { id } }) {
                     </tr>
                 </tbody>
             </table>
-
+    
             <h3 className="mt-5">Documentos Relacionados</h3>
             <table className="table table-bordered mt-4">
                 <tbody>
-                    {/* <tr>
-                        <th>ID do Documento</th>
-                        <td>{docs?.comDocsId || "Não possui registro"}</td>
-                    </tr> */}
-                    <tr>
-                        <th>Documento</th>
-                        <td>
-                        <a 
-                            href={`${COMUNICACAO_IMG_CAMINHO}${docs?.comDocsNome || "Não há registro"}`} 
-                            download={docs?.comDocsNome || "Não possui registro"} // Define o nome do arquivo a ser baixado
-                            style={{ textDecoration: 'none' }} // Remover sublinhado do link
-                            >
-                                <img 
-                                    src={`${COMUNICACAO_IMG_CAMINHO}${docs?.comDocsNome}` || "Não há registro"} 
-                                    alt={docs? "Documento" : "Não possui registro"}
-                                    style={{ maxWidth: '100%', height: 'auto' }} 
-                                />
-                        </a>
-                        </td>
-                    </tr>
-                    {/* <tr>
-                        <th>ID da Comunicação</th>
-                        <td>{docs?.comunicacaoId || ""}</td>
-                    </tr> */}
+                    {docs && docs.length > 0 ? (
+                        docs.map((doc, index) => (
+                            <tr key={index}>
+                                <th>Documento {index + 1}</th>
+                                <td>
+                                    <a 
+                                        
+                                        href={`${COMUNICACAO_IMG_CAMINHO}${doc.comDocsNome}`} 
+                                        download={doc.comDocsNome} 
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        <img 
+                                            src={`${COMUNICACAO_IMG_CAMINHO}${doc.comDocsNome}`} 
+                                            alt={`Documento ${index + 1}`} 
+                                            style={{ maxWidth: '100%', height: 'auto' }} 
+                                        />
+                                    </a>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="2">Não há documentos registrados.</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         </div>

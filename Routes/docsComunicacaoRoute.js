@@ -33,7 +33,7 @@ let upload = multer({storage,
 });
 
 
-router.post('/', auth.validar, upload.single("inputImage"), (req,res) =>{
+router.post('/', auth.validar, upload.array("inputImage"), (req,res) =>{
     // #swagger.tags = ['Documentos Comunicacao']
     // #swagger.summary = 'Cadastrar Imagem Comunicacao'
     

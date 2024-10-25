@@ -32,34 +32,38 @@ export default class DocsComunicacaoModel{
     }
 
     async gravar() {
-        if(this.#comDocsId == 0){
-            let sql = "insert into tb_docscomunicacao (comDocs_id, tb_comunicacao_com_id, comDocs_nome) values (?, ?, ?)";
-
-            let valores = [this.#comDocsId, this.#comunicacaoId, this.#comDocsNome];
-
+        if (this.#comDocsId === 0) {
+            // Verifique se o comDocsId é auto-incrementado
+            let sql = "INSERT INTO tb_docscomunicacao (tb_comunicacao_com_id, comDocs_nome) VALUES (?, ?)";
+            let valores = [this.#comunicacaoId, this.#comDocsNome];
+    
+            // Executa o comando e retorna o resultado
             return await banco.ExecutaComandoNonQuery(sql, valores);
+        } else {
+            // Aqui você pode implementar a lógica para atualizar o documento, se necessário
+            let sql = "UPDATE tb_docscomunicacao SET tb_comunicacao_com_id = ?, comDocs_nome = ? WHERE comDocs_id = ?";
+            let valores = [this.#comunicacaoId, this.#comDocsNome, this.#comDocsId];
+    
+            // Executa o comando e retorna o resultado
+            return await banco.ExecutaComandoNonQuery(sql, valores) > 0; // Retorna verdadeiro se a atualização for bem-sucedida
         }
-        // else{
-        //     //alterar
-        //     let sql = "update tb_produto set prd_cod = ?, prd_nome =?, prd_quantidade= ?, cat_id = ?, mar_id = ?, prd_imagem = ?, prd_preco = ? where prd_id = ?";
-
-        //     let valores = [this.#produtoCodigo, this.#produtoNome, this.#produtoQuantidade, this.#categoriaId, this.#marcaId, this.#produtoImagem, this.#produtoPreco, this.#produtoId];
-
-        //     return await conexao.ExecutaComandoNonQuery(sql, valores) > 0;
-        // }
     }
 
-    async obter(id){
+    async obter(id) {
         let sql = "select * from tb_docscomunicacao where tb_comunicacao_com_id = ?";
-        let valores = [id]
-
-        let rows = await banco.ExecutaComando(sql, valores)
-
-        if(rows.length > 0){
-            return rows.map(row => new DocsComunicacaoModel(row["comDocs_id"],row["tb_comunicacao_com_id"],row["comDocs_nome"]))
+        let valores = [id];
+    
+        let rows = await banco.ExecutaComando(sql, valores);
+    
+        if (rows.length > 0) {
+            return new DocsComunicacaoModel(
+                rows[0]["comDocs_id"],
+                rows[0]["tb_comunicacao_com_id"],
+                rows[0]["comDocs_nome"]
+            );
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     async deletarDocsComunicacao(id){
@@ -73,16 +77,25 @@ export default class DocsComunicacaoModel{
     }
 
     async obterDocs(id) {
-        let sql = `select * from tb_docscomunicacao where tb_comunicacao_com_id = ?`;
-            
+        let sql = "select * from tb_docscomunicacao where tb_comunicacao_com_id = ?";
         let valores = [id];
+        let lista = []
     
         let rows = await banco.ExecutaComando(sql, valores);
     
-        if(rows.length > 0){
-            return new DocsComunicacaoModel(rows[0]["comDocs_id"], rows[0]["tb_comunicacao_com_id"], rows[0]["comDocs_nome"])
-        }
+        if (rows.length > 0) {
+            for(let i = 0; i < rows.length; i++) {
+                let row = rows[i]
+                lista.push(new DocsComunicacaoModel(
+                    row["comDocs_id"],
+                    row["tb_comunicacao_com_id"],
+                    row["comDocs_nome"]
+                ));
+            }
 
-        return null;
+            return lista;
+        } else {
+            return null;
+        }
     }
 }

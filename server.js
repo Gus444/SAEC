@@ -24,7 +24,7 @@ app.use(express.json());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors({origin: "http://localhost:3000", credentials:true}))
 
@@ -41,7 +41,7 @@ app.use('/docsProtocolo', docsProtocoloRouter);
 
 
 global.COMUNICACAO_IMG_CAMINHO = "http://localhost:5000/img/Comunicacao/";
-global.PROTOCOLO_IMG_CAMINHO = ""
+global.PROTOCOLO_IMG_CAMINHO = "http://localhost:5000/img/Protocolo/"
 
 global.RAIZ_PROJETO = __dirname
 

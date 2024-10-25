@@ -10,6 +10,13 @@ export default function FormComunicacao(props){
     let router = useRouter();
     const { user, setUser } = useContext(UserContext); // usuário que vem do contexto que está logado
     const { emp, setEmp } = useContext(EmpContext); // empresa que vem do localStorage
+    const [arquivos, setArquivos] = useState([]);
+    const handleFileChange = (event) => {
+        const selectedFiles = event.target.files;
+        const fileArray = Array.from(selectedFiles); // Converte FileList para array
+        setArquivos((prevFiles) => [...prevFiles, ...fileArray]); // Adiciona novos arquivos ao estado
+    };
+
 
     const usuario = user.usuId;
     const empresa = emp.empId;
@@ -49,6 +56,7 @@ export default function FormComunicacao(props){
     function gravarComunicacao() {
         let ok = true;
     
+        // Validação dos campos
         if (titulo.current.value === "") {
             setErroTitulo(true);
             ok = false;
@@ -111,17 +119,21 @@ export default function FormComunicacao(props){
             .then(data => {
                 const comId = data.result; // Pega o ID da comunicação criada
                 if (comId) {
-                    // Se a comunicação foi cadastrada com sucesso, fazer o segundo fetch para enviar a imagem
+                    // Se a comunicação foi cadastrada com sucesso, fazer o segundo fetch para enviar as imagens
                     const formData = new FormData();
                     formData.append("comunicacao", comId); // Passa o ID da comunicação
-                    formData.append("inputImage", img.current.files[0]); // Imagem selecionada
-            
+    
+                    // Adiciona todos os arquivos ao FormData
+                    arquivos.forEach((arquivo) => {
+                        formData.append("inputImage", arquivo); // Adiciona cada arquivo
+                    });
+    
                     return fetch('http://localhost:5000/docsComunicacao', {
                         mode: 'cors',
                         credentials: 'include',
                         method: "POST",
                         body: formData
-                    })
+                    });
                 } else {
                     throw new Error('ID da comunicação não encontrado');
                 }
@@ -227,7 +239,22 @@ export default function FormComunicacao(props){
 
                 <div className="col-md-7 form-group mb-3">
                     <label for="fileInput">Escolha um arquivo:</label>
-                    <input type="file" defaultValue={docsComunicacao.comDocsNome} ref={img} id="fileInput" name="arquivo"/>
+                    <input type="file" defaultValue={docsComunicacao.comDocsNome} 
+                    ref={img} id="fileInput" onChange={handleFileChange} name="arquivo" multiple/>
+                </div>
+
+                <div className="file-grid">
+                {arquivos.length > 0 && (
+                    <div className="row">
+                    {arquivos.map((file, index) => (
+                        <div key={index} className="col-md-4">
+                        <div className="file-preview">
+                            <p>{file.name}</p>
+                        </div>
+                        </div>
+                    ))}
+                    </div>
+                )}
                 </div>
 
 

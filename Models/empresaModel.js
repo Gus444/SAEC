@@ -147,7 +147,7 @@ export default class EmpresaModel{
         else{//alterar
             sql = `update tb_empresa set emp_cnpj = ?, emp_nome = ?, emp_regime = ?, emp_ie = ?, emp_telefone = ?, emp_descricao = ?,
             emp_responsavel = ?, emp_proprietario = ?, emp_inicio = ?, emp_fim = ?, emp_email = ?, emp_endereco = ?, emp_bairro = ?,
-            emp_cidade = ?, emp_uf = ?
+            emp_cidade = ?, emp_cep = ?, emp_uf = ?
             where emp_id = ?`;
             
             valores =  [this.#empCnpj, this.#empNome, this.#empRegime, this.#empIe, this.#empTelefone, this.#empDescricao, this.#empResponsavel, 

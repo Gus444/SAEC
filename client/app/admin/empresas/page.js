@@ -130,7 +130,7 @@ export default function empresasAdmin() {
 
                 </div>
             <div>
-                <MontaTabelaEmpresa alteracao={""}  exclusao={excluirEmpresa} acesso={acessarEmpresa} exibir={"/admin/empresas/exibir"} lista={listaEmpresas} cabecalhos={["id","Empresa", "CNPJ", "Regime", "Email", "Telefone"]} propriedades={["empId" ,'empNome', 'empCnpj', 'empRegime', 'empEmail', 'empTelefone']} ></MontaTabelaEmpresa>
+                <MontaTabelaEmpresa alteracao={"/admin/empresas/alteracao"}  exclusao={excluirEmpresa} acesso={acessarEmpresa} exibir={"/admin/empresas/exibir"} lista={listaEmpresas} cabecalhos={["id","Empresa", "CNPJ", "Regime", "Email", "Telefone"]} propriedades={["empId" ,'empNome', 'empCnpj', 'empRegime', 'empEmail', 'empTelefone']} ></MontaTabelaEmpresa>
             </div>
         </div>
     )

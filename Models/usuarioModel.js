@@ -107,6 +107,23 @@ export default class UsuarioModel{
         return quantidade[0].quantidade_admins;
     }
 
+    async verificarEmail(usuEmail){
+        let sql = "select count(*) as quantidade_emails from tb_usuario where usu_email = ?"
+        let valores = [usuEmail]
+
+        let quantidade = await banco.ExecutaComando(sql,valores)
+
+        return quantidade[0].quantidade_emails
+    }
+
+    async verificarEmailAlteracao(usuEmail, usuId) {
+        let sql = "SELECT COUNT(*) AS quantidade_emails FROM tb_usuario WHERE usu_email = ? AND usu_id != ?";
+        let valores = [usuEmail, usuId];
+        let quantidade = await banco.ExecutaComando(sql, valores);
+    
+        return quantidade[0].quantidade_emails;
+    }
+
     async obter(id){
         let sql = "select * from tb_usuario where usu_id = ?";
         let valores = [id]
@@ -163,5 +180,24 @@ export default class UsuarioModel{
         }
 
         return null;
+    }
+
+    async verificarNivel(usuId ,usuNivel){
+
+        let sql = "select usu_nivel from tb_usuario where usu_id = ?"
+        let result = await banco.ExecutaComando(sql, usuId)
+
+        if(!result || result.length === 0){
+            return false;
+        }
+
+        let nivelAtual = result[0].usu_nivel;
+
+        if(nivelAtual == usuNivel){
+            return true
+        }
+        else{
+            return false
+        }
     }
 }

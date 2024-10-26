@@ -11,7 +11,6 @@ export default function comunicacaoAdmin(){
     let msgRef = useRef(null)
 
     let {emp, setEmp} = useContext(EmpContext)
-    let empresaLogada
     let [listaComunicacao, setListaComunicacao] = useState([]);
     const [loading, setLoading] = useState(true);
 

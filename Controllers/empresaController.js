@@ -137,4 +137,58 @@ export default class EmpresaController{
         }
     }
 
+    async alterarEmpresa(req, res) {
+        try {
+            // Verificação básica do body da requisição
+            if (!req.body) {
+                return res.status(400).json({ msg: "Favor, informar os dados da empresa" });
+            }
+    
+            // Desestruturação dos campos do body
+            let {
+                empId, empCnpj, empNome, empRegime, empIe, empTelefone, empDescricao,
+                empResponsavel, empProprietario, empInicio, empFim, empEmail,
+                empEndereco, empBairro, empCidade, empCep, empUf
+            } = req.body;
+    
+            // Verificação de preenchimento de campos obrigatórios
+            if (
+                !empCnpj || !empNome || !empRegime || !empIe || !empTelefone ||
+                !empResponsavel || !empProprietario || !empInicio || !empEmail ||
+                !empEndereco || !empBairro || !empCidade || !empCep || !empUf
+            ) {
+                return res.status(400).json({ msg: "Favor, inserir todas as informações" });
+            }
+    
+            // Criação do modelo de empresa
+            let empresa = new EmpresaModel(
+                empId, empCnpj, empNome, empRegime, empIe, empTelefone, empDescricao,
+                empResponsavel, empProprietario, empInicio, empFim, empEmail,
+                empEndereco, empBairro, empCidade, empCep, empUf
+            );
+    
+            // Verificação de CNPJ duplicado em outro registro
+            let cnpjDuplicado = await empresa.verificaCnpj(empCnpj, empId);
+            if (cnpjDuplicado) {
+                return res.status(400).json({ msg: "Este CNPJ já está cadastrado em outro registro" });
+            }
+    
+            // Verificação se a empresa existe pelo ID
+            const empresaExistente = await empresa.obter(empId);
+            if (!empresaExistente) {
+                return res.status(404).json({ msg: "Empresa não encontrada para atualização" });
+            }
+    
+            // Gravação dos dados atualizados no banco
+            const resultado = await empresa.gravarEmpresa();
+            if (resultado) {
+                return res.status(200).json({ msg: "Empresa atualizada com sucesso!" });
+            } else {
+                return res.status(500).json({ msg: "Erro ao atualizar a empresa" });
+            }
+        } catch (error) {
+            // Captura e resposta para erros no servidor
+            return res.status(500).json({ msg: "Erro de servidor", detalhes: error.message });
+        }
+    }
 }

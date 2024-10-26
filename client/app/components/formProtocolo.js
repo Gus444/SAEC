@@ -10,6 +10,23 @@ export default function FormProtocolo(props){
     let router = useRouter();
     const { user, setUser } = useContext(UserContext); // usuário que vem do contexto que está logado
     const { emp, setEmp } = useContext(EmpContext); // empresa que vem do localStorage
+    const [loading, setLoading] = useState(false);
+
+    //impede de acessar caso não tenha uma empresa//
+    useEffect(() => {
+        // Verifica se a empresa está selecionada
+        if (!emp) {
+            // Redireciona para a página de empresas se nenhuma empresa estiver selecionada
+            router.push("/admin/empresas");
+        } else {
+            setLoading(false);
+        }
+    }, [emp, router]);
+
+    if (loading || !emp || !user) {
+        return <div>Carregando...</div>;
+    }
+    ///////////////////////////////////////////////
 
     const usuario = user.usuId;
     const empresa = emp.empId;

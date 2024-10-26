@@ -55,23 +55,110 @@ export default function FormEmpresa(props) {
     
 
     function alterarEmpresa(id) {
-        let ok = false;
-        if( cnpj.current.value != "" &&
-            nome.current.value != "" &&
-            regime.current.value != "" &&
-            ie.current.value != "" &&
-            telefone.current.value != "" &&
-            responsavel.current.value != "" &&
-            proprietario.current.value != "" &&
-            inicio.current.value != "" &&
-            email.current.value != "" &&
-            endereco.current.value != "" &&
-            bairro.current.value != "" &&
-            cidade.current.value != "" &&
-            cep.current.value != "" &&
-            uf.current.value != ""
-        ) 
-        {
+        let ok = true;
+    
+        if (cnpj.current.value == "") {
+            setErroCNPJ(true);
+            ok = false;
+        } else {
+            setErroCNPJ(false);
+        }
+    
+        if (nome.current.value == "") {
+            setErroNome(true);
+            ok = false;
+        } else {
+            setErroNome(false);
+        }
+    
+        if (regime.current.value == "") {
+            setErroRegime(true);
+            ok = false;
+        } else {
+            setErroRegime(false);
+        }
+    
+        if (ie.current.value == "") {
+            setErroIe(true);
+            ok = false;
+        } else {
+            setErroIe(false);
+        }
+    
+        if (telefone.current.value == "") {
+            setErroTelefone(true);
+            ok = false;
+        } else {
+            setErroTelefone(false);
+        }
+    
+        if (responsavel.current.value == "") {
+            setErroResponsavel(true);
+            ok = false;
+        } else {
+            setErroResponsavel(false);
+        }
+    
+        if (proprietario.current.value == "") {
+            setErroProprietario(true);
+            ok = false;
+        } else {
+            setErroProprietario(false);
+        }
+    
+        if (inicio.current.value == "") {
+            setErroInicio(true);
+            ok = false;
+        } else {
+            setErroInicio(false);
+        }
+    
+        if (email.current.value == "") {
+            setErroEmail(true);
+            ok = false;
+        } else {
+            setErroEmail(false);
+        }
+    
+        if (endereco.current.value == "") {
+            setErroEndereco(true);
+            ok = false;
+        } else {
+            setErroEndereco(false);
+        }
+    
+        if (bairro.current.value == "") {
+            setErroBairro(true);
+            ok = false;
+        } else {
+            setErroBairro(false);
+        }
+    
+        if (cidade.current.value == "") {
+            setErroCidade(true);
+            ok = false;
+        } else {
+            setErroCidade(false);
+        }
+    
+        if (cep.current.value == "") {
+            setErroCep(true);
+            ok = false;
+        } else {
+            setErroCep(false);
+        }
+    
+        if (uf.current.value == "") {
+            setErroUf(true);
+            ok = false;
+        } else {
+            setErroUf(false);
+        }
+    
+        msgRef.current.className = '';
+        msgRef.current.innerHTML = '';
+    
+        if (ok) {
             let empresa = {
                 empId: id,
                 empCnpj: cnpj.current.value,
@@ -87,16 +174,16 @@ export default function FormEmpresa(props) {
                 empEmail: email.current.value,
                 empEndereco: endereco.current.value,
                 empBairro: bairro.current.value,
-                empCidade: cidade.current.value, 
+                empCidade: cidade.current.value,
                 empCep: cep.current.value,
                 empUf: uf.current.value,
-            }
-
-            fetch('http://localhost:5000/empresa', {
+            };
+    
+            fetch(`http://localhost:5000/empresa`, {
                 mode: 'cors',
                 credentials: 'include',
                 method: "PUT",
-                headers:{
+                headers: {
                     "Content-type": "application/json",
                 },
                 body: JSON.stringify(empresa)
@@ -105,35 +192,17 @@ export default function FormEmpresa(props) {
                 ok = r.status == 200;
                 return r.json();
             })
-            .then(r=> {
-                if(ok) {
-                    alert(r.msg);
-
-                    cnpj.current.value = "";
-                    nome.current.value = "";
-                    regime.current.value = "";
-                    ie.current.value = "";
-                    telefone.current.value = "";
-                    descricao.current.value = "";
-                    responsavel.current.value = "";
-                    proprietario.current.value = "";
-                    inicio.current.value = "";
-                    fim.current.value = "";
-                    email.current.value = "";
-                    endereco.current.value = "";
-                    bairro.current.value = "";
-                    cidade.current.value = "";
-                    cep.current.value = "";
-                    uf.current.value = "";
+            .then(r => {
+                if (ok) {
+                    router.push("/admin/empresas");
+                } else {
+                    msgRef.current.className = "msgError";
+                    msgRef.current.innerHTML = r.msg;
                 }
-                else {
-                    alert(r.msg);
-                }
-            })
-        }
-        else
-        {
-            alert("Preencha os campos corretamente!");
+            });
+        } else {
+            msgRef.current.className = "msgError";
+            msgRef.current.innerHTML = "Preencha todos os campos";
         }
     }
 

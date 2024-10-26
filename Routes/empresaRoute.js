@@ -59,6 +59,25 @@ router.get('/obter/:id', auth.validar, (req,res) => {
     }] */
     ctrl.obterEmpresa(req, res);
 })
+router.put('/', auth.validar, (req,res) =>{
+    // #swagger.tags = ['Empresa']
+    // #swagger.summary = 'Alterar uma empresa'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    /* #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/empresaModel"
+                }
+            }
+            
+        }
+    }*/
+    ctrl.alterarEmpresa(req,res);
+});
 
 
 export default router

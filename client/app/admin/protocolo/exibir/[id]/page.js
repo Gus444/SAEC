@@ -1,10 +1,14 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/navigation";
+import EmpContext from '@/app/context/empContext';
 
 export default function ExibirProtocolo({ params: { id } }) {
+    let router = useRouter()
     let [protocolo, setProtocolo] = useState(null);
     let [docs, setDocs] = useState(null);
     let [loading, setLoading] = useState(true);
+    let {emp, setEmp} = useContext(EmpContext)
     const PROTOCOLO_IMG_CAMINHO = "http://localhost:5000/img/Protocolo/";
 
     // Fazer ambas as requisições ao mesmo tempo com Promise.all
@@ -41,13 +45,21 @@ export default function ExibirProtocolo({ params: { id } }) {
         carregarDados(id);
     }, [id]);
 
-    if (loading) {
-        return (
-            <div className="container mt-5">
-                <h2 className="text-center">Carregando...</h2>
-            </div>
-        );
+     //impede de acessar caso não tenha uma empresa//
+    useEffect(() => {
+        // Verifica se a empresa está selecionada
+        if (!emp) {
+            // Redireciona para a página de empresas se nenhuma empresa estiver selecionada
+            router.push("/admin/empresas");
+        } else {
+            setLoading(false);
+        }
+    }, [emp, router]);
+
+    if (loading || !emp) {
+        return <div>Carregando...</div>;
     }
+    ///////////////////////////////////////////////
 
     console.log("Caminho da imagem:", PROTOCOLO_IMG_CAMINHO);
 

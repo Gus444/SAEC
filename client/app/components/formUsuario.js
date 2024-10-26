@@ -33,6 +33,85 @@ export default function FormUsuario(props){
     let [erroStatus, setErroStatus] = useState(false);
     let [erroNivel, setErroNivel] = useState(false);
 
+    function alterarUsuario(id) {
+        let ok = true;
+
+        if(nome.current.value == ""){
+            setErroNome(true);
+            ok = false
+        } else{
+            setErroNome(false)
+        }
+
+        if(email.current.value == ""){
+            setErroEmail(true);
+            ok = false
+        } else{
+            setErroEmail(false)
+        }
+
+        if(senha.current.value == ""){
+            setErroSenha(true);
+            ok = false
+        } else{
+            setErroSenha(false)
+        }
+
+        if(telefone.current.value == ""){
+            setErroTelefone(true);
+            ok = false
+        } else{
+            setErroTelefone(false)
+        }
+
+        if(status.current.value == ""){
+            setErroStatus(true);
+            ok = false
+        } else{
+            setErroStatus(false)
+        }
+
+        if(ok){
+            let usuario = {
+                usuId: id,
+                usuNome: nome.current.value,
+                usuEmail: email.current.value,
+                usuSenha: senha.current.value,
+                usuTelefone: telefone.current.value,
+                usuStatus: status.current.value,
+                usuNivel: nivel.current.value,
+            }
+
+            fetch('http://localhost:5000/usuarios', {
+                mode: 'cors',
+                credentials: 'include',
+                method: "PUT",
+                headers:{
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(usuario)
+            })
+            .then(r => {
+                ok = r.status == 200;
+                return r.json();
+            })
+            .then(r=> {
+                if(ok) {
+                    router.push("/admin/usuarios");
+                }
+                else {
+                    msgRef.current.className = "msgError";
+                    msgRef.current.innerHTML = r.msg;
+                }
+            })
+        }
+        else
+        {
+            msgRef.current.className = "msgError";
+            msgRef.current.innerHTML = "Preencha todos os campos";
+        }
+    }
+
     function gravarUsuario() {
 
         let ok = true;

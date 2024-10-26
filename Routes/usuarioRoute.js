@@ -49,7 +49,26 @@ router.delete('/excluir/:id', auth.validar,(req,res) =>{
             "bearerAuth": []
     }] */ 
    ctrl.excluirUsuario(req,res);
-})
+});
+router.put('/', auth.validar, (req, res) => {   
+    // #swagger.tags = ['Usuários']
+    // #swagger.summary = 'Atualiza todos os atributos de um usuário no banco de dados'    
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    /* #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/usuarioModel"
+                }
+            }
+            
+        }
+    }*/
+    ctrl.alterarUsuario(req, res);
+});
 
 
 export default router;

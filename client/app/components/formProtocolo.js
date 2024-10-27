@@ -211,8 +211,8 @@ export default function FormProtocolo(props){
                         <label htmlFor="status">Tipo*</label>
                         <select defaultValue={protocolo.protTipo} ref={tipo} className={`form-control ${erroTipo ? 'is-invalid' : ''}`} onChange={() => setErroTipo(false)} placeholder="Tipo de documento">
                             <option value="">Selecione o tipo</option>
-                            <option value="0">Entregue</option>
-                            <option value="1">Recebido</option>
+                            <option value="Entregue">Entregue</option>
+                            <option value="Recebido">Recebido</option>
                         </select>
                     </div>
                 </div>

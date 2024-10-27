@@ -59,23 +59,23 @@ export default function ExibirComunicacao({ params: { id } }) {
                 <tbody>
                     <tr>
                         <th>Título</th>
-                        <td>{comunicacao.comTitulo || "Título da Comunicação"}</td>
+                        <td>{comunicacao?.comTitulo || "Título da Comunicação"}</td>
                     </tr>
                     <tr>
                         <th>Canal</th>
-                        <td>{comunicacao.comCanal || "Canal da Comunicação"}</td>
+                        <td>{comunicacao?.comCanal || "Canal da Comunicação"}</td>
                     </tr>
                     <tr>
                         <th>Data</th>
-                        <td>{comunicacao.comData || "Data da Comunicação"}</td>
+                        <td>{comunicacao?.comData || "Data da Comunicação"}</td>
                     </tr>
                     <tr>
                         <th>Hora</th>
-                        <td>{comunicacao.comHora || "Hora da Comunicação"}</td>
+                        <td>{comunicacao?.comHora || "Hora da Comunicação"}</td>
                     </tr>
                     <tr>
                         <th>Descrição</th>
-                        <td>{comunicacao.comDescricao || "Descrição da Comunicação"}</td>
+                        <td>{comunicacao?.comDescricao || "Descrição da Comunicação"}</td>
                     </tr>
                 </tbody>
             </table>

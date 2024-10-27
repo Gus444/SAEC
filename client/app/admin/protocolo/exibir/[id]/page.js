@@ -70,19 +70,19 @@ export default function ExibirProtocolo({ params: { id } }) {
                 <tbody>
                     <tr>
                         <th>Título</th>
-                        <td>{protocolo.protTitulo || "Título da Comunicação"}</td>
+                        <td>{protocolo?.protTitulo || "Título do protocolo"}</td>
                     </tr>
                     <tr>
-                        <th>Canal</th>
-                        <td>{protocolo.protTipo || "Canal da Comunicação"}</td>
+                        <th>Tipo</th>
+                        <td>{protocolo?.protTipo || "Tipo de protocolo"}</td>
                     </tr>
                     <tr>
                         <th>Data</th>
-                        <td>{protocolo.protData || "Data da Comunicação"}</td>
+                        <td>{protocolo?.protData || "Data do protocolo"}</td>
                     </tr>
                     <tr>
                         <th>Descrição</th>
-                        <td>{protocolo.protDescricao || "Descrição da Comunicação"}</td>
+                        <td>{protocolo?.protDescricao || "Descrição do protocolo"}</td>
                     </tr>
                 </tbody>
             </table>

@@ -15,6 +15,14 @@ router.get('/', auth.validar, (req,res) =>{
     }] */
     ctrl.listarComunicacao(req,res)
 })
+router.get('/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Comunicacao']
+    // #swagger.summary = 'Lista de Comunicacoes por empresa'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    ctrl.listarComunicacaoPorEmpresa(req,res)
+})
 router.post('/', auth.validar, (req,res) =>{
     // #swagger.tags = ['Comunicacao']
     // #swagger.summary = 'Cadastrar comunicacao'

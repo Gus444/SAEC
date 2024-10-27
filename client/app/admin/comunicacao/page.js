@@ -29,7 +29,7 @@ export default function comunicacaoAdmin(){
     }, [emp, router]);
 
     function carregarComunicacao() {
-        fetch("http://localhost:5000/comunicacao", {
+        fetch(`http://localhost:5000/comunicacao/${emp.empId}`, {
             mode: 'cors',
             credentials: 'include',
             method: "GET",

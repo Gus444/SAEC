@@ -76,6 +76,20 @@ export default class ProtocoloModel{
         return lista;
     }
 
+    async listarPorEmpresa(id){
+
+        let sql = `select * from tb_protocolo u
+        inner join tb_usuario x on u.tb_usuario_usu_Id = x.usu_id
+        inner join tb_empresa y on u.tb_empresa_emp_Id = y.emp_id
+        where emp_id = ?`
+        let valores = [id]
+
+        let rows = await banco.ExecutaComando(sql, valores);
+
+        return rows.map(row => new ProtocoloModel(
+            row["prot_id"], row["prot_Titulo"], row["prot_Tipo"], row["prot_Data"], row["prot_Descricao"], new UsuarioModel(row["usu_id"], row["usu_nome"]), new EmpresaModel(row["emp_id"],[],row["emp_nome"])));
+    }
+
     async gravarProtocolo(){
         let sql = "";
         let valores = "";

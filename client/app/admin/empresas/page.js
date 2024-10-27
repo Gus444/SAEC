@@ -11,6 +11,7 @@ export default function empresasAdmin() {
     let {emp, setEmp} = useContext(EmpContext)
     let empresaLogada
     let [listaEmpresas, setListaEmpresas] = useState([]);
+    const [query, setQuery] = useState("");
     useEffect((e) => {
         carregarEmpresas();
     }, [])
@@ -21,12 +22,72 @@ export default function empresasAdmin() {
             credentials: 'include',
             method: "GET",
         })
-        .then(r=> {
-            return r.json()
-        })
-        .then(r=> {
+        .then(r => r.json())
+        .then(r => {
+            console.log("Dados carregados:", r); // Verifique os dados aqui
             setListaEmpresas(r);
-        })
+        });
+    }
+
+    function buscarEmpresas() {
+        if (query.trim() !== "") {
+            fetch(`http://localhost:5000/empresa/buscar?query=${encodeURIComponent(query)}`, {
+                mode: 'cors',
+                credentials: 'include',
+                method: "GET",
+            })
+            .then(r => r.json())
+            .then(r => {
+                console.log("Dados retornados da busca:", r); // Verifique os dados aqui
+                
+                // Verifica se a resposta é um array
+                if (Array.isArray(r)) {
+                    if (r.length === 0) {
+                        msgRef.current.className = "msgError";
+                        msgRef.current.innerHTML = "Nenhuma empresa encontrada.";
+                        setListaEmpresas([]); // Limpa a lista se não houver resultados
+                        setTimeout(() => {
+                            msgRef.current.innerHTML = '';
+                            msgRef.current.className = '';
+                        }, 3000);
+                    } else {
+                        // Mapeia os dados para os novos nomes
+                        const mappedData = r.map(item => ({
+                            empId: item.emp_id,
+                            empNome: item.emp_nome,
+                            empCnpj: item.emp_cnpj,
+                            empRegime: item.emp_regime,
+                            empEmail: item.emp_email,
+                            empTelefone: item.emp_telefone,
+                        }));
+    
+                        setListaEmpresas(mappedData);
+                    }
+                } else {
+                    // Caso não seja um array, você pode exibir uma mensagem de erro
+                    msgRef.current.className = "msgError";
+                    msgRef.current.innerHTML = "Sem resultado.";
+                    setListaEmpresas([]); // Limpa a lista em caso de erro
+                    setTimeout(() => {
+                        msgRef.current.innerHTML = '';
+                        msgRef.current.className = '';
+                    }, 2000);
+                }
+            })
+            .catch(err => {
+                // Tratamento de erro da requisição
+                console.error("Erro ao buscar empresas:", err);
+                msgRef.current.className = "msgError";
+                msgRef.current.innerHTML = "Sem resultado.";
+                setListaEmpresas([]); // Limpa a lista em caso de erro
+                setTimeout(() => {
+                    msgRef.current.innerHTML = '';
+                    msgRef.current.className = '';
+                }, 2000);
+            });
+        } else {
+            carregarEmpresas();
+        }
     }
 
     async function excluirEmpresa(id){
@@ -126,9 +187,27 @@ export default function empresasAdmin() {
             <div>
                 <Link href="/admin/empresas/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar empresa</Link>
             </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="form-floating mb-3" style={{ marginRight: '10px' }}>
+                    <input
+                        type="text"
+                        className='form-control'
+                        style={{ width: '500px' }} // Ajuste a largura do input
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                buscarEmpresas(); // Busca quando Enter é pressionado
+                            }
+                        }}
+                    />
+                    <label htmlFor="floatingInput">Buscar</label>
+                </div>
+                <button onClick={buscarEmpresas} className="btn btn-primary" style={{ width: '100px' }}><i className="fa-solid fa-magnifying-glass"></i></button> {/* Ajuste a largura do botão */}
+            </div>
             <div ref={msgRef}>
 
-                </div>
+            </div>
             <div>
                 <MontaTabelaEmpresa alteracao={"/admin/empresas/alteracao"}  exclusao={excluirEmpresa} acesso={acessarEmpresa} exibir={"/admin/empresas/exibir"} lista={listaEmpresas} cabecalhos={["id","Empresa", "CNPJ", "Regime", "Email", "Telefone"]} propriedades={["empId" ,'empNome', 'empCnpj', 'empRegime', 'empEmail', 'empTelefone']} ></MontaTabelaEmpresa>
             </div>

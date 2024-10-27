@@ -78,6 +78,10 @@ router.put('/', auth.validar, (req,res) =>{
     }*/
     ctrl.alterarEmpresa(req,res);
 });
+router.get('/buscar', auth.validar, (req,res) => {
+    // #swagger.tags = ['Empresa']
+    ctrl.buscar(req,res)
+})
 
 
 export default router

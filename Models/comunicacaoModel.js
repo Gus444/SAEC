@@ -82,6 +82,26 @@ export default class ComunicacaoModel{
         return lista;
     }
 
+    async listarPorEmpresa(id){
+        let sql = `select * from tb_comunicacao u
+        inner join tb_usuario x on u.tb_usuario_usu_Id = x.usu_id
+        inner join tb_empresa y on u.tb_empresa_emp_Id = y.emp_id
+        where emp_id = ?`
+        let valores = [id]
+
+        let rows = await banco.ExecutaComando(sql, valores);
+
+        return rows.map(row => new ComunicacaoModel(
+            row["com_id"],
+            row["com_titulo"],
+            row["com_canal"],
+            row["com_data"],
+            row["com_hora"],
+            row["com_descricao"],
+            new UsuarioModel(row["usu_id"], row["usu_nome"]), new EmpresaModel(row["emp_id"],[],row["emp_nome"])
+        ));
+    }
+
     async gravarComunicacao(){
         let sql = "";
         let valores = "";

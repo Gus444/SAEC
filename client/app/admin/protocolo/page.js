@@ -29,7 +29,7 @@ export default function comunicacaoAdmin(){
     }, [emp, router]);
 
     function carregarProtocolo() {
-        fetch("http://localhost:5000/protocolo", {
+        fetch(`http://localhost:5000/protocolo/${emp.empId}`, {
             mode: 'cors',
             credentials: 'include',
             method: "GET",

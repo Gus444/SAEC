@@ -17,6 +17,18 @@ export default class ComunicacaoController{
         }
     }
 
+    async listarComunicacaoPorEmpresa(req,res){
+        try {
+            let { id } = req.params;
+            let comunicacao = new ComunicacaoModel();
+            let listaComunicacao = await comunicacao.listarPorEmpresa(id)
+            res.status(200).json(listaComunicacao)
+
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
     async cadastrarComunicacao(req, res) {
         try{
             if(req.body) {

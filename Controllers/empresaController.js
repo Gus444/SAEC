@@ -191,4 +191,30 @@ export default class EmpresaController{
             return res.status(500).json({ msg: "Erro de servidor", detalhes: error.message });
         }
     }
+
+    async buscar(req, res) {
+        try {
+            // Obtém a query da requisição
+            let { query } = req.query;
+    
+            // Valida a entrada
+            if (!query || query.trim() === "") {
+                return res.status(400).json({ msg: "Por favor, forneça um termo de busca." });
+            }
+    
+            // Chama a função de busca na model
+            let empresa = new EmpresaModel();
+            let result = await empresa.buscar(req); // Altera 'empresa' para 'result'
+    
+            // Verifica se foram encontradas empresas
+            if (result.length === 0) {
+                return res.status(404).json({ msg: "Nenhuma empresa encontrada." });
+            }
+    
+            // Retorna as empresas encontradas
+            res.status(200).json(result); // Altera 'empresas' para 'result'
+        } catch (error) {
+            res.status(500).json({ msg: "Erro de servidor", detalhes: error.message });
+        }
+    }
 }

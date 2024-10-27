@@ -14,7 +14,7 @@ export default function MontaTabela(props) {
     if (props.lista.length > 0 && propriedades.length === 0) {
         propriedades = Object.keys(props.lista[0]);
     }
-    
+
     // Adiciona a coluna "Ações" automaticamente
     if (!propriedades.includes("Ações")) {
         propriedades.push("Ações");
@@ -23,6 +23,9 @@ export default function MontaTabela(props) {
     if (!cabecalho.includes("Ações")) {
         cabecalho.push("Ações");
     }
+
+    // Verifica se props.lista é um array
+    const lista = Array.isArray(props.lista) ? props.lista : [];
 
     return (
         <div className="container mt-1">
@@ -37,35 +40,36 @@ export default function MontaTabela(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {props.lista.map((value, index) => (
-                                <tr key={index}>
-                                    {propriedades.map((prop, index) => {
-                                        if (prop !== "Ações") {
-                                            return <td key={index}>{value[prop]}</td>;
-                                        } else {
-                                            return (
-                                                <td key={index}>
-                                                    <div>
-                                                        <Link href={props.alteracao + `/${value[propriedades[0]]}`} title="ALTERAR" className="btn btn-primary mr-2 mb-2">
-                                                            <i className="fas fa-pen"></i>
-                                                        </Link>
-                                                        <button onClick={() => props.exclusao(value[propriedades[0]])} title="EXCLUIR" className="btn btn-danger mr-2 mb-2">
-                                                            <i className="fas fa-trash"></i>
-                                                        </button>
-                                                        <button onClick={() => props.acesso(value[propriedades[0]])} title="ACESSAR" className="btn btn-success mr-2 mb-2">
-                                                            <i className="fas fa-share"></i>
-                                                        </button>
-                                                        <Link href={props.exibir + `/${value[propriedades[0]]}`} title="EXIBIR" className="btn btn-secondary mr-2 mb-2">
-                                                        <i class="fa-solid fa-scroll"></i>
-                                                        </Link>
-                                                    </div>
-                                                </td>
-                                            );
-                                        }
-                                    })}
-                                </tr>
-                            ))}
-                        </tbody>
+                        {props.lista.map((value, index) => (
+                            <tr key={index}>
+                                {props.propriedades.map((prop, index) => {
+                                    console.log(`Valor de ${prop}:`, value[prop]); // Adicione esta linha para verificar o valor
+                                    if (prop !== "Ações") {
+                                        return <td key={index}>{value[prop]}</td>;
+                                    } else {
+                                        return (
+                                            <td key={index}>
+                                                <div>
+                                                    <Link href={props.alteracao + `/${value[props.propriedades[0]]}`} title="ALTERAR" className="btn btn-primary mr-2 mb-2">
+                                                        <i className="fas fa-pen"></i>
+                                                    </Link>
+                                                    <button onClick={() => props.exclusao(value[props.propriedades[0]])} title="EXCLUIR" className="btn btn-danger mr-2 mb-2">
+                                                        <i className="fas fa-trash"></i>
+                                                    </button>
+                                                    <button onClick={() => props.acesso(value[props.propriedades[0]])} title="ACESSAR" className="btn btn-success mr-2 mb-2">
+                                                        <i className="fas fa-share"></i>
+                                                    </button>
+                                                    <Link href={props.exibir + `/${value[props.propriedades[0]]}`} title="EXIBIR" className="btn btn-secondary mr-2 mb-2">
+                                                        <i className="fa-solid fa-scroll"></i>
+                                                    </Link>
+                                                </div>
+                                            </td>
+                                        );
+                                    }
+                                })}
+                            </tr>
+                        ))}
+                    </tbody>
                     </table>
                 </div>
             </div>

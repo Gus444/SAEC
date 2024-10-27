@@ -15,6 +15,18 @@ export default class ProtocoloController{
         }
     }
 
+    async listarProtocoloPorEmpresa(req,res){
+        try {
+            let { id } = req.params;
+            let protocolo = new ProtocoloModel();
+            let listaProtocolo = await protocolo.listarPorEmpresa(id)
+            res.status(200).json(listaProtocolo)
+
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
     async cadastrarProtocolo(req, res) {
         try{
             if(req.body) {

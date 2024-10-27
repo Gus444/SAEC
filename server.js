@@ -15,6 +15,8 @@ import comunicacaoRouter from './Routes/comunicacaoRoute.js'
 import docsComunicacaoRouter from './Routes/docsComunicacaoRoute.js'
 import protocoloRouter from './Routes/protocoloRoute.js'
 import docsProtocoloRouter from './Routes/docsProtocoloRoute.js'
+import faturamentoRouter from './Routes/faturamentoRoute.js'
+import competenciaRouter from './Routes/competenciaRoute.js'
 
 const outputJson = require("./swagger-output.json");
 
@@ -37,6 +39,8 @@ app.use('/comunicacao', comunicacaoRouter);
 app.use('/docsComunicacao', docsComunicacaoRouter);
 app.use('/protocolo', protocoloRouter);
 app.use('/docsProtocolo', docsProtocoloRouter);
+app.use('/faturamento', faturamentoRouter);
+app.use('/competencia', competenciaRouter);
 
 
 

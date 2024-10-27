@@ -196,4 +196,12 @@ export default class EmpresaModel{
         }
     }
 
+    async buscar(req) {
+        let { query } = req.query;
+        let sql = 'SELECT * FROM tb_empresa WHERE emp_nome LIKE ?';
+        let valores = [`%${query}%`]; // Adicione '%' no início e no final para buscar por substrings
+    
+        let empresa = await banco.ExecutaComando(sql, valores);
+        return empresa;
+    }
 }

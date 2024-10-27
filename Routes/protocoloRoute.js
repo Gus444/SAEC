@@ -15,6 +15,14 @@ router.get('/', auth.validar, (req,res) =>{
     }] */
     ctrl.listarProtocolo(req,res)
 })
+router.get('/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Protocolo']
+    // #swagger.summary = 'Lista de Protocolos por empresa'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+    ctrl.listarProtocoloPorEmpresa(req,res)
+})
 router.post('/', auth.validar, (req,res) =>{
     // #swagger.tags = ['Protocolo']
     // #swagger.summary = 'Cadastrar protocolo'

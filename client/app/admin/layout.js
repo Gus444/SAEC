@@ -119,8 +119,13 @@ export default function AdminPage({ children }) {
                                         style={{ color: "red", cursor: "pointer" }}>Protocolo</a>)}
                                 </li>
                                 <li>
+                                {emp ? (
+                                    <a href="/admin/faturamento">Faturamento</a>) : (<a href="/admin/empresas" onClick={() => {alert("Por favor, selecione uma empresa antes de acessar o Faturamento.");}}
+                                        style={{ color: "red", cursor: "pointer" }}>Faturamento</a>)}
+                                </li>
+                                <li>
                                     <button onClick={handleLogout} style={{ color: "#ffffff", background: "transparent", border: "none", cursor: "pointer" }}>
-                                        <i className="fa-solid fa-sign-out-alt" style={{ color: "#ffffff" }}></i> Logout
+                                        <i className="fa-solid fa-sign-out-alt" style={{ color: "#ffffff" }}></i>Sair
                                     </button>
                                 </li>
                             </>

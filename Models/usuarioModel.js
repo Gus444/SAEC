@@ -107,6 +107,15 @@ export default class UsuarioModel{
         return quantidade[0].quantidade_admins;
     }
 
+    async VerificarNivel(id){
+        let sql = "select usu_nivel from tb_usuario where usu_id = ?"
+        let valores = [id]
+
+        let result = await banco.ExecutaComando(sql, valores);
+
+        return result[0].usu_nivel;
+    }
+
     async verificarEmail(usuEmail){
         let sql = "select count(*) as quantidade_emails from tb_usuario where usu_email = ?"
         let valores = [usuEmail]

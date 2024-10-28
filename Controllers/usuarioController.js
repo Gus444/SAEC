@@ -78,9 +78,28 @@ export default class UsuarioController{
             let usuario = new UsuarioModel();
             let { id } = req.params;
             if(await usuario.obter(id) != null){
-                let administradorCount;
-                administradorCount = await usuario.ContadorDeAdministrador();
-                if(administradorCount>1){
+
+                let verificaAdmin
+                verificaAdmin = await usuario.VerificarNivel(id);
+
+                if(verificaAdmin == 0){
+                    let administradorCount;
+                    administradorCount = await usuario.ContadorDeAdministrador();
+
+                    if(administradorCount>1){
+                        let result = await usuario.deletarUsuario(id);
+                        if(result){
+                            res.status(200).json({msg:"Exclusão efetuada com sucesso"});
+                        }
+                        else{
+                            res.status(500).json({msg:"Erro ao excluir usuario"});
+                        }
+                    }
+                    else{
+                        res.status(400).json({msg:"Não é possivel apagar, ultimo administrador do sistema"})
+                    }
+                }
+                else{
                     let result = await usuario.deletarUsuario(id);
                     if(result){
                         res.status(200).json({msg:"Exclusão efetuada com sucesso"});
@@ -88,9 +107,6 @@ export default class UsuarioController{
                     else{
                         res.status(500).json({msg:"Erro ao excluir usuario"});
                     }
-                }
-                else{
-                    res.status(400).json({msg:"Não é possivel apagar, ultimo administrador do sistema"})
                 }
             }
             else{

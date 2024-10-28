@@ -26,7 +26,12 @@ export default function usuariosAdmin() {
             return r.json()
         })
         .then(r=> {
-            setListaUsuarios(r);
+            let usuariosFormatados = r.map(usuario => ({
+                ...usuario,
+                usuNivel: usuario.usuNivel === 0 ? "Administrador" : "Usuário",
+                usuStatus: usuario.usuStatus === 0 ? "Ativo" : "Inativo"
+            }));
+            setListaUsuarios(usuariosFormatados);
         })
     }
 

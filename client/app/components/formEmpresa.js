@@ -13,7 +13,7 @@ export default function FormEmpresa(props) {
     : 
         {   empCnpj: "", empNome: "", empRegime: "", empIe: "", empTelefone: "", empDescricao: "",
             empResponsavel: "", empProprietario: "", empInicio: "", empFim: "", empEmail: "",
-            empEndereco: "", empBairro: "", empCidade: "", empCep: "", empUf:""
+            empEndereco: "", empBairro: "", empCidade: "", empCep: "", empUf: ""
         }
 
     let isAlteracao = empresa.empId != null;
@@ -594,7 +594,7 @@ export default function FormEmpresa(props) {
 
                 <div className="form-floating flex-grow-1">
                     <select defaultValue={empresa.empUf} ref={uf} className={`form-control ${erroUf ? 'is-invalid' : ''}`} onChange={() => setErroUf(false)} placeholder="UF">
-                        <option value="">Selecione o estado</option>
+                        <option value="0">Selecione o estado</option>
                         <option value="AC">Acre (AC)</option>
                         <option value="AL">Alagoas (AL)</option>
                         <option value="AP">Amapá (AP)</option>
@@ -665,13 +665,13 @@ export default function FormEmpresa(props) {
             <div className = "row">
                 <div className="col-md-4 form-group mb-3">
                     <label htmlFor="cnpj">Responsavel*</label>
-                    <input defaultValue={empresa.empCnpj} ref={responsavel} type="text" className={`form-control ${erroResponsavel ? 'is-invalid' : ''}`} onChange={() => setErroResponsavel(false)} placeholder="Nome do responsavel"/>
+                    <input defaultValue={empresa.empResponsavel} ref={responsavel} type="text" className={`form-control ${erroResponsavel ? 'is-invalid' : ''}`} onChange={() => setErroResponsavel(false)} placeholder="Nome do responsavel"/>
                     {/* {erroResponsavel && <small className="text-danger">Responsavel é obrigatório</small>} */}
                 </div>
 
                 <div className="col-md-4 form-group mb-3">
                     <label htmlFor="nome">Proprietário*</label>
-                    <input defaultValue={empresa.empNome} ref={proprietario} type="text" className={`form-control ${erroProprietario ? 'is-invalid' : ''}`} onChange={() => setErroProprietario(false)} placeholder="Nome do proprietário"/>
+                    <input defaultValue={empresa.empProprietario} ref={proprietario} type="text" className={`form-control ${erroProprietario ? 'is-invalid' : ''}`} onChange={() => setErroProprietario(false)} placeholder="Nome do proprietário"/>
                     {/* {erroProprietario && <small className="text-danger">Proprietário é obrigatório</small>} */}
                 </div>
             </div>
@@ -679,7 +679,7 @@ export default function FormEmpresa(props) {
 
             <div className="form-group mb-3">
                 <label htmlFor="nome">Descricão*</label>
-                <input defaultValue={empresa.empNome} ref={descricao} type="textarea" className="form-control" maxlength="100"/>
+                <input defaultValue={empresa.empDescricao} ref={descricao} type="textarea" className="form-control" maxlength="100"/>
             </div>
 
             <div className="d-flex justify-content-between mt-4">

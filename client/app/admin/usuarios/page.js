@@ -9,12 +9,21 @@ export default function usuariosAdmin() {
     let msgRef = useRef(null)
 
     let [listaUsuarios, setListaUsuarios] = useState([]);
+    let [mostrarInativos, setMostrarInativos] = useState(false);
     let usuarioLogado
     const {user, setUser} = useContext(UserContext)
+    let timeoutId;
 
-    useEffect((e) => {
+    
+
+    useEffect(() => {
         carregarUsuarios();
-    }, [])
+
+        // Limpa o timeout quando o componente desmonta
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
 
     function carregarUsuarios() {
         fetch("http://localhost:5000/usuarios", {
@@ -34,6 +43,10 @@ export default function usuariosAdmin() {
             setListaUsuarios(usuariosFormatados);
         })
     }
+
+    let usuariosExibidos = mostrarInativos
+    ? listaUsuarios
+    : listaUsuarios.filter(usuario => usuario.usuStatus === "Ativo");
 
     async function excluirUsuario(id) {
 
@@ -67,19 +80,23 @@ export default function usuariosAdmin() {
                             msgRef.current.innerHTML = r.msg;
                             carregarUsuarios();
 
-                            setTimeout(() => {
-                                msgRef.current.innerHTML = '';
-                                msgRef.current.className = '';
-                            }, 2000);
+                            timeoutId = setTimeout(() => {
+                                if (msgRef.current) {
+                                    msgRef.current.innerHTML = '';
+                                    msgRef.current.className = '';
+                                }
+                            }, 5000);
                         }
                         else{
                             msgRef.current.className = "msgError";
                             msgRef.current.innerHTML = r.msg;
 
-                            setTimeout(() => {
-                                msgRef.current.innerHTML = '';
-                                msgRef.current.className = '';
-                            }, 2000);
+                            timeoutId = setTimeout(() => {
+                                if (msgRef.current) {
+                                    msgRef.current.innerHTML = '';
+                                    msgRef.current.className = '';
+                                }
+                            }, 5000);
                         }
                     })
                 }
@@ -97,11 +114,24 @@ export default function usuariosAdmin() {
             <div>
                 <Link href="/admin/usuarios/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar usuario</Link>
             </div>
+            <div>
+                <label>
+                    <input 
+                        type="checkbox" 
+                        checked={mostrarInativos} 
+                        onChange={() => setMostrarInativos(!mostrarInativos)} 
+                    />
+                    Exibir Usuários Inativos
+                </label>
+            </div>
             <div ref={msgRef}>
 
-                </div>
+            </div>
             <div>
-                <MontaTabela alteracao={'/admin/usuarios/alteracao'}  exclusao={excluirUsuario} exibir={"/admin/usuarios/exibir"}  lista={listaUsuarios} cabecalhos={["id","Nome", "Email", "Status", "Nivel", "Telefone"]} propriedades={["usuId" ,'usuNome', 'usuEmail', 'usuStatus', 'usuNivel', 'usuTelefone']} ></MontaTabela>
+                <MontaTabela alteracao={'/admin/usuarios/alteracao'}  exclusao={excluirUsuario} exibir={"/admin/usuarios/exibir"}  lista={usuariosExibidos} cabecalhos={["id","Nome", "Email", "Status", "Nivel", "Telefone"]} 
+                propriedades={["usuId" ,'usuNome', 'usuEmail', 'usuStatus', 'usuNivel', 'usuTelefone']} linhaEstilo={(usuario) => usuario.usuStatus === "Inativo" ? { color: "red" } : {}} >
+                    
+                </MontaTabela>
             </div>
         </div>
     )

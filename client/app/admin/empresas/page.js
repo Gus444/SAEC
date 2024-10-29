@@ -90,61 +90,66 @@ export default function empresasAdmin() {
         }
     }
 
-    async function excluirEmpresa(id){
-
-        msgRef.current.className = ''
-        msgRef.current.innerHTML = ''
-
-        let empresa = await fetch(`http://localhost:5000/empresa/obter/${id}`,{
-            mode: 'cors',
-            credentials: 'include',
-            method: "GET",
-        });
-        let dados = await empresa.json();
-        empresaLogada = dados.empId
-
-            if(emp.empId != empresaLogada){
-                if(confirm("Tem certeza que deseja excluir esta empresa?")) {
-                    if(id > 0) {
-                        let ok = false;
-                        fetch(`http://localhost:5000/empresa/excluir/${id}`, {
-                            mode: 'cors',
-                            credentials: 'include',
-                            method: "DELETE",
-                        })
-                        .then(r=> {
-                            ok = r.status == 200;
-                            return r.json();
-                        })
-                        .then(r=> {
-                            if(ok) {
-                                msgRef.current.className = "msgSucess";
-                                msgRef.current.innerHTML = r.msg;
-                                carregarEmpresas();
-
-                                setTimeout(() => {
-                                    msgRef.current.innerHTML = '';
-                                    msgRef.current.className = '';
-                                }, 5000);
-                            }
-                            else{
-                                msgRef.current.className = "msgError";
-                                msgRef.current.innerHTML = r.msg;
-
-                                setTimeout(() => {
-                                    msgRef.current.innerHTML = '';
-                                    msgRef.current.className = '';
-                                }, 5000);
-                            }
-                        })
-                    }
-                }  
-            }
-            else{
+    async function excluirEmpresa(id) {
+        msgRef.current.className = '';
+        msgRef.current.innerHTML = '';
+    
+        if (emp && emp.empId) {
+            let empresa = await fetch(`http://localhost:5000/empresa/obter/${id}`, {
+                mode: 'cors',
+                credentials: 'include',
+                method: "GET",
+            });
+            let dados = await empresa.json();
+            empresaLogada = dados.empId;
+    
+            if (emp.empId !== empresaLogada) {
+                executarExclusao(id);
+            } else {
                 msgRef.current.className = "msgError";
-                msgRef.current.innerHTML = 'Não é possivel apagar a empresa em que esta Logado';
-            } 
-    }    
+                msgRef.current.innerHTML = 'Não é possível apagar a empresa em que está logado';
+            }
+        } else {
+            executarExclusao(id);
+        }
+    }
+    
+    function executarExclusao(id) {
+        if (confirm("Tem certeza que deseja excluir esta empresa?")) {
+            if (id > 0) {
+                let ok = false;
+                fetch(`http://localhost:5000/empresa/excluir/${id}`, {
+                    mode: 'cors',
+                    credentials: 'include',
+                    method: "DELETE",
+                })
+                .then(r => {
+                    ok = r.status === 200;
+                    return r.json();
+                })
+                .then(r => {
+                    if (ok) {
+                        msgRef.current.className = "msgSucess";
+                        msgRef.current.innerHTML = r.msg;
+                        carregarEmpresas();
+    
+                        setTimeout(() => {
+                            msgRef.current.innerHTML = '';
+                            msgRef.current.className = '';
+                        }, 5000);
+                    } else {
+                        msgRef.current.className = "msgError";
+                        msgRef.current.innerHTML = r.msg;
+    
+                        setTimeout(() => {
+                            msgRef.current.innerHTML = '';
+                            msgRef.current.className = '';
+                        }, 5000);
+                    }
+                });
+            }
+        }
+    }
 
     function acessarEmpresa(id){
 

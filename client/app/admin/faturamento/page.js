@@ -2,9 +2,8 @@
 import Link from "next/link";
 import { useContext, useEffect, useRef, useState } from "react"
 import EmpContext from '@/app/context/empContext';
-import MontaTabela from "@/app/components/montaTabela";
 import { useRouter } from "next/navigation";
-import MontaTabelaFaturamento from "@/app/components/montaTabelaFaturamento";
+import MontaTabelaAnos from "@/app/components/montaTabelaAnos";
 
 export default function faturamentoAdmin(){
 
@@ -106,7 +105,7 @@ export default function faturamentoAdmin(){
 
             </div>
             <div>
-                <MontaTabelaFaturamento alteracao={"/admin/faturamento/alteracao"}  exclusao={excluirFaturamento} exibir={"/admin/faturamento/exibir"} lista={listaAnos} cabecalhos={["Ano","Valor Total"]} propriedades={["ano", "totalFaturamento"]} campoExclusao="ano" ></MontaTabelaFaturamento>
+                <MontaTabelaAnos alteracao={"/admin/faturamento/alteracao"}  exclusao={excluirFaturamento} exibir={"/admin/faturamento/exibir"} lista={listaAnos} cabecalhos={["Ano","Valor Total"]} propriedades={["ano", "totalFaturamento"]} campoExclusao="ano" ></MontaTabelaAnos>
             </div>
         </div>
     )

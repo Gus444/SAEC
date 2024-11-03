@@ -91,3 +91,143 @@ h1, h2, h3, h4, h5, h6, a {
     font-family: 'Montserrat', sans-serif;
 }
 
+/* formulario despesa */
+
+.form-despesa {
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* estilo popup */
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup {
+    background: white;
+    border-radius: 8px;
+    width: 400px; /* Ajuste conforme necessário */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.popup-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.popup-content {
+    margin-bottom: 15px;
+    max-height: 300px; /* Adicione limite de altura se necessário */
+    overflow-y: auto; /* Para permitir scroll se necessário */
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.selected {
+    background-color: #007bff; /* Ou a cor que você quiser para o item selecionado */
+    color: white; /* Cor do texto para contraste */
+}
+
+  /* popup protocolo */
+
+  .popup2 {
+    background: white;
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.popup-title2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+  
+.popup-content2 {
+    width: 100%;
+    max-height: 300px; /* Limita a altura da lista */
+    overflow-y: auto; /* Permite rolagem */
+    margin-bottom: 20px; /* Espaço entre lista e botões */
+}
+  
+  .popup-button2 {
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .popup-overlay2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.protocol-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.protocol-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+.protocol-item:hover {
+    background-color: #f0f0f0;
+}
+
+.popup-buttons2 {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.popup-buttons2 button {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.protocol-item.selected {
+    background-color: #d0e0ff; /* Cor de destaque */
+    font-weight: bold;
+}

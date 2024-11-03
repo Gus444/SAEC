@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function MontaTabelaFaturamento(props) {
+export default function MontaTabelaAnos(props) {
     let cabecalho = props.cabecalhos || [];
     let propriedades = props.propriedades || [];
 

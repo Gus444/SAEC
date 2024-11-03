@@ -51,14 +51,14 @@ export default function FormDespesa(props){
     const [selectedTipoDespesaDesc, setSelectedTipoDespesaDesc] = useState("");
 
     function handleSelectTipoDespesa(TipoDespesa) {
-        setSelectedTipoDespesa(TipoDespesa.tipDesId); // Define a despesa selecionado
+        setSelectedTipoDespesa(TipoDespesa.tipDespId); // Define a despesa selecionado
     }
 
     function confirmTipoDespesa() {
         if (selectedTipoDespesa) {
             // Armazena o título da despesa selecionado
-            const tipoDespesa = listaTipoDespesa.find(p => p.tipDesId === selectedTipoDespesa);
-            setSelectedTipoDespesaDesc(tipoDespesa.tipDesDesc);
+            const tipoDespesa = listaTipoDespesa.find(p => p.tipDespId === selectedTipoDespesa);
+            setSelectedTipoDespesaDesc(tipoDespesa.tipDespDesc);
     
             closePopup2(); // Fecha a popup
         } else {
@@ -134,7 +134,7 @@ export default function FormDespesa(props){
     }
 
     function carregarTipoDespesa() {
-        fetch(`http://localhost:5000/tipoDespesa/${emp.empId}`, {
+        fetch(`http://localhost:5000/tipoDespesa/`, {
             mode: 'cors',
             credentials: 'include',
             method: "GET",
@@ -206,9 +206,9 @@ export default function FormDespesa(props){
                                             <li
                                                  key={index}
                                                 onClick={() => handleSelectTipoDespesa(despesa)}
-                                                className={`despesa-item ${selectedTipoDespesa === despesa.tipDesId ? "selected" : ""}`}
+                                                className={`despesa-item ${selectedTipoDespesa === despesa.tipDespId ? "selected" : ""}`}
                                             >
-                                                {despesa.tipDesId} | {despesa.tipDesDesc}
+                                                {despesa.tipDespId} | {despesa.tipDespDesc}
                                             </li>
                                         ))}
                                     </ul>

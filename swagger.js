@@ -3,6 +3,7 @@ import UsuarioModel from "./Models/usuarioModel.js";
 import LoginModel from "./Models/loginModel.js";
 import EmpresaModel from "./Models/empresaModel.js";
 import ComunicacaoModel from "./Models/comunicacaoModel.js";
+import TipoDespesaModel from "./Models/tipoDespesaModel.js";
 
 const doc = {
     info: {
@@ -25,6 +26,7 @@ const doc = {
             "TesteCid", "TesteCep", "TesteUf").toJSON(),
             comunicacaoModel: new ComunicacaoModel(0, "TesteTitulo", "TesteCanal", "testeData", "testeHora", "TesteDescricao", 
             new UsuarioModel(1), new EmpresaModel(1)).toJSON(),
+            tipoDespesa: new TipoDespesaModel(0, "Nome do tipo da despesa").toJSON()
         }
     } 
 }

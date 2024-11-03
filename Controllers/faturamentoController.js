@@ -120,4 +120,30 @@ export default class FaturamentoController{
             res.status(500).json({ msg: "Erro interno do servidor." });
         }
     }
+
+    async excluir(req, res) {
+        try{
+            let faturamento = new FaturamentoModel();
+            let { ano, empresaId } = req.params;
+            if(await faturamento.obterFaturamento(empresaId, ano) != null) {
+                let result = await faturamento.deletar(empresaId, ano);
+                if(result) {
+                    res.status(200).json({msg: "Exclusão realizada com sucesso!"});
+                }
+                else {
+                    res.status(500).json({msg: "Erro interno de servidor"});
+                }
+            }   
+            else {
+                res.status(404).json({msg: "Faturamento não encontrado para exclusão!"});
+            }
+        }
+        catch(ex) {
+                res.status(500).json(
+                    {msg: "Erro inesperado! Entre em contato com o nosso suporte técnico.",
+                    detalhes: ex.message})
+            
+        }
+
+    }
 }

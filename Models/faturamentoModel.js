@@ -147,4 +147,13 @@ export default class FaturamentoModel {
 
         return result;
     }
+
+    async deletar(empresa, ano){
+        let sql = 'delete from tb_faturamento where tb_competencia_tb_empresa_emp_id =? and tb_competencia_comp_ano = ?'
+        let valores = [empresa, ano]
+
+        let result = await banco.ExecutaComandoNonQuery(sql,valores);
+
+        return result
+    }
 }

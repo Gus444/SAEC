@@ -27,7 +27,7 @@ router.put('/:empresa/:ano', auth.validar,(req,res) =>{
     // #swagger.summary = 'Alterar faturamento'
     ctrl.alterar(req,res);
 })
-router.delete('/:id', auth.validar,(req,res) =>{
+router.delete('/excluir/ano/:ano/empresa/:empresaId', auth.validar,(req,res) =>{
     // #swagger.tags = ['Faturamento']
    // #swagger.summary = 'excluir faturamento'
    ctrl.excluir(req,res);

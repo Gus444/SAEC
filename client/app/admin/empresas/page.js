@@ -12,9 +12,16 @@ export default function empresasAdmin() {
     let empresaLogada
     let [listaEmpresas, setListaEmpresas] = useState([]);
     const [query, setQuery] = useState("");
-    useEffect((e) => {
+    const [exibirComDataFim, setExibirComDataFim] = useState(false); // Estado para o checkbox
+
+    let timeoutId
+    useEffect(() => {
         carregarEmpresas();
-    }, [])
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [exibirComDataFim]); // Recarregar quando o checkbox muda
 
     function carregarEmpresas() {
         fetch("http://localhost:5000/empresa", {
@@ -24,8 +31,11 @@ export default function empresasAdmin() {
         })
         .then(r => r.json())
         .then(r => {
-            console.log("Dados carregados:", r); // Verifique os dados aqui
-            setListaEmpresas(r);
+            console.log("Dados carregados:", r);
+
+            // Filtrar empresas para ocultar as que possuem `empFim` quando `exibirComDataFim` é falso
+            const empresasFiltradas = r.filter(item => exibirComDataFim || !item.empFim);
+            setListaEmpresas(empresasFiltradas);
         });
     }
 
@@ -68,10 +78,12 @@ export default function empresasAdmin() {
                     msgRef.current.className = "msgError";
                     msgRef.current.innerHTML = "Sem resultado.";
                     setListaEmpresas([]); // Limpa a lista em caso de erro
-                    setTimeout(() => {
-                        msgRef.current.innerHTML = '';
-                        msgRef.current.className = '';
-                    }, 2000);
+                    timeoutId = setTimeout(() => {
+                        if (msgRef.current) {
+                            msgRef.current.innerHTML = '';
+                            msgRef.current.className = '';
+                        }
+                    }, 5000);
                 }
             })
             .catch(err => {
@@ -80,10 +92,12 @@ export default function empresasAdmin() {
                 msgRef.current.className = "msgError";
                 msgRef.current.innerHTML = "Sem resultado.";
                 setListaEmpresas([]); // Limpa a lista em caso de erro
-                setTimeout(() => {
-                    msgRef.current.innerHTML = '';
-                    msgRef.current.className = '';
-                }, 2000);
+                timeoutId = setTimeout(() => {
+                    if (msgRef.current) {
+                        msgRef.current.innerHTML = '';
+                        msgRef.current.className = '';
+                    }
+                }, 5000);
             });
         } else {
             carregarEmpresas();
@@ -133,17 +147,21 @@ export default function empresasAdmin() {
                         msgRef.current.innerHTML = r.msg;
                         carregarEmpresas();
     
-                        setTimeout(() => {
-                            msgRef.current.innerHTML = '';
-                            msgRef.current.className = '';
+                        timeoutId = setTimeout(() => {
+                            if (msgRef.current) {
+                                msgRef.current.innerHTML = '';
+                                msgRef.current.className = '';
+                            }
                         }, 5000);
                     } else {
                         msgRef.current.className = "msgError";
                         msgRef.current.innerHTML = r.msg;
     
-                        setTimeout(() => {
-                            msgRef.current.innerHTML = '';
-                            msgRef.current.className = '';
+                        timeoutId = setTimeout(() => {
+                            if (msgRef.current) {
+                                msgRef.current.innerHTML = '';
+                                msgRef.current.className = '';
+                            }
                         }, 5000);
                     }
                 });
@@ -210,6 +228,16 @@ export default function empresasAdmin() {
                 </div>
                 <button onClick={buscarEmpresas} className="btn btn-primary" style={{ width: '100px' }}><i className="fa-solid fa-magnifying-glass"></i></button> {/* Ajuste a largura do botão */}
             </div>
+
+            <div style={{ marginTop: '15px' }}>
+                <input
+                    type="checkbox"
+                    checked={exibirComDataFim}
+                    onChange={() => setExibirComDataFim(!exibirComDataFim)}
+                />
+                <label style={{ marginLeft: '8px' }}>Exibir empresas com fim de contrato</label>
+            </div>
+
             <div ref={msgRef}>
 
             </div>

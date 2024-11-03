@@ -28,7 +28,7 @@ export default function ExibirComunicacao({ params: { id } }) {
             console.log(docsData);
             
             setComunicacao(comunicacaoData);
-            setDocs(docsData.docsEncontrados); // Acesse docsEncontrados diretamente
+            setDocs(docsData.docsEncontrados);
             setLoading(false);
         })
         .catch(err => {
@@ -49,7 +49,6 @@ export default function ExibirComunicacao({ params: { id } }) {
         );
     }
 
-    
     console.log("Caminho da imagem:", COMUNICACAO_IMG_CAMINHO);
 
     return (
@@ -88,18 +87,24 @@ export default function ExibirComunicacao({ params: { id } }) {
                             <tr key={index}>
                                 <th>Documento {index + 1}</th>
                                 <td>
-                                    <a 
-                                        
-                                        href={`${COMUNICACAO_IMG_CAMINHO}${doc.comDocsNome}`} 
-                                        download={doc.comDocsNome} 
-                                        style={{ textDecoration: 'none' }}
-                                    >
-                                        <img 
-                                            src={`${COMUNICACAO_IMG_CAMINHO}${doc.comDocsNome}`} 
-                                            alt={`Documento ${index + 1}`} 
-                                            style={{ maxWidth: '100%', height: 'auto' }} 
-                                        />
-                                    </a>
+                                    <span>{doc.comDocsNome}</span>
+                                    <div className="d-flex gap-2 mt-2">
+                                        <a 
+                                            href={`${COMUNICACAO_IMG_CAMINHO}${doc.comDocsNome}`} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer" 
+                                            className="btn btn-primary"
+                                        >
+                                            Visualizar
+                                        </a>
+                                        <a 
+                                            href={`${COMUNICACAO_IMG_CAMINHO}${doc.comDocsNome}`} 
+                                            download={doc.comDocsNome} 
+                                            className="btn btn-secondary"
+                                        >
+                                            Download
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         ))

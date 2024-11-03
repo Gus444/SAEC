@@ -34,6 +34,9 @@ export default function FormComunicacao(props){
     }
     ///////////////////////////////////////////////
 
+    const removerArquivo = (index) => {
+        setArquivos((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    };
 
     const usuario = user.usuId;
     const empresa = emp.empId;
@@ -69,6 +72,22 @@ export default function FormComunicacao(props){
     let [erroCanal, setErroCanal] = useState(false);
     let [erroData, setErroData] = useState(false);
     let [erroHora, setErroHora] = useState(false);
+
+    // Função para formatar a data no formato dd-mm-aaaa
+    const formatarData = (data) => {
+        const dataSelecionada = new Date(data);
+        const dia = String(dataSelecionada.getDate()).padStart(2, "0");
+        const mes = String(dataSelecionada.getMonth() + 1).padStart(2, "0");
+        const ano = dataSelecionada.getFullYear();
+        return `${dia}-${mes}-${ano}`;
+      };
+
+    // Handler para o evento de mudança da data
+    const handleDateChange = (e) => {
+        setErroData(false);
+        const dataFormatada = formatarData(e.target.value);
+        // Aqui você pode salvar `dataFormatada` conforme necessário
+    };
 
     function gravarComunicacao() {
         let ok = true;
@@ -241,7 +260,7 @@ export default function FormComunicacao(props){
 
                 <div className="col-md-3 form-group mb-3">
                             <label htmlFor="data">Data*</label>
-                            <input defaultValue={comunicacao.comData ? new Date(comunicacao.comData).toISOString().split('T')[0] : ''} ref={data} type="date" className={`form-control ${erroData ? 'is-invalid' : ''}`} onChange={() => setErroData(false)} placeholder="Digite a Data"/>
+                            <input defaultValue={comunicacao.comData ? comunicacao.comData.split('T')[0] : ''} ref={data} type="date" className={`form-control ${erroData ? 'is-invalid' : ''}`} onChange={handleDateChange} placeholder="Digite a Data"/>
                 </div>
 
                 <div className="col-md-2 form-group mb-3">
@@ -255,24 +274,39 @@ export default function FormComunicacao(props){
                 </div>
 
                 <div className="col-md-7 form-group mb-3">
-                    <label for="fileInput">Escolha um arquivo:</label>
-                    <input type="file" defaultValue={docsComunicacao.comDocsNome} 
-                    ref={img} id="fileInput" onChange={handleFileChange} name="arquivo" multiple/>
-                </div>
+                <label htmlFor="fileInput">Escolha um arquivo:</label>
+                <input 
+                    type="file" 
+                    ref={img} 
+                    id="fileInput" 
+                    onChange={handleFileChange} 
+                    name="arquivo" 
+                    multiple 
+                />
+            </div>
 
-                <div className="file-grid">
+            {/* Exibe os arquivos selecionados com um botão para remover */}
+            {/* Exibe os arquivos selecionados em um grid */}
+            <div className="file-grid">
                 {arquivos.length > 0 && (
                     <div className="row">
-                    {arquivos.map((file, index) => (
-                        <div key={index} className="col-md-4">
-                        <div className="file-preview">
-                            <p>{file.name}</p>
-                        </div>
-                        </div>
-                    ))}
+                        {arquivos.map((file, index) => (
+                            <div key={index} className="file-item col-md-4">
+                                <div className="file-preview d-flex align-items-center justify-content-between">
+                                    <p className="m-0 text-truncate">{file.name}</p>
+                                    <button 
+                                        type="button" 
+                                        onClick={() => removerArquivo(index)} 
+                                        className="btn btn-link text-danger"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
-                </div>
+            </div>
 
 
             <div className="d-flex justify-content-between mt-4">

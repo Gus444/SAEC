@@ -638,8 +638,20 @@ export default function FormEmpresa(props) {
             <div className = "row">
                 <div className="form-group mb-3 col-md-4">
                     <label>Regime*</label>
-                    <input defaultValue={empresa.empRegime} ref={regime} type="text" className={`form-control ${erroRegime ? 'is-invalid' : ''}`} onChange={() => setErroRegime(false)} placeholder="Digite o regime da empresa"/>
-                    {/* {erroRegime && <small className="text-danger">Regime é obrigatório</small>} */}
+                    <select 
+                        ref={regime} 
+                        className={`form-control ${erroRegime ? 'is-invalid' : ''}`} 
+                        defaultValue={empresa.empRegime} 
+                        onChange={() => setErroRegime(false)}
+                    >
+                        <option value="">Selecione o regime</option> {/* Opção padrão */}
+                        <option value="Simples Nacional">Simples Nacional</option>
+                        <option value="Lucro Presumido">Lucro Presumido</option>
+                        <option value="Lucro Real">Lucro Real</option>
+                        <option value="MEI">MEI</option>
+                        {/* Adicione mais opções conforme necessário */}
+                    </select>
+                    {erroRegime && <small className="text-danger">Regime é obrigatório</small>}
                 </div>
 
                 <div className="form-group mb-3 col-md-4">

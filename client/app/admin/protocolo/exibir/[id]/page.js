@@ -65,57 +65,64 @@ export default function ExibirProtocolo({ params: { id } }) {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center">Resumo do Protocolo Cadastrada</h2>
-            <table className="table table-bordered mt-4">
-                <tbody>
-                    <tr>
-                        <th>Título</th>
-                        <td>{protocolo?.protTitulo || "Título do protocolo"}</td>
-                    </tr>
-                    <tr>
-                        <th>Tipo</th>
-                        <td>{protocolo?.protTipo || "Tipo de protocolo"}</td>
-                    </tr>
-                    <tr>
-                        <th>Data</th>
-                        <td>{protocolo?.protData || "Data do protocolo"}</td>
-                    </tr>
-                    <tr>
-                        <th>Descrição</th>
-                        <td>{protocolo?.protDescricao || "Descrição do protocolo"}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <h2 className="text-center">Resumo do Protocolo Cadastrado</h2>
+        <table className="table table-bordered mt-4">
+            <tbody>
+                <tr>
+                    <th>Título</th>
+                    <td>{protocolo?.protTitulo || "Título do protocolo"}</td>
+                </tr>
+                <tr>
+                    <th>Tipo</th>
+                    <td>{protocolo?.protTipo || "Tipo de protocolo"}</td>
+                </tr>
+                <tr>
+                    <th>Data</th>
+                    <td>{protocolo?.protData || "Data do protocolo"}</td>
+                </tr>
+                <tr>
+                    <th>Descrição</th>
+                    <td>{protocolo?.protDescricao || "Descrição do protocolo"}</td>
+                </tr>
+            </tbody>
+        </table>
 
-            <h3 className="mt-5">Documentos Relacionados</h3>
-            <table className="table table-bordered mt-4">
-                <tbody>
-                    {/* <tr>
-                        <th>ID do Documento</th>
-                        <td>{docs?.protDocsId || "Não possui registro"}</td>
-                    </tr> */}
+        <h3 className="mt-5">Documentos Relacionados</h3>
+        <table className="table table-bordered mt-4">
+            <tbody>
+                {docs && docs.length > 0 ? (
+                    docs.map((doc, index) => (
+                        <tr key={index}>
+                            <th>Documento {index + 1}</th>
+                            <td>
+                                <span>{doc.protDocsNome}</span>
+                                <div className="d-flex gap-2 mt-2">
+                                    <a 
+                                        href={`${PROTOCOLO_IMG_CAMINHO}${doc.protDocsNome}`} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="btn btn-primary"
+                                    >
+                                        Visualizar
+                                    </a>
+                                    <a 
+                                        href={`${PROTOCOLO_IMG_CAMINHO}${doc.protDocsNome}`} 
+                                        download={doc.protDocsNome} 
+                                        className="btn btn-secondary"
+                                    >
+                                        Download
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    ))
+                ) : (
                     <tr>
-                        <th>Documento</th>
-                        <td>
-                        <a 
-                            href={`${PROTOCOLO_IMG_CAMINHO}${docs?.protDocsNome || "Não há registro"}`} 
-                            download={docs?.protDocsNome || "Não possui registro"} // Define o nome do arquivo a ser baixado
-                            style={{ textDecoration: 'none' }} // Remover sublinhado do link
-                            >
-                                <img 
-                                    src={`${PROTOCOLO_IMG_CAMINHO}${docs?.protDocsNome}` || "Não há registro"} 
-                                    alt={docs? "Documento" : "Não possui registro"}
-                                    style={{ maxWidth: '100%', height: 'auto' }} 
-                                />
-                        </a>
-                        </td>
+                        <td colSpan="2">Não há documentos registrados.</td>
                     </tr>
-                    <tr>
-                        {/* <th>ID da Comunicação</th>
-                        <td>{docs?.protocoloId || ""}</td> */}
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                )}
+            </tbody>
+        </table>
+    </div>
     );
 }

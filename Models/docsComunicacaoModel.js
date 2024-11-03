@@ -33,14 +33,12 @@ export default class DocsComunicacaoModel{
 
     async gravar() {
         if (this.#comDocsId === 0) {
-            // Verifique se o comDocsId é auto-incrementado
             let sql = "INSERT INTO tb_docscomunicacao (tb_comunicacao_com_id, comDocs_nome) VALUES (?, ?)";
             let valores = [this.#comunicacaoId, this.#comDocsNome];
     
             // Executa o comando e retorna o resultado
             return await banco.ExecutaComandoNonQuery(sql, valores);
         } else {
-            // Aqui você pode implementar a lógica para atualizar o documento, se necessário
             let sql = "UPDATE tb_docscomunicacao SET tb_comunicacao_com_id = ?, comDocs_nome = ? WHERE comDocs_id = ?";
             let valores = [this.#comunicacaoId, this.#comDocsNome, this.#comDocsId];
     

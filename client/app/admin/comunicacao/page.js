@@ -14,9 +14,15 @@ export default function comunicacaoAdmin(){
     let [listaComunicacao, setListaComunicacao] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect((e) => {
+    let timeoutId
+    useEffect(() => {
         carregarComunicacao();
-    }, [])
+
+        // Limpa o timeout quando o componente desmonta
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
 
     useEffect(() => {
         // Verifica se a empresa está selecionada
@@ -65,19 +71,23 @@ export default function comunicacaoAdmin(){
                             msgRef.current.innerHTML = r.msg;
                             carregarComunicacao();
 
-                            setTimeout(() => {
-                                msgRef.current.innerHTML = '';
-                                msgRef.current.className = '';
-                            }, 2000);
+                            timeoutId = setTimeout(() => {
+                                if (msgRef.current) {
+                                    msgRef.current.innerHTML = '';
+                                    msgRef.current.className = '';
+                                }
+                            }, 5000);
                         }
                         else{
                             msgRef.current.className = "msgError";
                             msgRef.current.innerHTML = r.msg;
 
-                            setTimeout(() => {
-                                msgRef.current.innerHTML = '';
-                                msgRef.current.className = '';
-                            }, 2000);
+                            timeoutId = setTimeout(() => {
+                                if (msgRef.current) {
+                                    msgRef.current.innerHTML = '';
+                                    msgRef.current.className = '';
+                                }
+                            }, 5000);
                         }
                     })
                 }

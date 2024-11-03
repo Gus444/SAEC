@@ -32,57 +32,68 @@ export default class DocsProtocoloModel{
     }
 
     async gravar() {
-        if(this.#protDocsId == 0){
-            let sql = "insert into tb_docsprotocolo (protDocs_id, tb_protocolo_prot_id, docs_nome) values (?, ?, ?)";
+        if (this.#protDocsId === 0) {
+            let sql = "INSERT INTO tb_docsprotocolo (tb_protocolo_prot_id, docs_nome) VALUES (?, ?)";
+            let valores = [this.#protId, this.#protDocsNome];
 
-            let valores = [this.#protDocsId, this.#protId, this.#protDocsNome];
-
+            // Executa o comando e retorna o resultado
             return await banco.ExecutaComandoNonQuery(sql, valores);
+        } else {
+            let sql = "UPDATE tb_docsprotocolo SET tb_protocolo_prot_id = ?, docs_nome = ? WHERE protDocs_id = ?";
+            let valores = [this.#protId, this.#protDocsNome, this.#protDocsId];
+
+            // Executa o comando e retorna o resultado
+            return await banco.ExecutaComandoNonQuery(sql, valores) > 0; // Retorna verdadeiro se a atualização for bem-sucedida
         }
-        // else{
-        //     //alterar
-        //     let sql = "update tb_produto set prd_cod = ?, prd_nome =?, prd_quantidade= ?, cat_id = ?, mar_id = ?, prd_imagem = ?, prd_preco = ? where prd_id = ?";
-
-        //     let valores = [this.#produtoCodigo, this.#produtoNome, this.#produtoQuantidade, this.#categoriaId, this.#marcaId, this.#produtoImagem, this.#produtoPreco, this.#produtoId];
-
-        //     return await conexao.ExecutaComandoNonQuery(sql, valores) > 0;
-        // }
     }
 
-    async obter(id){
-        let sql = "select * from tb_docsprotocolo where tb_protocolo_prot_id = ?";
-        let valores = [id]
+    async obter(id) {
+        let sql = "SELECT * FROM tb_docsprotocolo WHERE tb_protocolo_prot_id = ?";
+        let valores = [id];
 
-        let rows = await banco.ExecutaComando(sql, valores)
+        let rows = await banco.ExecutaComando(sql, valores);
 
-        if(rows.length > 0){
-            return rows.map(row => new DocsProtocoloModel(row["protDocs_id"],row["tb_protocolo_prot_id"],row["docs_nome"]))
+        if (rows.length > 0) {
+            return new DocsProtocoloModel(
+                rows[0]["protDocs_id"],
+                rows[0]["tb_protocolo_prot_id"],
+                rows[0]["docs_nome"]
+            );
+        } else {
+            return null;
         }
-
-        return null;
     }
 
-    async deletarDocsProtocolo(id){
-        let sql = "delete from tb_docsprotocolo where tb_protocolo_prot_id = ?";
+    async deletarDocsProtocolo(id) {
+        let sql = "DELETE FROM tb_docsprotocolo WHERE tb_protocolo_prot_id = ?";
 
         let valores = [id];
 
-        let result = await banco.ExecutaComandoNonQuery(sql,valores);
+        let result = await banco.ExecutaComandoNonQuery(sql, valores);
 
-        return result
+        return result;
     }
 
     async obterDocs(id) {
-        let sql = `select * from tb_docsprotocolo where tb_protocolo_prot_id = ?`;
-            
+        let sql = "SELECT * FROM tb_docsprotocolo WHERE tb_protocolo_prot_id = ?";
         let valores = [id];
-    
-        let rows = await banco.ExecutaComando(sql, valores);
-    
-        if(rows.length > 0){
-            return new DocsProtocoloModel(rows[0]["protDocs_id"], rows[0]["tb_protocolo_prot_id"], rows[0]["docs_nome"])
-        }
+        let lista = [];
 
-        return null;
+        let rows = await banco.ExecutaComando(sql, valores);
+
+        if (rows.length > 0) {
+            for (let i = 0; i < rows.length; i++) {
+                let row = rows[i];
+                lista.push(new DocsProtocoloModel(
+                    row["protDocs_id"],
+                    row["tb_protocolo_prot_id"],
+                    row["docs_nome"]
+                ));
+            }
+
+            return lista;
+        } else {
+            return null;
+        }
     }
 }

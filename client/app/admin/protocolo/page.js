@@ -13,9 +13,15 @@ export default function comunicacaoAdmin(){
     let [listaProtocolo, setListaProtocolo] = useState([]);
     const [loading, setLoading] = useState(true);
     
-    useEffect((e) => {
+    let timeoutId
+    useEffect(() => {
         carregarProtocolo();
-    }, [])
+
+        // Limpa o timeout quando o componente desmonta
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
     const router = useRouter();
 
     useEffect(() => {
@@ -65,19 +71,23 @@ export default function comunicacaoAdmin(){
                             msgRef.current.innerHTML = r.msg;
                             carregarProtocolo();
 
-                            setTimeout(() => {
-                                msgRef.current.innerHTML = '';
-                                msgRef.current.className = '';
-                            }, 2000);
+                            timeoutId = setTimeout(() => {
+                                if (msgRef.current) {
+                                    msgRef.current.innerHTML = '';
+                                    msgRef.current.className = '';
+                                }
+                            }, 5000);
                         }
                         else{
                             msgRef.current.className = "msgError";
                             msgRef.current.innerHTML = r.msg;
 
-                            setTimeout(() => {
-                                msgRef.current.innerHTML = '';
-                                msgRef.current.className = '';
-                            }, 2000);
+                            timeoutId = setTimeout(() => {
+                                if (msgRef.current) {
+                                    msgRef.current.innerHTML = '';
+                                    msgRef.current.className = '';
+                                }
+                            }, 5000);
                         }
                     })
                 }

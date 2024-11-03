@@ -10,6 +10,7 @@ export default function FormProtocolo(props){
     let router = useRouter();
     const { user, setUser } = useContext(UserContext); // usuário que vem do contexto que está logado
     const { emp, setEmp } = useContext(EmpContext); // empresa que vem do localStorage
+    const [arquivos, setArquivos] = useState([]);
     const [loading, setLoading] = useState(false);
 
     //impede de acessar caso não tenha uma empresa//
@@ -27,6 +28,16 @@ export default function FormProtocolo(props){
         return <div>Carregando...</div>;
     }
     ///////////////////////////////////////////////
+
+    const handleFileChange = (event) => {
+        const selectedFiles = event.target.files;
+        const fileArray = Array.from(selectedFiles); // Converte FileList para array
+        setArquivos((prevFiles) => [...prevFiles, ...fileArray]); // Adiciona novos arquivos ao estado
+    };
+
+    const removerArquivo = (index) => {
+        setArquivos((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    };
 
     const usuario = user.usuId;
     const empresa = emp.empId;
@@ -128,7 +139,10 @@ export default function FormProtocolo(props){
                   
                     const formData = new FormData();
                     formData.append("protocolo", protId); 
-                    formData.append("inputImage", img.current.files[0]); // Imagem selecionada
+                    
+                    arquivos.forEach((arquivo) =>{
+                        formData.append("inputImage", arquivo);
+                    })
             
                     return fetch('http://localhost:5000/docsProtocolo', {
                         mode: 'cors',
@@ -195,58 +209,108 @@ export default function FormProtocolo(props){
 
     return(
         <div className="container mt-1 d-flex justify-content-center">
-            <div className="card mt-5 p-4 shadow" style={{ width: '800px' }}>
-                <div ref={msgRef}>
+        <div className="card mt-5 p-4 shadow" style={{ width: '800px' }}>
+            <div ref={msgRef}></div>
+            <h2 className="mb-4">{isAlteracao ? "Alterar Protocolo" : "Cadastrar Protocolo"}</h2>
 
+            <div className="row">
+                <div className="col-md-5 form-group mb-3">
+                    <label htmlFor="nome">Título*</label>
+                    <input
+                        defaultValue={protocolo.protTitulo}
+                        ref={titulo}
+                        type="text"
+                        className={`form-control ${erroTitulo ? 'is-invalid' : ''}`}
+                        onChange={() => setErroTitulo(false)}
+                        placeholder="Digite o Título"
+                    />
                 </div>
-                <h2 className="mb-4">{isAlteracao ? "Alterar Protocolo" : "Cadastrar Protocolo"}</h2>
 
-                <div className="row">
-                    <div className="col-md-5 form-group mb-3">
-                        <label htmlFor="nome">Titulo*</label>
-                        <input defaultValue={protocolo.protTitulo} ref={titulo} type="text" className={`form-control ${erroTitulo ? 'is-invalid' : ''}`} onChange={() => setErroTitulo(false)} placeholder="Digite o Titulo"/>
+                <div className="col-md-5 form-group mb-3">
+                    <label htmlFor="status">Tipo*</label>
+                    <select
+                        defaultValue={protocolo.protTipo}
+                        ref={tipo}
+                        className={`form-control ${erroTipo ? 'is-invalid' : ''}`}
+                        onChange={() => setErroTipo(false)}
+                        placeholder="Tipo de documento"
+                    >
+                        <option value="">Selecione o tipo</option>
+                        <option value="Entregue">Entregue</option>
+                        <option value="Recebido">Recebido</option>
+                    </select>
+                </div>
+            </div>
+
+            <div className="col-md-3 form-group mb-3">
+                <label htmlFor="data">Data*</label>
+                <input
+                    defaultValue={protocolo.protData}
+                    ref={data}
+                    type="date"
+                    className={`form-control ${erroData ? 'is-invalid' : ''}`}
+                    onChange={() => setErroData(false)}
+                    placeholder="Digite a Data"
+                />
+            </div>
+
+            <div className="form-group mb-3">
+                <label htmlFor="descricao">Descrição</label>
+                <input
+                    defaultValue={protocolo.protDescricao}
+                    ref={descricao}
+                    type="textarea"
+                    className={`form-control ${erroDescricao ? 'is-invalid' : ''}`}
+                    onChange={() => setErroDescricao(false)}
+                    maxLength="100"
+                />
+                {erroDescricao && <small className="text-danger"> Ex: quem recebeu, quem entregou</small>}
+            </div>
+
+            <div className="col-md-7 form-group mb-3">
+                <label htmlFor="fileInput">Escolha um arquivo:</label>
+                <input
+                    type="file"
+                    ref={img}
+                    id="fileInput"
+                    name="arquivo"
+                    onChange={handleFileChange}
+                    multiple
+                />
+            </div>
+
+            {/* Exibe os arquivos selecionados com um botão para remover */}
+            <div className="file-grid">
+                {arquivos.length > 0 && (
+                    <div className="row">
+                        {arquivos.map((file, index) => (
+                            <div key={index} className="file-item col-md-4">
+                                <div className="file-preview d-flex align-items-center justify-content-between">
+                                    <p className="m-0 text-truncate">{file.name}</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => removerArquivo(index)}
+                                        className="btn btn-link text-danger"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-
-                    <div className="col-md-5 form-group mb-3">
-                        <label htmlFor="status">Tipo*</label>
-                        <select defaultValue={protocolo.protTipo} ref={tipo} className={`form-control ${erroTipo ? 'is-invalid' : ''}`} onChange={() => setErroTipo(false)} placeholder="Tipo de documento">
-                            <option value="">Selecione o tipo</option>
-                            <option value="Entregue">Entregue</option>
-                            <option value="Recebido">Recebido</option>
-                        </select>
-                    </div>
-                </div>
-
-
-                <div className="col-md-3 form-group mb-3">
-                            <label htmlFor="data">Data*</label>
-                            <input defaultValue={protocolo.protData} ref={data} type="date" className={`form-control ${erroData ? 'is-invalid' : ''}`} onChange={() => setErroData(false)} placeholder="Digite a Data"/>
-                </div>
-                        
-                <div className="form-group mb-3">
-                    <label htmlFor="descricao">Descricão</label>
-                    <input defaultValue={protocolo.protDescricao} ref={descricao} type="textarea" className={`form-control ${erroDescricao ? 'is-invalid' : ''}`} onChange={() => setErroDescricao(false)} maxlength="100"/>
-                    {erroDescricao && <small className="text-danger"> Ex: quem recebeu, quem entregou</small>}
-                </div>
-
-                <div className="col-md-7 form-group mb-3">
-                    <label for="fileInput">Escolha um arquivo:</label>
-                    <input type="file" defaultValue={docsProtocolo.protDocsNome} ref={img} id="fileInput" name="arquivo"/>
-                </div>
-
+                )}
+            </div>
 
             <div className="d-flex justify-content-between mt-4">
-                 
                 <button
-                    onClick={() => isAlteracao ? alterarProtocolo(protocolo.protId) : gravarProtocolo()}
+                    onClick={() => (isAlteracao ? alterarProtocolo(protocolo.protId) : gravarProtocolo())}
                     className="btn btn-primary"
                 >
                     {isAlteracao ? "Alterar" : "Cadastrar"}
                 </button>
                 <Link href="/admin/protocolo" className="btn btn-outline-secondary">Voltar</Link>
-                </div>
-
             </div>
         </div>
+    </div>
     );
 }

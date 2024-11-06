@@ -5,11 +5,23 @@ import EmpContext from "../context/empContext.js";
 import Link from "next/link";
 
 export default function FormDespesa(props){
+
     const [despesas, setDespesas] = useState([]);
     let [listaProtocolo, setListaProtocolo] = useState([]);
     let [listaTipoDespesa, setListaTipoDespesa] = useState([]);
+    const [selectedTipoDespesa, setSelectedTipoDespesa] = useState(null); // tipo de despesa selecionado
+    const [selectedTipoDespesaDesc, setSelectedTipoDespesaDesc] = useState(""); // descrição do tipo selecionado
+    const [isAnoMesFixed, setIsAnoMesFixed] = useState(false);
     let { emp, setEmp } = useContext(EmpContext);
     let msgRef = useRef(null);
+
+    let [erroAno, setErroAno] = useState(false);
+    let [erroMes, setErroMes] = useState(false);
+    let [erroData, setErroData] = useState(false);
+    let [erroTipo, setErroTipo] = useState(false);
+    let [erroDescricao, setErroDescricao] = useState(false);
+    let [erroValor, setErroValor] = useState(false);
+
     const [formData, setFormData] = useState({
         ano: '',
         mes: '',
@@ -35,11 +47,15 @@ export default function FormDespesa(props){
 
     function confirmProtocolo() {
         if (selectedProtocolo) {
-            // Armazena o título do protocolo selecionado
             const protocolo = listaProtocolo.find(p => p.protId === selectedProtocolo);
             setSelectedProtocoloTitulo(protocolo.protTitulo);
     
-            closePopup2(); // Fecha a popup
+            setFormData((prevData) => ({
+                ...prevData,
+                protocolo: selectedProtocolo,
+            }));
+    
+            closePopup2();
         } else {
             alert("Por favor, selecione um protocolo antes de confirmar.");
         }
@@ -47,24 +63,24 @@ export default function FormDespesa(props){
     //////////////////////
 
     //seleciona tipo de despesa//
-    const [selectedTipoDespesa, setSelectedTipoDespesa] = useState(null);
-    const [selectedTipoDespesaDesc, setSelectedTipoDespesaDesc] = useState("");
+    const handleSelectTipoDespesa = (despesa) => {
+        setSelectedTipoDespesa(despesa.tipDespId); // Atualiza o estado com o id do tipo de despesa selecionado
+        setSelectedTipoDespesaDesc(despesa.tipDespDesc); // Armazena a descrição do tipo de despesa selecionado
+    };
 
-    function handleSelectTipoDespesa(TipoDespesa) {
-        setSelectedTipoDespesa(TipoDespesa.tipDespId); // Define a despesa selecionado
-    }
-
-    function confirmTipoDespesa() {
+    const confirmTipoDespesa = () => {
         if (selectedTipoDespesa) {
-            // Armazena o título da despesa selecionado
-            const tipoDespesa = listaTipoDespesa.find(p => p.tipDespId === selectedTipoDespesa);
-            setSelectedTipoDespesaDesc(tipoDespesa.tipDespDesc);
-    
-            closePopup2(); // Fecha a popup
+            
+            setFormData((prevData) => ({
+                ...prevData,
+                tipo: selectedTipoDespesa, // Define o tipo no formData
+            }));
+            console.log("Tipo de despesa selecionado:", selectedTipoDespesa, selectedTipoDespesaDesc);
+            closePopup(); // Fecha o popup
         } else {
-            alert("Por favor, selecione um tipo antes de confirmar.");
+            alert("Por favor, selecione um tipo de despesa antes de confirmar.");
         }
-    }
+    };
 
     //popup para selecionar tipo despesa//
     const [showPopup, setShowPopup] = useState(false);
@@ -91,33 +107,128 @@ export default function FormDespesa(props){
     //fim popup protocolo//
 
     // Função para atualizar os valores dos campos
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+    
+        // Se o ano ou mês estão fixos, ignore mudanças nesses campos
+        if ((name === 'ano' || name === 'mes') && isAnoMesFixed) {
+            return;
+        }
+
+        if (name === 'ano') {
+            setErroAno(value === ""); // Define erro se o valor estiver vazio
+        }
+    
+        // Atualiza o formData
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    
+        // Ajusta o campo "data" com base nas mudanças do mês ou ano
+        if (name === 'mes' || name === 'ano') {
+            const ano = name === 'ano' ? value : formData.ano || new Date().getFullYear();
+            const mes = name === 'mes' ? value : formData.mes;
+    
+            if (ano && mes) {
+                // Define o primeiro e último dia do mês selecionado
+                const firstDay = new Date(ano, mes - 1, 1).toISOString().split("T")[0];
+                const lastDay = new Date(ano, mes, 0).toISOString().split("T")[0];
+    
+                // Atualiza o formData com limites de data (min e max)
+                setFormData((prevData) => ({
+                    ...prevData,
+                    data: prevData.data && prevData.data >= firstDay && prevData.data <= lastDay ? prevData.data : firstDay,
+                    dataMin: firstDay,
+                    dataMax: lastDay,
+                }));
+            }
+        }
     };
 
     // Função para adicionar uma nova despesa ao array de despesas
     const adicionarDespesa = () => {
-        // Verifica se todos os campos necessários estão preenchidos
-        if (formData.ano && formData.mes && formData.descricao && formData.data && formData.valor && selectedProtocolo) {
-            const novaDespesa = {
-                ano: formData.ano,
-                mes: formData.mes,
-                descricao: formData.descricao,
-                data: formData.data,
-                //tipo: selectedTipo, // Certifique-se de que você tenha a variável `selectedTipo`
-                valor: formData.valor,
-                protocolo: selectedProtocolo // Aqui você adiciona o ID do protocolo
-            };
-    
-            setDespesas([...despesas, novaDespesa]); // Atualiza a lista de despesas
-            setFormData({ ano: "", mes: "", descricao: "", data: "", valor: "" }); // Reseta os campos do formulário
-            setSelectedProtocolo(null); // Reseta o protocolo selecionado
-            setSelectedProtocoloTitulo(""); // Reseta o título do protocolo selecionado
+
+        let ok = true; // Variável para controlar se tudo está ok
+
+        // Verifica se o campo "ano" está vazio
+        if (formData.ano == "") {
+            setErroAno(true); // Marca o erro
+            ok = false; // Define ok como false
         } else {
-            alert("Por favor, preencha todos os campos necessários e selecione um protocolo.");
+            setErroAno(false); // Remove erro se o campo não estiver vazio
+        }
+
+        if(formData.mes == "") {
+            setErroMes(true);
+            ok = false
+        } else {
+            setErroMes(false)
+        }
+
+        if(formData.data == "") {
+            setErroData(true);
+        } else {
+            setErroData(false);
+        }
+
+        if(formData.descricao == "") {
+            setErroDescricao(true);
+        } else {
+            setErroDescricao(false);
+        }
+
+        if(formData.valor == "") {
+            setErroValor(true);
+        } else {
+            setErroValor(false);
+        }
+
+        if(formData.tipo == ""){
+            setErroTipo(true);
+        } else{
+            setErroTipo(false);
+        }
+
+        
+        const novaDespesa = {
+            ano: formData.ano,
+            mes: formData.mes,
+            data: formData.data,
+            tipo: formData.tipo,
+            descricao: formData.descricao,
+            valor: formData.valor,
+            protocolo: formData.protocolo,
+        };
+
+        if(formData.ano !== "" && formData.mes !== "" && formData.data !== "" && 
+            formData.tipo !== "" && formData.descricao !== "" && formData.valor !== ""){
+             // Adiciona a nova despesa ao array de despesas
+            setDespesas((prevDespesas) => [...prevDespesas, novaDespesa]);
+
+            // Se for o primeiro registro, fixa "Ano" e "Mês" e impede alterações
+            if (!isAnoMesFixed) {
+                setIsAnoMesFixed(true);
+
+                // Define "Ano" e "Mês" fixos no formData
+                setFormData((prevData) => ({
+                    ...prevData,
+                    ano: novaDespesa.ano,
+                    mes: novaDespesa.mes,
+                    descricao: '',
+                    data: '',
+                    tipo: '',
+                    valor: '',
+                    protocolo: '',
+                }));
+            }
+        }
+        else{
+            msgRef.current.className = "msgError";
+            msgRef.current.innerHTML = "Preencha todos os campos";
         }
     };
+
     //funcao pra pegar os protocolos
     function carregarProtocolo() {
         fetch(`http://localhost:5000/protocolo/${emp.empId}`, {
@@ -155,29 +266,33 @@ export default function FormDespesa(props){
     return  (
         <div className="container form-despesa" style={{ width: '900px' }}>
             <h3 className="text-center mb-4">Cadastrar Despesa</h3>
+            <div ref={msgRef}>
+
+            </div>
 
             <div className="row">
                 <div className="col-md-2 mb-3">
                     <label>Ano:</label>
-                    <input type="number" name="ano" className="form-control" value={formData.ano} onChange={handleInputChange} />
+                    <input type="number" name="ano" readOnly={isAnoMesFixed} className={`form-control ${erroAno ? 'is-invalid' : ''}`} value={formData.ano} onChange={handleInputChange} />
                 </div>
                 <div className="col-md-2 mb-3">
                     <label>Mês:</label>
-                    <input type="number" name="mes" min="1" max="12" className="form-control" value={formData.mes} onChange={handleInputChange} />
+                    <input type="number" name="mes"  readOnly={isAnoMesFixed} min="1" max="12"  className={`form-control ${erroMes ? 'is-invalid' : ''}`} value={formData.mes} onChange={handleInputChange} />
                 </div>
             </div>
 
             <div className="row">
                 <div className="col-md-3 mb-3">
                         <label>Data:</label>
-                        <input type="date" name="data" className="form-control" value={formData.data} onChange={handleInputChange} />
+                        <input type="date" name="data"  className={`form-control ${erroData ? 'is-invalid' : ''}`} value={formData.data} onChange={handleInputChange} min={formData.dataMin} max={formData.dataMax} />
                 </div>
             </div>
 
             <div className="row">
                 <div className="col-md-3 mb-3">
                     <label>Tipo:</label>
-                    <button className="btn btn-primary w-100" onClick={openPopup}>Selecionar Tipo</button>
+                    <button  className={`btn btn-primary w-100 ${erroData ? 'btn btn-danger w-100' : ''}`} onClick={openPopup}>Selecionar Tipo</button>
+                    {erroTipo && <small className="text-danger">Tipo é obrigatório</small>}
                 </div>
                 <div className="col-md-3 mb-3">
                     <label>Protocolo:</label>
@@ -206,8 +321,7 @@ export default function FormDespesa(props){
                                             <li
                                                  key={index}
                                                 onClick={() => handleSelectTipoDespesa(despesa)}
-                                                className={`despesa-item ${selectedTipoDespesa === despesa.tipDespId ? "selected" : ""}`}
-                                            >
+                                                className={`despesa-item ${selectedTipoDespesa === despesa.tipDespId ? "selected" : ""}`}>
                                                 {despesa.tipDespId} | {despesa.tipDespDesc}
                                             </li>
                                         ))}
@@ -260,14 +374,14 @@ export default function FormDespesa(props){
             <div className="row">
                     <div className="col-md-12 mb-3">
                         <label>Descrição:</label>
-                        <input type="text" name="descricao" className="form-control" value={formData.descricao} onChange={handleInputChange} />
+                        <input type="text" name="descricao"  className={`form-control ${erroDescricao ? 'is-invalid' : ''}`} value={formData.descricao} onChange={handleInputChange} />
                     </div>
             </div>
 
             <div className="row">
                 <div className="col-md-2 mb-3">
                     <label>Valor:</label>
-                    <input type="number" name="valor" className="form-control" value={formData.valor} onChange={handleInputChange} />
+                    <input type="number" name="valor" className={`form-control ${erroValor ? 'is-invalid' : ''}`} value={formData.valor} onChange={handleInputChange} />
                 </div>
             </div>
             <div className="text-center">

@@ -80,6 +80,7 @@ router.put('/', auth.validar, (req,res) =>{
 });
 router.get('/buscar', auth.validar, (req,res) => {
     // #swagger.tags = ['Empresa']
+    // #swagger.summary = 'Buscar por nome'
     ctrl.buscar(req,res)
 })
 

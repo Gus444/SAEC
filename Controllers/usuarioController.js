@@ -164,4 +164,25 @@ export default class UsuarioController{
         }
     }
 
+    async buscar(req, res) {
+        try {
+         
+            let { query } = req.query;
+    
+            if (!query || query.trim() === "") {
+                return res.status(400).json({ msg: "Por favor, forneça um termo de busca." });
+            }
+            
+            let usuario = new UsuarioModel();
+            let result = await usuario.buscar(req); 
+    
+            if (result.length === 0) {
+                return res.status(404).json({ msg: "Nenhum usuario foi encontrado." });
+            }
+    
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(500).json({ msg: "Erro de servidor", detalhes: error.message });
+        }
+    }
 }

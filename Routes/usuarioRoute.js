@@ -69,6 +69,11 @@ router.put('/', auth.validar, (req, res) => {
     }*/
     ctrl.alterarUsuario(req, res);
 });
+router.get('/buscar', auth.validar, (req,res) => {
+    // #swagger.tags = ['Usuários']
+    // #swagger.summary = 'Buscar por nome'
+    ctrl.buscar(req,res)
+})
 
 
 export default router;

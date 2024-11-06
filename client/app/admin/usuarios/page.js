@@ -12,6 +12,7 @@ export default function usuariosAdmin() {
     let [mostrarInativos, setMostrarInativos] = useState(false);
     let usuarioLogado
     const {user, setUser} = useContext(UserContext)
+    const [query, setQuery] = useState("");
     let timeoutId;
 
     
@@ -108,12 +109,97 @@ export default function usuariosAdmin() {
         }    
     }
 
+    function buscarUsuario() {
+        if (query.trim() !== "") {
+            fetch(`http://localhost:5000/usuarios/buscar?query=${encodeURIComponent(query)}`, {
+                mode: 'cors',
+                credentials: 'include',
+                method: "GET",
+            })
+            .then(r => r.json())
+            .then(r => {
+                console.log("Dados retornados da busca:", r); // Verifique os dados aqui
+                
+                // Verifica se a resposta é um array
+                if (Array.isArray(r)) {
+                    if (r.length === 0) {
+                        msgRef.current.className = "msgError";
+                        msgRef.current.innerHTML = "Nenhuma usuario encontrado.";
+                        setListaUsuarios([]); // Limpa a lista se não houver resultados
+                        setTimeout(() => {
+                            msgRef.current.innerHTML = '';
+                            msgRef.current.className = '';
+                        }, 3000);
+                    } else {
+                        // Mapeia os dados para os novos nomes
+                        const mappedData = r.map(item => ({
+                            usuId: item.usu_id,
+                            usuNome: item.usu_nome,
+                            usuEmail: item.usu_email,
+                            usuStatus: item.usu_status == 0 ? "Ativo" : "Inativo",
+                            usuNivel: item.usu_nivel == 0 ? "Administrador" : "Usuário",
+                            usuTelefone: item.usu_telefone
+                        }));
+    
+                        setListaUsuarios(mappedData);
+                    }
+                } else {
+                    // Caso não seja um array, você pode exibir uma mensagem de erro
+                    msgRef.current.className = "msgError";
+                    msgRef.current.innerHTML = "Sem resultado.";
+                    setListaUsuarios([]); // Limpa a lista em caso de erro
+                    timeoutId = setTimeout(() => {
+                        if (msgRef.current) {
+                            msgRef.current.innerHTML = '';
+                            msgRef.current.className = '';
+                        }
+                    }, 5000);
+                }
+            })
+            .catch(err => {
+                // Tratamento de erro da requisição
+                console.error("Erro ao buscar Usuario:", err);
+                msgRef.current.className = "msgError";
+                msgRef.current.innerHTML = "Sem resultado.";
+                setListaUsuarios([]); // Limpa a lista em caso de erro
+                timeoutId = setTimeout(() => {
+                    if (msgRef.current) {
+                        msgRef.current.innerHTML = '';
+                        msgRef.current.className = '';
+                    }
+                }, 5000);
+            });
+        } else {
+            carregarUsuarios();
+        }
+    }
+
     return (
         <div>
             <h1>Usuarios cadastrados</h1>
             <div>
                 <Link href="/admin/usuarios/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar usuario</Link>
             </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="form-floating mb-3" style={{ marginRight: '10px' }}>
+                        <input
+                            type="text"
+                            className='form-control'
+                            style={{ width: '500px' }} // Ajuste a largura do input
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    buscarUsuario(); // Busca quando Enter é pressionado
+                                }
+                            }}
+                        />
+                        <label htmlFor="floatingInput">Buscar</label>
+                    </div>
+                    <button onClick={buscarUsuario} className="btn btn-primary" style={{ width: '100px' }}><i className="fa-solid fa-magnifying-glass"></i></button> {/* Ajuste a largura do botão */}
+                </div>
+
             <div>
                 <label>
                     <input 
@@ -128,7 +214,7 @@ export default function usuariosAdmin() {
 
             </div>
             <div>
-                <MontaTabela alteracao={'/admin/usuarios/alteracao'}  exclusao={excluirUsuario} exibir={"/admin/usuarios/exibir"}  lista={usuariosExibidos} cabecalhos={["id","Nome", "Email", "Status", "Nivel", "Telefone"]} 
+                <MontaTabela alteracao={'/admin/usuarios/alteracao'}  exclusao={excluirUsuario} exibir={"/admin/usuarios/exibir"}  lista={listaUsuarios} cabecalhos={["id","Nome", "Email", "Status", "Nivel", "Telefone"]} 
                 propriedades={["usuId" ,'usuNome', 'usuEmail', 'usuStatus', 'usuNivel', 'usuTelefone']} linhaEstilo={(usuario) => usuario.usuStatus === "Inativo" ? { color: "red" } : {}} >
                     
                 </MontaTabela>

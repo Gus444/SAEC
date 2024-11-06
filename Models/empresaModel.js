@@ -168,7 +168,7 @@ export default class EmpresaModel{
         if(row.length > 0){
             return new EmpresaModel(row[0]["emp_id"], row[0]["emp_cnpj"],row[0]["emp_nome"], row[0]["emp_regime"],row[0]["emp_ie"], row[0]["emp_telefone"], row[0]["emp_descricao"], 
             row[0]["emp_responsavel"], row[0]["emp_proprietario"], row[0]["emp_inicio"], row[0]["emp_fim"], row[0]["emp_email"], row[0]["emp_endereco"], row[0]["emp_bairro"],
-            row[0]["emp_cidade"], row[0]["emp_uf"]);
+            row[0]["emp_cidade"], row[0]["emp_cep"] , row[0]["emp_uf"]);
         }
 
         return null;

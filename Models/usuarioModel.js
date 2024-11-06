@@ -209,4 +209,13 @@ export default class UsuarioModel{
             return false
         }
     }
+
+    async buscar(req) {
+        let { query } = req.query;
+        let sql = 'SELECT * FROM tb_usuario WHERE usu_nome LIKE ?';
+        let valores = [`%${query}%`]; // Adicione '%' no início e no final para buscar por substrings
+    
+        let usuario = await banco.ExecutaComando(sql, valores);
+        return usuario;
+    }
 }

@@ -100,9 +100,9 @@ export default class ProtocoloModel{
             valores = [this.#protId, this.#protTitulo, this.#protTipo, this.#protData, this.#protDescricao, this.#usuario.usuId, this.#empresa.empId];
         }
         else{//alterar
-            sql = "update tb_protocolo set prot_Titulo = ?, prot_Tipo = ?, prot_Data = ?, prot_Descricao = ?, tb_usuario_usu_Id = ?, tb_empresa_emp_Id = ? where prot_id = ?";
+            sql = "update tb_protocolo set prot_Titulo = ?, prot_Tipo = ?, prot_Data = ?, prot_Descricao = ?, tb_usuario_usu_Id = ?, where prot_id = ?";
             
-            valores =  [this.#protTitulo, this.#protTipo, this.#protData, this.#protDescricao, this.#usuario.usuId, this.#empresa.empId, this.#protId];
+            valores =  [this.#protTitulo, this.#protTipo, this.#protData, this.#protDescricao, this.#usuario.usuId, this.#protId];
         }
 
         let result = await banco.ExecutaComandoLastInserted(sql,valores);

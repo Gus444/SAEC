@@ -57,6 +57,14 @@ router.delete('/excluir/:id', auth.validar, (req,res) => {
             "bearerAuth": []
     }] */
     ctrl.excluirComunicacao(req, res);
-})
+});
+router.put('/', auth.validar, (req,res) =>{
+    // #swagger.tags = ['Comunicacao']
+    // #swagger.summary = 'Alterar Comunicação'
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+   ctrl.alterarComunicacao(req,res);
+});
 
 export default router

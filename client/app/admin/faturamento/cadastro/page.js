@@ -1,6 +1,6 @@
 import FormFaturamento from "@/app/components/formFaturamento";
 
-export default function cadastroUsuarios(){
+export default function cadastroFaturamento(){
 
     
     return(

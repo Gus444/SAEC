@@ -121,4 +121,39 @@ export default class ProtocoloController{
                 res.status(500).json({msg:"Erro de servidor", detalhes: error.message})
             }
         }
+
+        async alterarProtocolo(req, res) {
+            try {
+                if (req.body) {
+                    let { protId, protTitulo, protData, protDescricao, usuario} = req.body;
+                    
+                    if (protId && protTitulo && protData && protDescricao && usuario > 0) {
+                        
+                        let protocolo = new ProtocoloModel(protId, protTitulo, protData, protDescricao, usuario);
+                        
+                        if (await protocolo.obter(protId) != null) {
+                                    
+                            let result = await protocolo.gravarProtocolo();
+                            if (result) {
+                                res.status(200).json({ msg: "Protocolo atualizada com sucesso!" });
+                            } else {
+                                res.status(500).json({ msg: "Erro interno de servidor"});
+                            }
+                        
+                        } else {
+                            res.status(404).json({ msg: "Protocolo não encontrado para alteração" });
+                        }
+                    } else {
+                        res.status(400).json({ msg: "Existem campos que não foram preenchidos!" });
+                    }
+                } else {
+                    res.status(400).json({ msg: "Preencha corretamente os dados do registro!" });
+                }
+            } catch (ex) {
+                res.status(500).json({
+                    msg: "Erro inesperado! Entre em contato com o nosso suporte técnico.",
+                    detalhes: ex.message
+                });
+            }
+        }
 }

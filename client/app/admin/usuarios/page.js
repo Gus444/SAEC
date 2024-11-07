@@ -11,9 +11,15 @@ export default function usuariosAdmin() {
     let [listaUsuarios, setListaUsuarios] = useState([]);
     let [mostrarInativos, setMostrarInativos] = useState(false);
     let usuarioLogado
-    const {user, setUser} = useContext(UserContext)
-    const [query, setQuery] = useState("");
+    let {user, setUser} = useContext(UserContext)
+    let [query, setQuery] = useState("");
     let timeoutId;
+
+    let usuariosExibidos = listaUsuarios.filter(usuario => {
+        let statusMatch = mostrarInativos || usuario.usuStatus === "Ativo";
+        let queryMatch = query === "" || usuario.usuNome.toLowerCase().includes(query.toLowerCase());
+        return statusMatch && queryMatch;
+    });
 
     
     
@@ -44,10 +50,6 @@ export default function usuariosAdmin() {
             setListaUsuarios(usuariosFormatados);
         })
     }
-
-    let usuariosExibidos = mostrarInativos
-    ? listaUsuarios
-    : listaUsuarios.filter(usuario => usuario.usuStatus === "Ativo");
 
     async function excluirUsuario(id) {
 
@@ -214,7 +216,7 @@ export default function usuariosAdmin() {
 
             </div>
             <div>
-                <MontaTabela alteracao={'/admin/usuarios/alteracao'}  exclusao={excluirUsuario} exibir={"/admin/usuarios/exibir"}  lista={listaUsuarios} cabecalhos={["id","Nome", "Email", "Status", "Nivel", "Telefone"]} 
+                <MontaTabela alteracao={'/admin/usuarios/alteracao'}  exclusao={excluirUsuario} exibir={"/admin/usuarios/exibir"}  lista={usuariosExibidos} cabecalhos={["id","Nome", "Email", "Status", "Nivel", "Telefone"]} 
                 propriedades={["usuId" ,'usuNome', 'usuEmail', 'usuStatus', 'usuNivel', 'usuTelefone']} linhaEstilo={(usuario) => usuario.usuStatus === "Inativo" ? { color: "red" } : {}} >
                     
                 </MontaTabela>

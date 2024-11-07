@@ -104,7 +104,7 @@ export default function comunicacaoAdmin(){
 
             </div>
             <div>
-                <MontaTabela alteracao={""}  exclusao={excluirProtocolo} exibir={"/admin/protocolo/exibir"} lista={listaProtocolo} cabecalhos={["id","Titulo", "Tipo", "Data", "Usuario", "Empresa"]} propriedades={['protId', 'protTitulo', 'protTipo', 'protData', "usuario.usuNome", "empresa.empNome"]} ></MontaTabela>
+                <MontaTabela alteracao={"/admin/protocolo/alteracao"}  exclusao={excluirProtocolo} exibir={"/admin/protocolo/exibir"} lista={listaProtocolo} cabecalhos={["id","Titulo", "Tipo", "Data", "Usuario", "Empresa"]} propriedades={['protId', 'protTitulo', 'protTipo', 'protData', "usuario.usuNome", "empresa.empNome"]} ></MontaTabela>
             </div>
         </div>
     )

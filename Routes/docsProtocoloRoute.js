@@ -14,18 +14,13 @@ let storage = multer.diskStorage({
         cb(null, 'public/img/Protocolo');
     },
     filename: function(req, file, cb) {
-        // Obtenha a extensão do arquivo
-        const ext = path.extname(file.originalname).toLowerCase();
-        
-        // Remove caracteres especiais do nome do arquivo
+        // Remove caracteres especiais do nome do arquivo e utiliza o nome original
         const sanitizedFilename = file.originalname
-            .split('.')[0]
             .normalize("NFD") // Normaliza acentos e outros caracteres
             .replace(/[\u0300-\u036f]/g, '') // Remove marcas diacríticas
-            .replace(/[^a-zA-Z0-9]/g, '0'); // Substitui caracteres especiais por '_'
-
-        // Gera um novo nome único
-        cb(null, `${sanitizedFilename}_${Date.now()}${ext}`);
+            .replace(/[^a-zA-Z0-9.]/g, '_'); // Substitui caracteres especiais por '_'
+        
+        cb(null, sanitizedFilename);
     }
 });
 

@@ -71,6 +71,19 @@ export default class FaturamentoModel {
         }
     }
 
+    async verificarAno(ano, empresa){
+        let sql = 'select count(*) as count FROM tb_faturamento where tb_competencia_comp_ano = ? and tb_competencia_tb_empresa_emp_id = ?'
+        let valores = [ano, empresa]
+
+        let result = await banco.ExecutaComando(sql,valores);
+
+        if (result[0].count > 0) {
+            return true;
+        } else {
+            return false;
+        }   
+    }
+
     async listarPorEmpresa(id){
         let sql = `SELECT 
                     tb_competencia_comp_ano AS ano, 

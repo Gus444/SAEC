@@ -238,6 +238,7 @@ export default function FormUsuario(props){
 
                 </div>
                 <h2 className="mb-4">{isAlteracao ? "Alterar Usuario" : "Cadastrar Usuario"}</h2>
+                <p className="text-muted mb-4">Campos com * são obrigatórios</p>
 
                 <div className="row">
                     <div className="col-md-5 form-group mb-3">

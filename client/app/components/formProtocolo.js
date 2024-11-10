@@ -320,6 +320,7 @@ export default function FormProtocolo(props){
             <div className="card mt-5 p-4 shadow" style={{ width: '800px' }}>
                 <div ref={msgRef}></div>
                 <h2 className="mb-4">{isAlteracao ? "Alterar Protocolo" : "Cadastrar Protocolo"}</h2>
+                <p className="text-muted mb-4">Campos com * são obrigatórios</p>
 
                 <div className="row">
                     <div className="col-md-5 form-group mb-3">
@@ -361,7 +362,7 @@ export default function FormProtocolo(props){
                 </div>
 
                 <div className="form-group mb-3">
-                    <label htmlFor="descricao">Descrição</label>
+                    <label htmlFor="descricao">Descrição*</label>
                     <input
                         defaultValue={protocolo.protDescricao}
                         ref={descricao}

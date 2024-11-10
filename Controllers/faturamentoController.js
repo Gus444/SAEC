@@ -17,13 +17,21 @@ export default class FaturamentoController{
     
                 // Verificar se a competência já existe
                 let competencia = new CompetenciaModel();
+                let faturamento = new FaturamentoModel();
                 competencia.compAno = ano;
                 competencia.empresa = new EmpresaModel(empresa);
                 let competenciaExiste = await competencia.verifica(ano, empresa);
+                let faturamentoExiste = await faturamento.verificarAno(ano, empresa)
     
                 if (!competenciaExiste) {
                     return res.status(400).json({ msg: "Competência não encontrada." });
                 }
+
+                if (faturamentoExiste == true) {
+                    return res.status(400).json({ msg: "Este cadastro já existe." });
+                }
+
+                
 
                 let nomeMeses = ["janeiro", "fevereiro", "marco", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
                 // Gravar dados de faturamento

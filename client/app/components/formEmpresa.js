@@ -540,7 +540,8 @@ export default function FormEmpresa(props) {
 
         </div>
             <h2 className="mb-4">{isAlteracao ? "Alterar Empresa" : "Cadastrar Empresa"}</h2>
-
+            <p className="text-muted mb-4">Campos com * são obrigatórios</p>
+            
             <div className="row">
                 <div className="col-md-3 form-group mb-3">
                     <label htmlFor="cnpj">CNPJ*</label>

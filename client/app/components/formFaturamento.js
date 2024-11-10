@@ -179,14 +179,16 @@ export default function FormFaturamento(props) {
                     body: JSON.stringify(valores)
                 })
                 .then(res => {
-                    if (!res.ok) {
+                    if (res.ok != 201) {
                         msgRef.current.className = "msgError";
                         msgRef.current.innerHTML = res.msg;
                     }
-                    return res.json();
+                    else{
+                        return res.json();
+                    }
                 })
                 .then(res => {
-                    if (res) {
+                    if (ok) {
                         router.push("/admin/faturamento");
                     } else {
                         msgRef.current.className = "msgError";
@@ -217,7 +219,7 @@ export default function FormFaturamento(props) {
             </div>
             <div className="card-body">
                 <div className="form-group mb-3">
-                    <label htmlFor="ano">Ano</label>
+                    <label htmlFor="ano">Ano*</label>
                     <input type="number" readOnly={isAlteracao} defaultValue={faturamento[0]?.ano} ref={ano} className={`form-control ${erroAno ? 'is-invalid' : ''}`} onChange={() => setErroAno(false)} id="ano" placeholder="Digite o ano" required/>
                 </div>
                 <div className="row">

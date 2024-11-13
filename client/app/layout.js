@@ -1,7 +1,7 @@
 import { UserProvider } from './context/userContext'  //contexto de usuario
 import { EmpProvider } from "./context/empContext";
 export const metadata = {
-  title: 'Escritório Primus',
+  title: 'SAEC',
   description: '',
 }
 

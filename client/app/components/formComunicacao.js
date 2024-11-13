@@ -12,11 +12,6 @@ export default function FormComunicacao(props){
     const { emp, setEmp } = useContext(EmpContext); // empresa que vem do localStorage
     const [loading, setLoading] = useState(false);
     const [arquivos, setArquivos] = useState([]);
-    const handleFileChange = (event) => {
-        const selectedFiles = event.target.files;
-        const fileArray = Array.from(selectedFiles); // Converte FileList para array
-        setArquivos((prevFiles) => [...prevFiles, ...fileArray]); // Adiciona novos arquivos ao estado
-    };
 
     //impede de acessar caso não tenha uma empresa//
     useEffect(() => {
@@ -33,6 +28,21 @@ export default function FormComunicacao(props){
         return <div>Carregando...</div>;
     }
     ///////////////////////////////////////////////
+
+    function handleFileChange(event) {
+        const selectedFiles = Array.from(event.target.files);
+        const nomesExistentes = arquivos.map(file => file.name);
+
+        const novosArquivos = selectedFiles.filter(file => {
+            if (nomesExistentes.includes(file.name)) {
+                alert(`O arquivo "${file.name}" já foi selecionado.`);
+                return false;
+            }
+            return true;
+        });
+
+        setArquivos(prevArquivos => [...prevArquivos, ...novosArquivos]);
+    }
 
     const removerArquivo = (index) => {
         setArquivos((prevFiles) => prevFiles.filter((_, i) => i !== index));

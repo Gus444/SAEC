@@ -136,8 +136,24 @@ export default class ProtocoloModel{
         return result
     }
 
-    async obterEmpresa(id){
+    async obterEmpresaProtocolo(id){
         let sql = "select * from tb_protocolo where tb_empresa_emp_Id = ?"
+
+        let valores = [id];
+    
+        let rows = await banco.ExecutaComando(sql, valores);
+    
+        // Verifica se há resultados
+        if(rows.length > 0){
+            return new ProtocoloModel(rows[0]["prot_id"], rows[0]["prot_Titulo"], rows[0]["prot_Tipo"],
+            rows[0]["prot_Data"],rows[0]["prot_Descricao"],rows[0]["tb_usuario_usu_Id"],rows[0]["tb_empresa_emp_Id"])
+        }
+    
+        return null;
+    }
+
+    async obterUsuarioProtocolo(id){
+        let sql = "select * from tb_protocolo where tb_usuario_usu_Id = ?"
 
         let valores = [id];
     

@@ -78,9 +78,9 @@ export default class EmpresaController{
             let { id } = req.params;
             if(await empresa.obter(id) != null){
                 let protocolo = new ProtocoloModel()
-                if(await protocolo.obterEmpresa(id) == null){
+                if(await protocolo.obterEmpresaProtocolo(id) == null){
                     let comunicacao = new ComunicacaoModel()
-                    if(await comunicacao.obterEmpresa(id) == null){
+                    if(await comunicacao.obterEmpresaComunicacao(id) == null){
                         let result = await empresa.deletarEmpresa(id);
                         if(result){
                             res.status(200).json({msg:"Exclusão efetuada com sucesso"});

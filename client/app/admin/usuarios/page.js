@@ -14,6 +14,7 @@ export default function usuariosAdmin() {
     let {user, setUser} = useContext(UserContext)
     let [query, setQuery] = useState("");
     let timeoutId;
+    const conteudoPrincipalRef = useRef(null);
 
     let usuariosExibidos = listaUsuarios.filter(usuario => {
         let statusMatch = mostrarInativos || usuario.usuStatus === "Ativo";
@@ -176,11 +177,56 @@ export default function usuariosAdmin() {
         }
     }
 
+    const prepararRelatorio = () => {// relatorio de usuarios
+        // Usa `usuariosExibidos` em vez de `listaUsuarios`
+        const conteudoImpressao = document.createElement("div");
+        conteudoImpressao.innerHTML = `
+            <img src="/img/logotipo primus.png" style="display: block; margin: 0 auto; width: 200px; height: auto;"></img>
+            <h1>Relatório de Usuários</h1>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid black; padding: 8px;">ID</th>
+                        <th style="border: 1px solid black; padding: 8px;">Nome</th>
+                        <th style="border: 1px solid black; padding: 8px;">Email</th>
+                        <th style="border: 1px solid black; padding: 8px;">Status</th>
+                        <th style="border: 1px solid black; padding: 8px;">Nível</th>
+                        <th style="border: 1px solid black; padding: 8px;">Telefone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${usuariosExibidos.map(usuario => `
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">${usuario.usuId}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${usuario.usuNome}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${usuario.usuEmail}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${usuario.usuStatus}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${usuario.usuNivel}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${usuario.usuTelefone}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+    
+        // Salva o conteúdo original da página
+        const originalContents = document.body.innerHTML;
+    
+        // Substitui o conteúdo do `body` pelo conteúdo de impressão e imprime
+        document.body.innerHTML = conteudoImpressao.innerHTML;
+        window.print();
+    
+        // Restaura o conteúdo original
+        document.body.innerHTML = originalContents;
+        window.location.reload();
+    };
+
     return (
-        <div>
+        <div ref={conteudoPrincipalRef}>
             <h1>Usuarios cadastrados</h1>
             <div>
                 <Link href="/admin/usuarios/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar usuario</Link>
+                <button className="btn btn-primary" style={{marginBottom: "15px"}} onClick={prepararRelatorio}>Salvar PDF</button>
             </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

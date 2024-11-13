@@ -1,3 +1,4 @@
+import ControleDespesaModel from "../Models/controleDespesaModel.js";
 import TipoDespesaModel from "../Models/tipoDespesaModel.js";
 
 
@@ -50,13 +51,13 @@ export default class tipoDespesaController{
     async obterTipoDespesa(req, res){
         try {
             let { id } = req.params;
-            let tipoDespesa = new UsuarioModel()
+            let tipoDespesa = new TipoDespesaModel()
             let tipoDespesaEncontrado = await tipoDespesa.obter(id);
             if(tipoDespesaEncontrado != null){
                 res.status(200).json(tipoDespesaEncontrado);
             }
             else{
-                res.status(404).json({msg: "Usuario não encontrado"});
+                res.status(404).json({msg: "não encontrado"});
             }
         } catch (error) {
             res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
@@ -67,36 +68,22 @@ export default class tipoDespesaController{
         try {
             let tipoDespesa = new TipoDespesaModel();
             let { id } = req.params;
-            if(await usuario.obter(id) != null){
-
-                let verificaAdmin
-                verificaAdmin = await usuario.VerificarNivel(id);
-
-                if(verificaAdmin == 0){
-                    let administradorCount;
-                    administradorCount = await usuario.ContadorDeAdministrador();
-
-                    if(administradorCount>1){
-                        let result = await usuario.deletarUsuario(id);
-                        if(result){
-                            res.status(200).json({msg:"Exclusão efetuada com sucesso"});
-                        }
-                        else{
-                            res.status(500).json({msg:"Erro ao excluir usuario"});
-                        }
-                    }
-                    else{
-                        res.status(400).json({msg:"Não é possivel apagar, ultimo administrador do sistema"})
-                    }
-                }
-                else{
-                    let result = await usuario.deletarUsuario(id);
+            if(await tipoDespesa.obter(id) != null){
+                
+                let despesa = new ControleDespesaModel()
+                let verificarUso
+                verificarUso = await despesa.verificarTipDesp(id)
+                if(verificarUso == false){
+                    let result = await tipoDespesa.deletar(id);
                     if(result){
                         res.status(200).json({msg:"Exclusão efetuada com sucesso"});
                     }
                     else{
                         res.status(500).json({msg:"Erro ao excluir usuario"});
                     }
+                }
+                else{
+                    res.status(400).json({msg:"Não é possivel apagar, tipo de despesa em uso"})
                 }
             }
             else{

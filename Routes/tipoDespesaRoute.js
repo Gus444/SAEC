@@ -15,7 +15,7 @@ router.get('/', auth.validar, (req,res) => {
     }] */
     ctrl.listarTipoDespesa(req, res);
 })
-router.get('/obter/:id', auth.validar, (req,res) => {
+router.get('/obter', auth.validar, (req,res) => {
     // #swagger.tags = ['Tipo Despesa']
     // #swagger.summary = 'Retorna um tipo de despesa baseado em um id'
     /* #swagger.security = [{

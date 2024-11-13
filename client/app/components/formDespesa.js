@@ -6,14 +6,15 @@ import Link from "next/link";
 
 export default function FormDespesa(props){
 
-    const [despesas, setDespesas] = useState([]);
+    let [despesas, setDespesas] = useState([]);
     let [listaProtocolo, setListaProtocolo] = useState([]);
     let [listaTipoDespesa, setListaTipoDespesa] = useState([]);
-    const [selectedTipoDespesa, setSelectedTipoDespesa] = useState(null); // tipo de despesa selecionado
-    const [selectedTipoDespesaDesc, setSelectedTipoDespesaDesc] = useState(""); // descrição do tipo selecionado
-    const [isAnoMesFixed, setIsAnoMesFixed] = useState(false);
+    let [tipoDespesaInput, setTipoDespesaInput] = useState("");
+    let [isAnoMesFixed, setIsAnoMesFixed] = useState(false);
     let { emp, setEmp } = useContext(EmpContext);
     let msgRef = useRef(null);
+    let router = useRouter();
+    let timeoutId;
 
     let [erroAno, setErroAno] = useState(false);
     let [erroMes, setErroMes] = useState(false);
@@ -22,7 +23,7 @@ export default function FormDespesa(props){
     let [erroDescricao, setErroDescricao] = useState(false);
     let [erroValor, setErroValor] = useState(false);
 
-    const [formData, setFormData] = useState({
+    let [formData, setFormData] = useState({
         ano: '',
         mes: '',
         descricao: '',
@@ -38,8 +39,8 @@ export default function FormDespesa(props){
     }, []);
 
     //selecionar protocolo
-    const [selectedProtocolo, setSelectedProtocolo] = useState(null);
-    const [selectedProtocoloTitulo, setSelectedProtocoloTitulo] = useState("");
+    let [selectedProtocolo, setSelectedProtocolo] = useState(null);
+    let [selectedProtocoloTitulo, setSelectedProtocoloTitulo] = useState("");
 
     function handleSelectProtocolo(protocolo) {
         setSelectedProtocolo(protocolo.protId); // Define o protocolo selecionado
@@ -47,7 +48,7 @@ export default function FormDespesa(props){
 
     function confirmProtocolo() {
         if (selectedProtocolo) {
-            const protocolo = listaProtocolo.find(p => p.protId === selectedProtocolo);
+            let protocolo = listaProtocolo.find(p => p.protId === selectedProtocolo);
             setSelectedProtocoloTitulo(protocolo.protTitulo);
     
             setFormData((prevData) => ({
@@ -62,61 +63,86 @@ export default function FormDespesa(props){
     }
     //////////////////////
 
-    //seleciona tipo de despesa//
-    const handleSelectTipoDespesa = (despesa) => {
-        setSelectedTipoDespesa(despesa.tipDespId); // Atualiza o estado com o id do tipo de despesa selecionado
-        setSelectedTipoDespesaDesc(despesa.tipDespDesc); // Armazena a descrição do tipo de despesa selecionado
-    };
-
-    const confirmTipoDespesa = () => {
-        if (selectedTipoDespesa) {
-            
-            setFormData((prevData) => ({
-                ...prevData,
-                tipo: selectedTipoDespesa, // Define o tipo no formData
-            }));
-            console.log("Tipo de despesa selecionado:", selectedTipoDespesa, selectedTipoDespesaDesc);
-            closePopup(); // Fecha o popup
+    // Função de filtro para mostrar sugestões enquanto o usuário digita
+    let handleTipoDespesaChange = (event) => {
+        const value = event.target.value;
+        setTipoDespesaInput(value);
+    
+        if (value) {
+            const filtered = listaTipoDespesa.filter(despesa =>
+                despesa.tipDespDesc.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredTipoDespesa(filtered);
+            setShowDropdown(filtered.length > 0);  // Mostra o dropdown apenas se houver sugestões
         } else {
-            alert("Por favor, selecione um tipo de despesa antes de confirmar.");
+            setFilteredTipoDespesa([]);
+            setShowDropdown(false);
         }
     };
 
-    //popup para selecionar tipo despesa//
-    const [showPopup, setShowPopup] = useState(false);
-
-    const openPopup = () => {
-        setShowPopup(true);
+    let selectTipoDespesa = (despesa) => {
+        setTipoDespesaInput(despesa.tipDespDesc);
+        setFormData((prevData) => ({
+            ...prevData,
+            tipo: despesa.tipDespId,
+        }));
+        setShowDropdown(false);
     };
 
-    const closePopup = () => {
-        setShowPopup(false);
-    };
-    //fim popup tipo despesa//
 
     //Popup selecionar protocolo//
-    const [showPopup2, setShowPopup2] = useState(false);
+    let [showPopup2, setShowPopup2] = useState(false);
 
-    const openPopup2 = () => {
+    let openPopup2 = () => {
         setShowPopup2(true);
     };
 
-    const closePopup2 = () => {
+    let closePopup2 = () => {
         setShowPopup2(false);
     };
     //fim popup protocolo//
 
     // Função para atualizar os valores dos campos
+    const validarCampoIndividual = (campo, valor) => {
+        let anoAtual = new Date().getFullYear();
+        let erro = true;
+    
+        switch (campo) {
+            case 'ano':
+                erro = !valor || valor > anoAtual || valor < 2000;
+                setErroAno(erro);
+                break;
+            case 'mes':
+                erro = !valor;
+                setErroMes(erro);
+                break;
+            case 'data':
+                erro = !valor || !(valor >= formData.dataMin && valor <= formData.dataMax);
+                setErroData(erro);
+                break;
+            case 'descricao':
+                erro = !valor.trim();
+                setErroDescricao(erro);
+                break;
+            case 'valor':
+                erro = !valor || valor <= 0;
+                setErroValor(erro);
+                break;
+            case 'tipo':
+                erro = !valor;
+                setErroTipo(erro);
+                break;
+            default:
+                break;
+        }
+        return !erro; // Retorna true se não houver erro no campo
+    };
+    
     const handleInputChange = (event) => {
         const { name, value } = event.target;
     
-        // Se o ano ou mês estão fixos, ignore mudanças nesses campos
         if ((name === 'ano' || name === 'mes') && isAnoMesFixed) {
             return;
-        }
-
-        if (name === 'ano') {
-            setErroAno(value === ""); // Define erro se o valor estiver vazio
         }
     
         // Atualiza o formData
@@ -125,17 +151,18 @@ export default function FormDespesa(props){
             [name]: value,
         }));
     
-        // Ajusta o campo "data" com base nas mudanças do mês ou ano
+        // Valida apenas o campo atual
+        validarCampoIndividual(name, value);
+    
+        // Atualiza limites de data para o campo "data" quando ano ou mês mudam
         if (name === 'mes' || name === 'ano') {
             const ano = name === 'ano' ? value : formData.ano || new Date().getFullYear();
             const mes = name === 'mes' ? value : formData.mes;
     
             if (ano && mes) {
-                // Define o primeiro e último dia do mês selecionado
                 const firstDay = new Date(ano, mes - 1, 1).toISOString().split("T")[0];
                 const lastDay = new Date(ano, mes, 0).toISOString().split("T")[0];
     
-                // Atualiza o formData com limites de data (min e max)
                 setFormData((prevData) => ({
                     ...prevData,
                     data: prevData.data && prevData.data >= firstDay && prevData.data <= lastDay ? prevData.data : firstDay,
@@ -145,87 +172,50 @@ export default function FormDespesa(props){
             }
         }
     };
-
-    // Função para adicionar uma nova despesa ao array de despesas
+    
     const adicionarDespesa = () => {
-
-        let ok = true; // Variável para controlar se tudo está ok
-
-        // Verifica se o campo "ano" está vazio
-        if (formData.ano == "") {
-            setErroAno(true); // Marca o erro
-            ok = false; // Define ok como false
-        } else {
-            setErroAno(false); // Remove erro se o campo não estiver vazio
-        }
-
-        if(formData.mes == "") {
-            setErroMes(true);
-            ok = false
-        } else {
-            setErroMes(false)
-        }
-
-        if(formData.data == "") {
-            setErroData(true);
-        } else {
-            setErroData(false);
-        }
-
-        if(formData.descricao == "") {
-            setErroDescricao(true);
-        } else {
-            setErroDescricao(false);
-        }
-
-        if(formData.valor == "") {
-            setErroValor(true);
-        } else {
-            setErroValor(false);
-        }
-
-        if(formData.tipo == ""){
-            setErroTipo(true);
-        } else{
-            setErroTipo(false);
-        }
-
-        
-        const novaDespesa = {
-            ano: formData.ano,
-            mes: formData.mes,
-            data: formData.data,
-            tipo: formData.tipo,
-            descricao: formData.descricao,
-            valor: formData.valor,
-            protocolo: formData.protocolo,
-        };
-
-        if(formData.ano !== "" && formData.mes !== "" && formData.data !== "" && 
-            formData.tipo !== "" && formData.descricao !== "" && formData.valor !== ""){
-             // Adiciona a nova despesa ao array de despesas
+        if (validarCampoIndividual()) {
+            let novaDespesa = {
+                ano: formData.ano,
+                mes: formData.mes,
+                data: formData.data,
+                tipo: formData.tipo,
+                descricao: formData.descricao,
+                valor: formData.valor,
+                protocolo: formData.protocolo,
+                empresa: emp.empId,
+            };
+    
             setDespesas((prevDespesas) => [...prevDespesas, novaDespesa]);
-
-            // Se for o primeiro registro, fixa "Ano" e "Mês" e impede alterações
+    
             if (!isAnoMesFixed) {
                 setIsAnoMesFixed(true);
-
-                // Define "Ano" e "Mês" fixos no formData
                 setFormData((prevData) => ({
                     ...prevData,
                     ano: novaDespesa.ano,
                     mes: novaDespesa.mes,
-                    descricao: '',
-                    data: '',
-                    tipo: '',
-                    valor: '',
-                    protocolo: '',
                 }));
             }
-        }
-        else{
+    
+            // Limpa os outros campos sempre após adicionar uma despesa
+            setFormData((prevData) => ({
+                ...prevData,
+                descricao: '',
+                data: '',
+                tipo: '',
+                valor: '',
+                protocolo: '',
+            }));
+        } else {
             msgRef.current.className = "msgError";
-            msgRef.current.innerHTML = "Preencha todos os campos";
+            msgRef.current.innerHTML = "Preencha todos os campos corretamente";
+    
+            timeoutId = setTimeout(() => {
+                if (msgRef.current) {
+                    msgRef.current.innerHTML = '';
+                    msgRef.current.className = '';
+                }
+            }, 7000);
         }
     };
 
@@ -258,9 +248,52 @@ export default function FormDespesa(props){
         })
     }
 
+
     // Função para submeter as despesas para o backend
     function cadastrarDespesas(){
-        //fetch para cadastrar despesa
+          
+        if (despesas.length === 0) {
+            msgRef.current.className = "msgError";
+            msgRef.current.innerHTML = "Nenhuma despesa para salvar.";
+
+            timeoutId = setTimeout(() => {
+                if (msgRef.current) {
+                    msgRef.current.innerHTML = '';
+                    msgRef.current.className = '';
+                    msgRef.current.classList.remove("msgError");
+                }
+            }, 7000);
+            return;
+        }
+
+        const despesasV = despesas.map(despesa => {
+            if (!despesa.protocolo || despesa.protocolo === "") {
+                despesa.protocolo = null; // Atribui null se protId estiver vazio
+            }
+            return despesa;
+        });
+    
+        // Faz a requisição de envio das despesas
+        fetch('http://localhost:5000/controleDespesa/', {
+            mode: 'cors',
+            credentials: 'include',
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(despesasV) // Envia o array de despesas como JSON
+        })
+        .then(r => {
+            if (r.status === 201) {
+                msgRef.current.className = "msgSuccess";
+                msgRef.current.innerHTML = "Despesas gravadas com sucesso!";
+                setDespesas([]); // Limpa o array de despesas após salvar
+                router.push("/admin/despesa");
+            } else {
+                msgRef.current.className = "msgError";
+                msgRef.current.innerHTML = r.message;
+            }
+        })
     };
 
     return  (
@@ -274,10 +307,25 @@ export default function FormDespesa(props){
                 <div className="col-md-2 mb-3">
                     <label>Ano:</label>
                     <input type="number" name="ano" readOnly={isAnoMesFixed} className={`form-control ${erroAno ? 'is-invalid' : ''}`} value={formData.ano} onChange={handleInputChange} />
+                    {erroAno && <small className="text-danger">Ano invalido</small>}
                 </div>
-                <div className="col-md-2 mb-3">
+                <div className="col-md-3 mb-3">
                     <label>Mês:</label>
-                    <input type="number" name="mes"  readOnly={isAnoMesFixed} min="1" max="12"  className={`form-control ${erroMes ? 'is-invalid' : ''}`} value={formData.mes} onChange={handleInputChange} />
+                    <select type="number" name="mes"  readOnly={isAnoMesFixed} min="1" max="12"  className={`form-control ${erroMes ? 'is-invalid' : ''}`} value={formData.mes} onChange={handleInputChange}>
+                    <option value="0">Selecione o Mês</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
                 </div>
             </div>
 
@@ -289,11 +337,41 @@ export default function FormDespesa(props){
             </div>
 
             <div className="row">
-                <div className="col-md-3 mb-3">
-                    <label>Tipo:</label>
-                    <button  className={`btn btn-primary w-100 ${erroData ? 'btn btn-danger w-100' : ''}`} onClick={openPopup}>Selecionar Tipo</button>
-                    {erroTipo && <small className="text-danger">Tipo é obrigatório</small>}
-                </div>
+            <div className="col-md-3 mb-3 position-relative">
+                <label>Tipo de Despesa:</label>
+                <select
+                    name="tipo" className={`form-control ${erroTipo ? 'is-invalid' : ''}`}
+                    value={tipoDespesaInput}
+                    onChange={(e) => {
+                        const selectedValue = e.target.value;
+                        setTipoDespesaInput(selectedValue);
+                        if (selectedValue) {
+                            setErroTipo(false);
+                        }        
+
+                        // Encontra o tipo de despesa pelo nome
+                        const selectedDespesa = listaTipoDespesa.find(
+                            (despesa) => despesa.tipDespDesc === selectedValue
+                        );
+                        if (selectedDespesa) {
+                            setFormData((prevData) => ({
+                                ...prevData,
+                                tipo: selectedDespesa.tipDespId,
+                            }));
+                        }
+                    }}
+                    placeholder="Selecione o tipo de despesa"
+                >
+                    <option value="">Selecione</option>
+                    {listaTipoDespesa.map((despesa) => (
+                        <option key={despesa.tipDespId} value={despesa.tipDespDesc}>
+                            {despesa.tipDespDesc}
+                        </option>
+                    ))}
+                </select>
+                {erroTipo && <small className="text-danger">Tipo é obrigatório</small>}
+            </div>
+
                 <div className="col-md-3 mb-3">
                     <label>Protocolo:</label>
                     <button className="btn btn-primary w-100" onClick={openPopup2}>
@@ -304,38 +382,6 @@ export default function FormDespesa(props){
                     )}
                 </div>
             </div>
-
-                    {showPopup && (
-                        <div className="popup-overlay">
-                            <div className="popup">
-                                <aside ref={msgRef}></aside>
-
-                                <div className="popup-title">Selecionar Tipo de despesa</div>
-                                <div className="popup-content">
-                                    {/* Lista de tipos de despesa */}
-                                    {listaTipoDespesa.length === 0 ? (
-                                    <p className="text-center">Nenhum registro disponível.</p>
-                                    ) : (
-                                    <ul className="despesa-list">
-                                        {listaTipoDespesa.map((despesa, index) => (
-                                            <li
-                                                 key={index}
-                                                onClick={() => handleSelectTipoDespesa(despesa)}
-                                                className={`despesa-item ${selectedTipoDespesa === despesa.tipDespId ? "selected" : ""}`}>
-                                                {despesa.tipDespId} | {despesa.tipDespDesc}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    )}
-                                </div>
-
-                                <div className="popup-buttons2">
-                                    <button className="btn btn-danger" id="fechar" onClick={closePopup}>Cancelar</button>
-                                    <button className="btn btn-primary" id="criarSala" onClick={confirmTipoDespesa}>Confirmar</button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
 
                     {showPopup2 && (
                             <div className="popup-overlay2">

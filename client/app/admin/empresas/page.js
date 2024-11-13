@@ -13,6 +13,12 @@ export default function empresasAdmin() {
     let [listaEmpresas, setListaEmpresas] = useState([]);
     const [query, setQuery] = useState("");
     const [exibirComDataFim, setExibirComDataFim] = useState(false); // Estado para o checkbox
+    const conteudoPrincipalRef = useRef(null);
+
+    let empresasExibidas = listaEmpresas.filter(empresa => {
+        let queryMatch = query === "" || empresa.empNome.toLowerCase().includes(query.toLowerCase());
+        return queryMatch;
+    });
 
     let timeoutId
     useEffect(() => {
@@ -204,11 +210,64 @@ export default function empresasAdmin() {
         }
     }
 
+    const prepararRelatorio = () => {// relatorio de usuarios
+        // Usa `usuariosExibidos` em vez de `listaUsuarios`
+        const conteudoImpressao = document.createElement("div");
+        conteudoImpressao.innerHTML = `
+            <img src="/img/logotipo primus.png" style="display: block; margin: 0 auto; width: 200px; height: auto;"></img>
+            <h1>Relatório de Empresas</h1>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid black; padding: 8px;">CNPJ</th>
+                        <th style="border: 1px solid black; padding: 8px;">Nome</th>
+                        <th style="border: 1px solid black; padding: 8px;">Regime</th>
+                        <th style="border: 1px solid black; padding: 8px;">Ie</th>
+                        <th style="border: 1px solid black; padding: 8px;">Telefone</th>
+                        <th style="border: 1px solid black; padding: 8px;">Responsavel</th>
+                        <th style="border: 1px solid black; padding: 8px;">Proprietário</th>
+                        <th style="border: 1px solid black; padding: 8px;">Inicio</th>
+                        <th style="border: 1px solid black; padding: 8px;">Fim</th>
+                        <th style="border: 1px solid black; padding: 8px;">Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${empresasExibidas.map(empresa => `
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empCnpj}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empNome}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empRegime}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empIe}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empTelefone}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empResponsavel}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empProprietario}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empInicio}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empFim}</td>
+                            <td style="border: 1px solid black; padding: 8px;">${empresa.empEmail}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+    
+        // Salva o conteúdo original da página
+        const originalContents = document.body.innerHTML;
+    
+        // Substitui o conteúdo do `body` pelo conteúdo de impressão e imprime
+        document.body.innerHTML = conteudoImpressao.innerHTML;
+        window.print();
+    
+        // Restaura o conteúdo original
+        document.body.innerHTML = originalContents;
+        window.location.reload();
+    };
+
     return (
         <div>
             <h1>Empresas cadastradas</h1>
             <div>
                 <Link href="/admin/empresas/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar empresa</Link>
+                <button className="btn btn-primary" style={{marginBottom: "15px"}} onClick={prepararRelatorio}>Salvar PDF</button>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div className="form-floating mb-3" style={{ marginRight: '10px' }}>

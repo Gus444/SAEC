@@ -78,4 +78,14 @@ export default class TipoDespesaModel{
 
         return result;
     }
+
+    async deletar(id){
+        let sql = "delete from tb_tipodespesa where tipDes_id = ?";
+
+        let valores = [id];
+
+        let result = await banco.ExecutaComandoNonQuery(sql,valores);
+
+        return result
+    }
 }

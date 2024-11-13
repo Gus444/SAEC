@@ -3,7 +3,7 @@ import path from 'path'; // Para validar extensões de arquivos
 
 export default class docsComunicacaoController {
 
-    async cadastrarDocsComunicacao(req, res) {
+    async cadastrarDocsComunicacao(req, res) {//isso precisaria ser na controller da comunicacao
         try {
             // Verifique se o body e os arquivos existem
             if (req.body && req.files) {

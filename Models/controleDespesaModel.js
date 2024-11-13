@@ -14,7 +14,7 @@ export default class ControleDespesaModel{
     #conData
     #conValor
     #protId
-    #tipDespesa
+    #tipDespId
 
     get empId(){return this.#empId}
     set empId(empId){this.#empId = empId}
@@ -37,10 +37,10 @@ export default class ControleDespesaModel{
     get protId(){return this.#protId}
     set protId(protId){this.#protId = protId}
 
-    get tipDespesa(){return this.#tipDespesa}
-    set tipDespesa(tipDespesa){this.#tipDespesa = tipDespesa}
+    get tipDespId(){return this.#tipDespId}
+    set tipDespId(tipDespId){this.#tipDespId = tipDespId}
 
-    constructor(empId, compMes, compAno, conDescricao, conData, conValor, protId, tipDespesa){
+    constructor(empId, compMes, compAno, conDescricao, conData, conValor, protId, tipDespId){
         this.#empId = empId
         this.#compMes = compMes
         this.#compAno = compAno
@@ -48,6 +48,74 @@ export default class ControleDespesaModel{
         this.#conData = conData
         this.#conValor = conValor
         this.#protId = protId
-        this.#tipDespesa = tipDespesa
+        this.#tipDespId = tipDespId
+    }
+
+    toJSON() {
+        return {
+            "empId": this.#empId,
+            "compMes": this.#compMes,
+            "compAno": this.#compAno,
+            "conDescricao": this.#conDescricao,
+            "conData": this.#conData,
+            "conValor": this.#conValor,
+            "protId": this.#protId,
+            "tipDespId": this.#tipDespId
+        }
+    }
+
+    async verificarTipDesp(id){
+
+        let sql = 'select count(*) as count FROM tb_controledespesas where tb_TipoDespesa_tipDes_id = ?'
+        let valores = [id]
+
+        let result = await banco.ExecutaComando(sql,valores);
+
+        if (result[0].count > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    async gravar(despesas) {
+        let sql = "";
+        let resultado = [];
+    
+        // Percorre cada despesa no array
+        for (let i = 0; i < despesas.length; i++) {
+            let despesa = despesas[i];
+    
+            // Monta a SQL e os valores para a inserção de cada despesa
+            sql = `INSERT INTO tb_controledespesas (
+                tb_competencia_tb_empresa_emp_id, 
+                tb_competencia_comp_mes, 
+                tb_competencia_comp_ano, 
+                con_descricao, 
+                con_data, 
+                con_valor, 
+                tb_protocolo_prot_id, 
+                tb_TipoDespesa_tipDes_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    
+            // Definindo os valores da despesa
+            let valores = [
+                despesa.empId,       // Empresa
+                despesa.compMes,     // Mês
+                despesa.compAno,     // Ano
+                despesa.conDescricao, // Descrição
+                despesa.conData,     // Data
+                despesa.conValor,    // Valor
+                despesa.protId,      // Protocolo
+                despesa.tipDespId    // Tipo de despesa
+            ];
+    
+            // Executa a query para cada despesa
+            let result = await banco.ExecutaComandoNonQuery(sql, valores);
+            resultado.push(result); // Adiciona o resultado da execução no array de resultados
+        }
+    
+        // Retorna o array de resultados das inserções
+        return resultado;
     }
 }

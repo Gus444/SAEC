@@ -3,7 +3,7 @@ import DocsProtocoloModel from "../Models/docsProtocoloModel.js";
 
 export default class docsProtocoloController {
     
-    async cadastrarDocsProtocolo(req, res) {
+    async cadastrarDocsProtocolo(req, res) {//isso precisaria ser na controller do protocolo
         try {
             if (req.body && req.files) {
                 let { protocolo } = req.body;

@@ -119,7 +119,7 @@ export default class EmpresaModel{
 
     async listar(){
         let lista = [];
-        let sql = "select * from tb_empresa";
+        let sql = "select * from tb_empresa order by emp_nome asc";
 
         let rows = await banco.ExecutaComando(sql)
 

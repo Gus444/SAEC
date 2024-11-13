@@ -40,3 +40,32 @@ a {
     color-scheme: dark;
   }
 }
+
+@media print {
+  #sidebar {
+      display: none;
+  }
+}
+
+@media print {
+  table {
+      width: 100%; /* Garante que a tabela ocupe a largura total */
+      font-size: 12px; /* Ajusta o tamanho da fonte, se necessário */
+  }
+  
+  th, td {
+      padding: 8px; /* Ajuste o padding para melhorar o layout */
+      word-wrap: break-word; /* Permite que o conteúdo se ajuste dentro das células */
+  }
+  
+  .tabela-container {
+      margin: 0; /* Remove margens adicionais */
+  }
+}
+
+@media print {
+  th:nth-child(1), td:nth-child(1) { width: 10%; } /* ID */
+  th:nth-child(2), td:nth-child(2) { width: 20%; } /* Nome */
+  th:nth-child(3), td:nth-child(3) { width: 30%; } /* Email */
+  /* Continue para outras colunas */
+}

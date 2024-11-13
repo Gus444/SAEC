@@ -4,7 +4,6 @@ import EmpresaModel from "../Models/empresaModel.js";
 
 export default class CompetenciaController{
 
-
     async cadastrar(req,res){
         try {
             if(req.body){
@@ -12,7 +11,7 @@ export default class CompetenciaController{
                 if( ano != "" && empresa != ""){
                     let anoAtual = new Date().getFullYear();
                     if(ano < 2000 || ano > anoAtual){
-                        res.status(400).json({msg: "Ano superior ao atual"});
+                        res.status(400).json({msg: "Ano superior ao atual ou inferior a 2000"});
                     }
                     else{
                         let competencia = new CompetenciaModel();

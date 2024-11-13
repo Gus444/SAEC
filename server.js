@@ -18,6 +18,7 @@ import docsProtocoloRouter from './Routes/docsProtocoloRoute.js'
 import faturamentoRouter from './Routes/faturamentoRoute.js'
 import competenciaRouter from './Routes/competenciaRoute.js'
 import tipoDespesaRouter from './Routes/tipoDespesaRoute.js'
+import controleDespesaRouter from './Routes/controleDespesa.js'
 
 const outputJson = require("./swagger-output.json");
 
@@ -43,6 +44,7 @@ app.use('/docsProtocolo', docsProtocoloRouter);
 app.use('/faturamento', faturamentoRouter);
 app.use('/competencia', competenciaRouter);
 app.use('/tipoDespesa', tipoDespesaRouter);
+app.use('/controleDespesa', controleDespesaRouter);
 
 
 

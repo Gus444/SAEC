@@ -1,3 +1,5 @@
+import ComunicacaoModel from "../Models/comunicacaoModel.js";
+import ProtocoloModel from "../Models/protocoloModel.js";
 import UsuarioModel from "../Models/usuarioModel.js";
 
 export default class UsuarioController{
@@ -87,12 +89,28 @@ export default class UsuarioController{
                     administradorCount = await usuario.ContadorDeAdministrador();
 
                     if(administradorCount>1){
-                        let result = await usuario.deletarUsuario(id);
-                        if(result){
-                            res.status(200).json({msg:"Exclusão efetuada com sucesso"});
+
+                        let protocolo = new ProtocoloModel()
+                        if(await protocolo.obterUsuarioProtocolo(id) == null){
+
+                            let comunicacao = new ComunicacaoModel()
+                            if(await comunicacao.obterUsuarioComunicacao(id) == null){
+
+                                let result = await usuario.deletarUsuario(id);
+
+                                if(result){
+                                    res.status(200).json({msg:"Exclusão efetuada com sucesso"});
+                                }
+                                else{
+                                    res.status(500).json({msg:"Erro ao excluir usuario"});
+                                }
+                            }
+                            else{
+                                res.status(400).json({msg:"Não é possivel apagar o usuario pois o mesmo possui registro de comunicação"})
+                            }
                         }
                         else{
-                            res.status(500).json({msg:"Erro ao excluir usuario"});
+                            res.status(400).json({msg:"Não é possivel apagar o usuario pois o mesmo possui registro de protocolo"})
                         }
                     }
                     else{

@@ -88,41 +88,43 @@ export default function ExibirProtocolo({ params: { id } }) {
         </table>
 
         <h3 className="mt-5">Documentos Relacionados</h3>
-        <table className="table table-bordered mt-4">
-            <tbody>
-                {docs && docs.length > 0 ? (
-                    docs.map((doc, index) => (
-                        <tr key={index}>
-                            <th>Documento {index + 1}</th>
-                            <td>
-                                <span>{doc.protDocsNome}</span>
-                                <div className="d-flex gap-2 mt-2">
-                                    <a 
-                                        href={`${PROTOCOLO_IMG_CAMINHO}${doc.protDocsNome}`} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer" 
-                                        className="btn btn-primary"
-                                    >
-                                        Visualizar
-                                    </a>
-                                    <a 
-                                        href={`${PROTOCOLO_IMG_CAMINHO}${doc.protDocsNome}`} 
-                                        download={doc.protDocsNome} 
-                                        className="btn btn-secondary"
-                                    >
-                                        Download
-                                    </a>
-                                </div>
-                            </td>
+        <div className="document-table-container" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+            <table className="table table-bordered mt-4">
+                <tbody>
+                    {docs && docs.length > 0 ? (
+                        docs.map((doc, index) => (
+                            <tr key={index}>
+                                <th>Documento {index + 1}</th>
+                                <td>
+                                    <span>{doc.protDocsNome}</span>
+                                    <div className="d-flex gap-2 mt-2">
+                                        <a 
+                                            href={`${PROTOCOLO_IMG_CAMINHO}${doc.protDocsNome}`} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer" 
+                                            className="btn btn-primary"
+                                        >
+                                            Visualizar
+                                        </a>
+                                        <a 
+                                            href={`${PROTOCOLO_IMG_CAMINHO}${doc.protDocsNome}`} 
+                                            download={doc.protDocsNome} 
+                                            className="btn btn-secondary"
+                                        >
+                                            Download
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="2">Não há documentos registrados.</td>
                         </tr>
-                    ))
-                ) : (
-                    <tr>
-                        <td colSpan="2">Não há documentos registrados.</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>
+                    )}
+                </tbody>
+            </table>
+        </div>
     </div>
     );
 }

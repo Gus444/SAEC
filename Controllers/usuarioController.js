@@ -146,9 +146,9 @@ export default class UsuarioController{
                     
                     if (await usuario.obter(usuId) != null) {
                         
-                        let altNivel = await usuario.verificarNivel(usuId, usuNivel)
+                        //let altNivel = await usuario.verificarNivel(usuId, usuNivel)
 
-                            if(altNivel != null && altNivel != false){
+                            //if(altNivel != null && altNivel != false){
                                 
                                 let verEmail = await usuario.verificarEmailAlteracao(usuEmail, usuId);
                                 if (verEmail == 0) {
@@ -161,10 +161,10 @@ export default class UsuarioController{
                                 } else {
                                     res.status(400).json({ msg: "Email já cadastrado no sistema, tente outro" });
                                 }
-                            }
-                            else{
-                                res.status(403).json({msg: "Alteração de nível de usuário não permitida!"})
-                            }
+                            //}
+                            //else{
+                                //res.status(403).json({msg: "Alteração de nível de usuário não permitida!"})
+                            //}
                     } else {
                         res.status(404).json({ msg: "Usuário não encontrado para alteração" });
                     }

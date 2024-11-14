@@ -1,7 +1,8 @@
 'use client'
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useContext } from "react"
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import UserContext from "../context/userContext.js";
 
 export default function FormUsuario(props){
 
@@ -32,6 +33,8 @@ export default function FormUsuario(props){
     let [erroTelefone, setErroTelefone] = useState(false);
     let [erroStatus, setErroStatus] = useState(false);
     let [erroNivel, setErroNivel] = useState(false);
+
+    let { user, setUser } = useContext(UserContext);
 
     function alterarUsuario(id) {
         let ok = true;
@@ -71,7 +74,21 @@ export default function FormUsuario(props){
             setErroStatus(false)
         }
 
-        if(ok){
+        if(nivel.current.value == ""){
+            setErroNivel(true);
+            ok = false
+        } else{
+            setErroNivel(false)
+        }
+
+        if(user.usuId == id){
+            if (user.usuNivel != nivel.current.value) {
+                ok = 2;
+            }
+        }
+        
+
+        if(ok == true){
             let usuario = {
                 usuId: id,
                 usuNome: nome.current.value,
@@ -105,10 +122,15 @@ export default function FormUsuario(props){
                 }
             })
         }
-        else
+        else if(ok == false)
         {
             msgRef.current.className = "msgError";
             msgRef.current.innerHTML = "Preencha todos os campos";
+        }
+        else if(ok == 2)
+        {
+            msgRef.current.className = "msgError";
+            msgRef.current.innerHTML = "Você não pode alterar o nível do próprio usuário.";
         }
     }
 

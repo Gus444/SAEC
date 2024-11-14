@@ -69,7 +69,7 @@ export default function tipoDespesaAdmin(){
         else{
             if (msgRef.current) {
                 msgRef.current.className = 'msgError';
-                msgRef.current.innerHTML = 'Preencha os dados corretamente';
+                msgRef.current.innerHTML = 'Preencha o nome do tipo de despesa';
             }
         }
     }

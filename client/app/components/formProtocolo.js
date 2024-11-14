@@ -32,15 +32,27 @@ export default function FormProtocolo(props){
     function handleFileChange(event) {
         const selectedFiles = Array.from(event.target.files);
         const nomesExistentes = arquivos.map(file => file.name);
-
+    
+        // Tipos de arquivos aceitos
+        const tiposAceitos = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'];
+    
         const novosArquivos = selectedFiles.filter(file => {
+            // Verifica se o arquivo já foi selecionado
             if (nomesExistentes.includes(file.name)) {
                 alert(`O arquivo "${file.name}" já foi selecionado.`);
                 return false;
             }
+    
+            // Verifica se o tipo de arquivo é válido
+            if (!tiposAceitos.includes(file.type)) {
+                alert(`O arquivo "${file.name}" não é um tipo aceito. Apenas PNG, JPG, JPEG e PDF são permitidos.`);
+                return false;
+            }
+    
             return true;
         });
-
+    
+        // Adiciona os novos arquivos ao estado
         setArquivos(prevArquivos => [...prevArquivos, ...novosArquivos]);
     }
 

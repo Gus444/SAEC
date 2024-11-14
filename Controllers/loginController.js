@@ -10,18 +10,24 @@ export default class LoginController {
                 let { usuEmail, usuSenha} = req.body;
                 let loginModel = new LoginModel(usuEmail, usuSenha)
                 if(await loginModel.autenticar()) {
-                    
-                    let usuario = new UsuarioModel();
-                    usuario = await usuario.obterPorEmailSenha(usuEmail, usuSenha);
-                    usuario.usuSenha = "";
-                    let auth = new Autenticar();
-                    let token = auth.gerarToken(usuario.toJSON())
-                    
-                    res.cookie("jwt", token, {
-                        httpOnly: true
-                    })
 
-                    res.status(200).json({tokenAcesso: token, usuario: usuario});
+                    let inativo = await loginModel.verificaInativo(usuEmail,usuSenha)
+                    if(inativo.usuStatus == 0){
+                        let usuario = new UsuarioModel();
+                        usuario = await usuario.obterPorEmailSenha(usuEmail, usuSenha);
+                        usuario.usuSenha = "";
+                        let auth = new Autenticar();
+                        let token = auth.gerarToken(usuario.toJSON())
+                        
+                        res.cookie("jwt", token, {
+                            httpOnly: true
+                        })
+
+                        res.status(200).json({tokenAcesso: token, usuario: usuario});
+                    }
+                    else{
+                        res.status(404).json({msg: "Este usuário esta inativo"})
+                    }
                 }
                 else {
                     res.status(404).json({msg: "Usuário/senha inválidos"});

@@ -94,4 +94,38 @@ export default class tipoDespesaController{
         }
     }
 
+    async alterarTipoDespesa(req,res){
+        try {
+            if (req.body) {
+                let {tipDespId, tipDespDesc } = req.body;
+    
+                if (tipDespDesc != "") {
+                    
+                    let tipoDespesa = new TipoDespesaModel(tipDespId, tipDespDesc);
+                    
+                    if (await tipoDespesa.obter(tipDespId) != null) {
+                            
+                        let result = await tipoDespesa.gravarTipoDespesa();
+                        if (result) {
+                            res.status(200).json({ msg: "Tipo de despesa atualizado com sucesso!" });
+                        } else {
+                            res.status(500).json({ msg: "Erro interno de servidor" });
+                        }
+                    } else {
+                        res.status(404).json({ msg: "Tipo de despesa não encontrado para alteração" });
+                    }
+                } else {
+                    res.status(400).json({ msg: "Existem campos que não foram preenchidos!" });
+                }
+            } else {
+                res.status(400).json({ msg: "Preencha corretamente os dados do tipo da despesa!" });
+            }
+        } catch (ex) {
+            res.status(500).json({
+                msg: "Erro inesperado! Entre em contato com o nosso suporte técnico.",
+                detalhes: ex.message
+            });
+        }
+    }
+
 }

@@ -5,7 +5,7 @@ export default function ExibirComunicacao({ params: { id } }) {
     let [comunicacao, setComunicacao] = useState(null);
     let [docs, setDocs] = useState(null);
     let [loading, setLoading] = useState(true);
-    const COMUNICACAO_IMG_CAMINHO = "http://localhost:5000/img/Comunicacao/";
+    const COMUNICACAO_IMG_CAMINHO = "http://localhost:5000/img/Comunicacao/"
 
     // Fazer ambas as requisições ao mesmo tempo com Promise.all
     function carregarDados(id) {
@@ -49,7 +49,22 @@ export default function ExibirComunicacao({ params: { id } }) {
         );
     }
 
-    console.log("Caminho da imagem:", COMUNICACAO_IMG_CAMINHO);
+    function downloadArquivo(url, nomeArquivo) {
+        // Cria um objeto Blob vazio apenas para iniciar o download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = nomeArquivo; // Nome do arquivo para download
+        link.target = '_blank'; // Garante que será aberto em uma nova aba
+        
+        // Adiciona o link temporário ao documento
+        document.body.appendChild(link);
+        
+        // Aciona o clique no link para iniciar o download
+        link.click();
+        
+        // Remove o link do documento após o clique
+        document.body.removeChild(link);
+    }
 
     return (
         <div className="container mt-5">
@@ -98,13 +113,12 @@ export default function ExibirComunicacao({ params: { id } }) {
                                             >
                                                 Visualizar
                                             </a>
-                                            <a 
-                                                href={`${COMUNICACAO_IMG_CAMINHO}${doc.comDocsNome}`} 
-                                                download={doc.comDocsNome} 
+                                            <button 
+                                                onClick={() => downloadArquivo(`${COMUNICACAO_IMG_CAMINHO}${doc.comDocsNome}`)} 
                                                 className="btn btn-secondary"
                                             >
                                                 Download
-                                            </a>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>

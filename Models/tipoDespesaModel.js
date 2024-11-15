@@ -33,7 +33,7 @@ export default class TipoDespesaModel{
     }
 
     async obter(id){
-        let sql = "select * from tb_tipodespesa";
+        let sql = "select * from tb_tipodespesa where tipDes_id = ?";
         let valores = [id]
 
         let row = await banco.ExecutaComando(sql, valores)

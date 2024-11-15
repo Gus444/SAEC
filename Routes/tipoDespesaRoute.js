@@ -50,5 +50,13 @@ router.delete('/excluir/:id', auth.validar,(req,res) =>{
     }] */ 
    ctrl.excluirTipoDespesa(req,res);
 });
+router.put('/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Tipo Despesa']
+    // #swagger.summary = 'Alterar tipo de despesa' 
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+   ctrl.alterarTipoDespesa(req,res)
+})
 
 export default router

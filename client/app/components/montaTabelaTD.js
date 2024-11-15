@@ -55,9 +55,9 @@ export default function MontaTabelaTD(props) {
                                         return (
                                             <td key={index}>
                                                 <div>
-                                                    <Link href={props.alteracao + `/${value[propriedades[0]]}`} title="ALTERAR" className="btn btn-primary mr-2 mb-2">
+                                                    <button onClick={() => props.alteracao(value[propriedades[0]])} title="ALTERAR" className="btn btn-primary mr-2 mb-2">
                                                         <i className="fas fa-pen"></i>
-                                                    </Link>
+                                                    </button>
                                                     <button onClick={() => props.exclusao(value[propriedades[0]])} title="EXCLUIR" className="btn btn-danger mr-2 mb-2">
                                                         <i className="fas fa-trash"></i>
                                                     </button>

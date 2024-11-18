@@ -112,9 +112,12 @@ export default class ComunicacaoModel{
             valores = [this.#comId, this.#comTitulo, this.#comCanal, this.#comData, this.#comHora, this.#comDescricao, this.#usuario.usuId, this.#empresa.empId];
         }
         else{//alterar
-            sql = "update tb_comunicacao set com_titulo = ?, com_canal = ?, com_data = ?, com_hora = ?, com_descricao = ?, tb_usuario_usu_Id = ?, where com_id = ?";
+            sql = "update tb_comunicacao set com_titulo = ?, com_canal = ?, com_data = ?, com_hora = ?, com_descricao = ?, tb_usuario_usu_Id = ?, tb_empresa_emp_Id = ? where com_id = ?";
             
-            valores =  [this.#comTitulo, this.#comCanal, this.#comData, this.#comHora, this.#comDescricao, this.#usuario.usuId, this.#comId];
+            valores =  [this.#comTitulo, this.#comCanal, this.#comData, this.#comHora, this.#comDescricao, this.#usuario, this.#empresa, this.#comId];
+
+            let result = await banco.ExecutaComandoNonQuery(sql,valores);
+            return result;
         }
 
         let result = await banco.ExecutaComandoLastInserted(sql,valores);

@@ -47,7 +47,7 @@ export default class ComunicacaoController{
 
                     let result = await comunicacao.gravarComunicacao();
                     if(result) {
-                        res.status(201).json({msg: "Comunicação cadastrada com sucesso!", result});    
+                        res.status(200).json({msg: "Comunicação cadastrada com sucesso!", result});    
                     }
                     else{
                         res.status(500).json({msg: "Erro interno de servidor!"})
@@ -128,17 +128,17 @@ export default class ComunicacaoController{
     async alterarComunicacao(req, res) {
         try {
             if (req.body) {
-                let { comId, comTitulo, comCanal, comData, comHora, comDescricao, usuario} = req.body;
+                let { comId, comTitulo, comCanal, comData, comHora, comDescricao, usuario, empresa} = req.body;
     
-                if (comId && comTitulo && comCanal && comData && comHora && comDescricao && usuario > 0) {
+                if (comId && comTitulo && comCanal && comData && comHora && comDescricao && usuario > 0 && empresa > 0) {
                     
-                    let comunicacao = new ComunicacaoModel(comId, comTitulo, comCanal, comData, comHora, comDescricao, usuario);
+                    let comunicacao = new ComunicacaoModel(comId, comTitulo, comCanal, comData, comHora, comDescricao, usuario, empresa);
                     
                     if (await comunicacao.obter(comId) != null) {
                                 
                         let result = await comunicacao.gravarComunicacao();
                         if (result) {
-                            res.status(200).json({ msg: "Comunicação atualizada com sucesso!" });
+                            res.status(200).json({ msg: "Comunicação atualizada com sucesso!", result });
                         } else {
                             res.status(500).json({ msg: "Erro interno de servidor"});
                         }

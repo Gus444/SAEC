@@ -55,5 +55,11 @@ router.get('/obter/:id', auth.validar, (req, res) => {
     }] */
     ctrl.obter(req, res);
 });
+router.put('/', auth.validar, upload.array("inputImage"), (req,res) =>{
+    // #swagger.tags = ['Documentos Comunicacao']
+    // #swagger.summary = 'Alterar Imagem Comunicacao'
+    
+    ctrl.alterarDocsComunicacao(req, res);
+})
 
 export default router;

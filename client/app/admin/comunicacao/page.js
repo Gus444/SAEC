@@ -104,7 +104,7 @@ export default function comunicacaoAdmin(){
 
             </div>
             <div>
-                <MontaTabela alteracao={""}  exclusao={excluirComunicacao} exibir={"/admin/comunicacao/exibir"} lista={listaComunicacao} cabecalhos={["id","Titulo", "Canal", "Data", "Hora", "Usuario", "Empresa"]} propriedades={['comId', 'comTitulo', 'comCanal', 'comData', 'comHora', "usuario.usuNome", "empresa.empNome"]} ></MontaTabela>
+                <MontaTabela alteracao={"/admin/comunicacao/alteracao"}  exclusao={excluirComunicacao} exibir={"/admin/comunicacao/exibir"} lista={listaComunicacao} cabecalhos={["id","Titulo", "Canal", "Data", "Hora", "Usuario", "Empresa"]} propriedades={['comId', 'comTitulo', 'comCanal', 'comData', 'comHora', "usuario.usuNome", "empresa.empNome"]} ></MontaTabela>
             </div>
         </div>
     )

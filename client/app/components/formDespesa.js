@@ -3,16 +3,19 @@ import { useEffect, useRef, useState, useContext } from "react"
 import { useRouter } from "next/navigation";
 import EmpContext from "../context/empContext.js";
 import Link from "next/link";
+import CadastroTipoDespesa from "./cadastroTD.js";
 
 export default function FormDespesa(props){
 
     let [despesas, setDespesas] = useState([]);
+    const [showCadastro, setShowCadastro] = useState(false);
     let [listaProtocolo, setListaProtocolo] = useState([]);
     let [listaTipoDespesa, setListaTipoDespesa] = useState([]);
     let [tipoDespesaInput, setTipoDespesaInput] = useState("");
     let [isAnoMesFixed, setIsAnoMesFixed] = useState(false);
     let { emp, setEmp } = useContext(EmpContext);
     let msgRef = useRef(null);
+    let msgStatus = useRef(null);
     let router = useRouter();
     let timeoutId;
 
@@ -23,6 +26,10 @@ export default function FormDespesa(props){
     let [erroDescricao, setErroDescricao] = useState(false);
     let [erroValor, setErroValor] = useState(false);
 
+    //selecionar protocolo
+    let [selectedProtocolo, setSelectedProtocolo] = useState(null);
+    let [selectedProtocoloTitulo, setSelectedProtocoloTitulo] = useState("");
+
     let [formData, setFormData] = useState({
         ano: '',
         mes: '',
@@ -31,16 +38,44 @@ export default function FormDespesa(props){
         tipo: '',
         valor: '',
         protocolo: '',
-    });
+    })
+    
+
+     //funcao pra pegar os protocolos
+     function carregarProtocolo() {
+        fetch(`http://localhost:5000/protocolo/${emp.empId}`, {
+            mode: 'cors',
+            credentials: 'include',
+            method: "GET",
+        })
+        .then(r=> {
+            return r.json()
+        })
+        .then(r=> {
+            setListaProtocolo(r);
+        })
+    }
+
+    function carregarTipoDespesa() {
+        fetch(`http://localhost:5000/tipoDespesa/`, {
+            mode: 'cors',
+            credentials: 'include',
+            method: "GET",
+        })
+        .then(r=> {
+            return r.json()
+        })
+        .then(r=> {
+            setListaTipoDespesa(r);
+        })
+    };
 
     useEffect(() => {
         carregarProtocolo();
         carregarTipoDespesa()
     }, []);
 
-    //selecionar protocolo
-    let [selectedProtocolo, setSelectedProtocolo] = useState(null);
-    let [selectedProtocoloTitulo, setSelectedProtocoloTitulo] = useState("");
+    
 
     function handleSelectProtocolo(protocolo) {
         setSelectedProtocolo(protocolo.protId); // Define o protocolo selecionado
@@ -121,7 +156,7 @@ export default function FormDespesa(props){
                 setErroData(erro);
                 break;
             case 'descricao':
-                erro = !valor.trim();
+                erro = !valor || !valor.toString().trim();
                 setErroDescricao(erro);
                 break;
             case 'valor':
@@ -174,7 +209,17 @@ export default function FormDespesa(props){
     };
     
     const adicionarDespesa = () => {
-        if (validarCampoIndividual()) {
+        // Valida todos os campos individualmente
+        const isAnoValido = validarCampoIndividual('ano', formData.ano);
+        const isMesValido = validarCampoIndividual('mes', formData.mes);
+        const isDataValida = validarCampoIndividual('data', formData.data);
+        const isDescricaoValida = validarCampoIndividual('descricao', formData.descricao);
+        const isValorValido = validarCampoIndividual('valor', formData.valor);
+        const isTipoValido = validarCampoIndividual('tipo', formData.tipo);
+    
+        // Verifica se há algum erro nos campos
+        if (isAnoValido && isMesValido && isDataValida && isDescricaoValida && isValorValido && isTipoValido) {
+            // Se tudo for válido, cria a nova despesa
             let novaDespesa = {
                 ano: formData.ano,
                 mes: formData.mes,
@@ -182,12 +227,14 @@ export default function FormDespesa(props){
                 tipo: formData.tipo,
                 descricao: formData.descricao,
                 valor: formData.valor,
-                protocolo: formData.protocolo,
                 empresa: emp.empId,
+                protocolo: formData.protocolo || "Sem Protocolo",
             };
     
+            // Adiciona a nova despesa na lista
             setDespesas((prevDespesas) => [...prevDespesas, novaDespesa]);
     
+            // Define ano e mês como fixos se ainda não estiverem
             if (!isAnoMesFixed) {
                 setIsAnoMesFixed(true);
                 setFormData((prevData) => ({
@@ -197,7 +244,7 @@ export default function FormDespesa(props){
                 }));
             }
     
-            // Limpa os outros campos sempre após adicionar uma despesa
+            // Limpa os campos restantes
             setFormData((prevData) => ({
                 ...prevData,
                 descricao: '',
@@ -207,46 +254,39 @@ export default function FormDespesa(props){
                 protocolo: '',
             }));
         } else {
-            msgRef.current.className = "msgError";
-            msgRef.current.innerHTML = "Preencha todos os campos corretamente";
+            // Mostra mensagem de erro se houver campos inválidos
+            if (msgRef.current) {
+                msgRef.current.className = "msgError";
+                msgRef.current.innerHTML = "Preencha todos os campos corretamente";
     
-            timeoutId = setTimeout(() => {
-                if (msgRef.current) {
-                    msgRef.current.innerHTML = '';
-                    msgRef.current.className = '';
-                }
-            }, 7000);
+                setTimeout(() => {
+                    if (msgRef.current) {
+                        msgRef.current.innerHTML = '';
+                        msgRef.current.className = '';
+                    }
+                }, 7000);
+            }
         }
     };
 
-    //funcao pra pegar os protocolos
-    function carregarProtocolo() {
-        fetch(`http://localhost:5000/protocolo/${emp.empId}`, {
-            mode: 'cors',
-            credentials: 'include',
-            method: "GET",
-        })
-        .then(r=> {
-            return r.json()
-        })
-        .then(r=> {
-            setListaProtocolo(r);
-        })
-    }
+    const handleSave = async (novoTipo) => {
+        const dados = { tipDespDesc: novoTipo };
 
-    function carregarTipoDespesa() {
-        fetch(`http://localhost:5000/tipoDespesa/`, {
+        const response = await fetch("http://localhost:5000/tipoDespesa", {
             mode: 'cors',
             credentials: 'include',
-            method: "GET",
-        })
-        .then(r=> {
-            return r.json()
-        })
-        .then(r=> {
-            setListaTipoDespesa(r);
-        })
-    }
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(dados),
+        });
+
+        if (response.ok) {
+            // Recarrega os tipos de despesa após salvar
+            carregarTipoDespesa();
+        }
+    };
 
 
     // Função para submeter as despesas para o backend
@@ -272,6 +312,11 @@ export default function FormDespesa(props){
             }
             return despesa;
         });
+
+        if (msgStatus.current) {
+            msgStatus.current.className = "msgSuccess";
+            msgStatus.current.innerHTML = "Despesas gravadas com sucesso!";
+        }
     
         // Faz a requisição de envio das despesas
         fetch('http://localhost:5000/controleDespesa/', {
@@ -285,13 +330,13 @@ export default function FormDespesa(props){
         })
         .then(r => {
             if (r.status === 201) {
-                msgRef.current.className = "msgSuccess";
-                msgRef.current.innerHTML = "Despesas gravadas com sucesso!";
+                msgStatus.current.className = "msgSuccess";
+                msgStatus.current.innerHTML = "Despesas gravadas com sucesso!";
                 setDespesas([]); // Limpa o array de despesas após salvar
                 router.push("/admin/despesa");
             } else {
-                msgRef.current.className = "msgError";
-                msgRef.current.innerHTML = r.message;
+                msgStatus.current.className = "msgError";
+                msgStatus.current.innerHTML = r.message;
             }
         })
     };
@@ -299,9 +344,8 @@ export default function FormDespesa(props){
     return  (
         <div className="container form-despesa" style={{ width: '900px' }}>
             <h3 className="text-center mb-4">Cadastrar Despesa</h3>
-            <div ref={msgRef}>
-
-            </div>
+            <div ref={msgRef}></div>
+            <div ref={msgStatus}></div>
 
             <div className="row">
                 <div className="col-md-2 mb-3">
@@ -369,7 +413,15 @@ export default function FormDespesa(props){
                         </option>
                     ))}
                 </select>
+                <button className="btn btn-link" onClick={() => setShowCadastro(true)}><i className="fas fa-plus"></i></button>
                 {erroTipo && <small className="text-danger">Tipo é obrigatório</small>}
+
+                    {showCadastro && (
+                    <CadastroTipoDespesa
+                        onClose={() => setShowCadastro(false)}
+                        onSave={handleSave}
+                    />
+                )}
             </div>
 
                 <div className="col-md-3 mb-3">

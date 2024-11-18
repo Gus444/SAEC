@@ -75,6 +75,11 @@ export default function empresasAdmin() {
                             empRegime: item.emp_regime,
                             empEmail: item.emp_email,
                             empTelefone: item.emp_telefone,
+                            empIe: item.emp_ie,
+                            empResponsavel: item.emp_responsavel,
+                            empProprietario: item.emp_proprietario,
+                            empInicio: item.emp_inicio,
+                            empFim: item.emp_fim,
                         }));
     
                         setListaEmpresas(mappedData);
@@ -215,40 +220,23 @@ export default function empresasAdmin() {
         const conteudoImpressao = document.createElement("div");
         conteudoImpressao.innerHTML = `
             <img src="/img/logotipo primus.png" style="display: block; margin: 0 auto; width: 200px; height: auto;"></img>
-            <h1>Relatório de Empresas</h1>
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th style="border: 1px solid black; padding: 8px;">CNPJ</th>
-                        <th style="border: 1px solid black; padding: 8px;">Nome</th>
-                        <th style="border: 1px solid black; padding: 8px;">Regime</th>
-                        <th style="border: 1px solid black; padding: 8px;">Ie</th>
-                        <th style="border: 1px solid black; padding: 8px;">Telefone</th>
-                        <th style="border: 1px solid black; padding: 8px;">Responsavel</th>
-                        <th style="border: 1px solid black; padding: 8px;">Proprietário</th>
-                        <th style="border: 1px solid black; padding: 8px;">Inicio</th>
-                        <th style="border: 1px solid black; padding: 8px;">Fim</th>
-                        <th style="border: 1px solid black; padding: 8px;">Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${empresasExibidas.map(empresa => `
-                        <tr>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empCnpj}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empNome}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empRegime}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empIe}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empTelefone}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empResponsavel}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empProprietario}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empInicio}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empFim}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${empresa.empEmail}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        `;
+            <h1 style="text-align: center;">Relatório de Empresas</h1>
+            <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+                ${empresasExibidas.map(empresa => `
+                    <div style="border: 1px solid black; margin-bottom: 20px; padding: 10px; border-radius: 8px;">
+                        <h2 style="margin: 0; text-align: center;">***** ${empresa.empNome} *****</h2>
+                        <p><strong>CNPJ:</strong> ${empresa.empCnpj}</p>
+                        <p><strong>Regime:</strong> ${empresa.empRegime}</p>
+                        <p><strong>IE:</strong> ${empresa.empIe}</p>
+                        <p><strong>Telefone:</strong> ${empresa.empTelefone}</p>
+                        <p><strong>Responsável:</strong> ${empresa.empResponsavel}</p>
+                        <p><strong>Proprietário:</strong> ${empresa.empProprietario}</p>
+                        <p><strong>Início:</strong> ${empresa.empInicio}</p>
+                        <p><strong>Fim:</strong> ${empresa.empFim}</p>
+                        <p><strong>Email:</strong> ${empresa.empEmail}</p>
+                    </div>
+                `).join('')}
+            </div>`;
     
         // Salva o conteúdo original da página
         const originalContents = document.body.innerHTML;

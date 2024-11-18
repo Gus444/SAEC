@@ -5,6 +5,7 @@ import EmpContext from '@/app/context/empContext';
 import MontaTabela from "@/app/components/montaTabela";
 import { useRouter } from "next/navigation";
 import MontaTabelaFaturamento from "@/app/components/montaTabelaAnos";
+import MontaTabelaAnos from "@/app/components/montaTabelaAnos";
 
 export default function despesaAdmin(){
 
@@ -31,7 +32,7 @@ export default function despesaAdmin(){
     }, [emp, router]);
 
     function carregarAnos() {
-        fetch(`http://localhost:5000/despesa/${emp.empId}`, {
+        fetch(`http://localhost:5000/controleDespesa/${emp.empId}`, {
             mode: 'cors',
             credentials: 'include',
             method: "GET",
@@ -40,61 +41,61 @@ export default function despesaAdmin(){
         .then(r => {
             const listaAnosComPrefixo = r.map(item => ({
                 ...item,
-                totalFaturamento: `R$ ${item.totalFaturamento.toFixed(2).replace('.', ',')}`, // Formata o valor
+                totalDespesa: `R$ ${item.totalDespesa.toFixed(2).replace('.', ',')}`, // Formata o valor
             }));
             setListaAnos(listaAnosComPrefixo);
         });
     }
 
-    // async function excluirFaturamento(ano) {
-    //     msgRef.current.className = '';
-    //     msgRef.current.innerHTML = '';
+    async function excluirDespesa(id) {
+        msgRef.current.className = '';
+        msgRef.current.innerHTML = '';
     
-    //     if (confirm("Tem certeza que deseja excluir este período?")) {
+        if (confirm("Tem certeza que deseja excluir este período? ATENÇÃO VOCE ESTA PRESTES A APAGAR TODOS OS LANÇAMENTOS DE FEITOS NESTE ANO")) {
     
-    //         if (ano) {
-    //             let ok = false;
+            if (id) {
+                let ok = false;
     
-    //             fetch(`http://localhost:5000/faturamento/excluir/ano/${ano}/empresa/${emp.empId}`, {
-    //                 mode: 'cors',
-    //                 credentials: 'include',
-    //                 method: "DELETE",
-    //             })
-    //             .then(r => {
-    //                 ok = r.status === 200;
-    //                 return r.json();
-    //             })
-    //             .then(r => {
-    //                 if (ok) {
-    //                     msgRef.current.className = "msgSucess";
-    //                     msgRef.current.innerHTML = r.msg;
-    //                     carregarAnos();
+                fetch(`http://localhost:5000/controleDespesa/excluirAno/${id}/${emp.empId}`, {
+                    mode: 'cors',
+                    credentials: 'include',
+                    method: "DELETE",
+                })
+                .then(r => {
+                    ok = r.status === 200;
+                    return r.json();
+                })
+                .then(r => {
+                    if (ok) {
+                        msgRef.current.className = "msgSucess";
+                        msgRef.current.innerHTML = r.msg;
+                        carregarAnos();
     
-    //                     timeoutId = setTimeout(() => {
-    //                         if (msgRef.current) {
-    //                             msgRef.current.innerHTML = '';
-    //                             msgRef.current.className = '';
-    //                         }
-    //                     }, 5000);
-    //                 } else {
-    //                     msgRef.current.className = "msgError";
-    //                     msgRef.current.innerHTML = r.msg;
+                        timeoutId = setTimeout(() => {
+                            if (msgRef.current) {
+                                msgRef.current.innerHTML = '';
+                                msgRef.current.className = '';
+                            }
+                        }, 5000);
+                    } else {
+                        msgRef.current.className = "msgError";
+                        msgRef.current.innerHTML = r.msg;
     
-    //                     timeoutId = setTimeout(() => {
-    //                         if (msgRef.current) {
-    //                             msgRef.current.innerHTML = '';
-    //                             msgRef.current.className = '';
-    //                         }
-    //                     }, 5000);
-    //                 }
-    //             });
-    //         } else {
-    //             console.error("Ano ou ID da empresa ausente.");
-    //             msgRef.current.className = "msgError";
-    //             msgRef.current.innerHTML = "Não foi possível excluir o período: informações ausentes.";
-    //         }
-    //     }
-    // }
+                        timeoutId = setTimeout(() => {
+                            if (msgRef.current) {
+                                msgRef.current.innerHTML = '';
+                                msgRef.current.className = '';
+                            }
+                        }, 5000);
+                    }
+                });
+            } else {
+                console.error("Ano ou ID da empresa ausente.");
+                msgRef.current.className = "msgError";
+                msgRef.current.innerHTML = "Não foi possível excluir o período: informações ausentes.";
+            }
+        }
+    }
 
     return (
         <div>
@@ -106,7 +107,7 @@ export default function despesaAdmin(){
 
             </div>
             <div>
-                <MontaTabelaFaturamento alteracao={"/admin/despesa/alteracao"}  exclusao={""} exibir={"/admin/despesa/exibir"} lista={listaAnos} cabecalhos={["Ano","Valor Total"]} propriedades={["ano", "totalFaturamento"]} campoExclusao="ano" ></MontaTabelaFaturamento>
+                <MontaTabelaAnos alteracao={"/admin/despesa/alteracao"}  exclusao={excluirDespesa} exibir={"/admin/despesa/exibir"} lista={listaAnos} cabecalhos={["Ano","Valor Total"]} propriedades={["ano", "totalDespesa"]} campoExclusao="ano" ></MontaTabelaAnos>
             </div>
         </div>
     )

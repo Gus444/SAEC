@@ -13,53 +13,6 @@ export default function FormProtocolo(props){
     const [arquivos, setArquivos] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    //impede de acessar caso não tenha uma empresa//
-    useEffect(() => {
-        // Verifica se a empresa está selecionada
-        if (!emp) {
-            // Redireciona para a página de empresas se nenhuma empresa estiver selecionada
-            router.push("/admin/empresas");
-        } else {
-            setLoading(false);
-        }
-    }, [emp, router]);
-
-    if (loading || !emp || !user) {
-        return <div>Carregando...</div>;
-    }
-    ///////////////////////////////////////////////
-
-    function handleFileChange(event) {
-        const selectedFiles = Array.from(event.target.files);
-        const nomesExistentes = arquivos.map(file => file.name);
-    
-        // Tipos de arquivos aceitos
-        const tiposAceitos = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'];
-    
-        const novosArquivos = selectedFiles.filter(file => {
-            // Verifica se o arquivo já foi selecionado
-            if (nomesExistentes.includes(file.name)) {
-                alert(`O arquivo "${file.name}" já foi selecionado.`);
-                return false;
-            }
-    
-            // Verifica se o tipo de arquivo é válido
-            if (!tiposAceitos.includes(file.type)) {
-                alert(`O arquivo "${file.name}" não é um tipo aceito. Apenas PNG, JPG, JPEG e PDF são permitidos.`);
-                return false;
-            }
-    
-            return true;
-        });
-    
-        // Adiciona os novos arquivos ao estado
-        setArquivos(prevArquivos => [...prevArquivos, ...novosArquivos]);
-    }
-
-    const removerArquivo = (index) => {
-        setArquivos((prevFiles) => prevFiles.filter((_, i) => i !== index));
-    };
-
     const usuario = user.usuId;
     const empresa = emp.empId;
 
@@ -80,6 +33,92 @@ export default function FormProtocolo(props){
         }    
 
     let isAlteracao = protocolo.protId != null && protocolo.protId !== "";
+
+    let [arquivoAlterado, setArquivoAlterado] = useState({
+        docsEncontrados: [],
+    });
+
+    useEffect(() => {
+
+        if(isAlteracao){
+            if (arquivoAlterado !== docsProtocolo) {
+                setArquivoAlterado(docsProtocolo);
+            }
+        }
+    }, [docsProtocolo, arquivoAlterado]);
+
+    //impede de acessar caso não tenha uma empresa//
+    useEffect(() => {
+        // Verifica se a empresa está selecionada
+        if (!emp) {
+            // Redireciona para a página de empresas se nenhuma empresa estiver selecionada
+            router.push("/admin/empresas");
+        } else {
+            setLoading(false);
+        }
+    }, [emp, router]);
+
+    if (loading || !emp || !user) {
+        return <div>Carregando...</div>;
+    }
+    ///////////////////////////////////////////////
+
+    function normalizeFileName(name) {
+        return name
+            .normalize("NFD") // Normaliza acentos e outros caracteres
+            .replace(/[\u0300-\u036f]/g, '') // Remove marcas diacríticas
+            .replace(/[^a-zA-Z0-9.]/g, '_') // Substitui caracteres especiais por '_'
+            .toLowerCase(); // Converte tudo para minúsculas
+    }
+    
+    function handleFileChange(event) {
+        const selectedFiles = Array.from(event.target.files);
+    
+        // Normaliza nomes existentes (arquivos já carregados e arquivos no protocolo)
+        const nomesExistentes = [
+            ...arquivos.map(file => normalizeFileName(file.name)),
+            ...(arquivoAlterado.docsEncontrados?.map(doc => normalizeFileName(doc.protDocsNome)) || []),
+        ];
+    
+        // Tipos de arquivos aceitos
+        const tiposAceitos = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'];
+    
+        const novosArquivos = selectedFiles.filter(file => {
+            const fileName = normalizeFileName(file.name); // Normaliza o nome selecionado
+    
+            // Verifica se o arquivo já foi selecionado
+            if (nomesExistentes.includes(fileName)) {
+                alert(`O arquivo "${file.name}" já foi selecionado.`);
+                return false;
+            }
+    
+            // Verifica se o tipo de arquivo é válido
+            if (!tiposAceitos.includes(file.type)) {
+                alert(`O arquivo "${file.name}" não é um tipo aceito. Apenas PNG, JPG, JPEG e PDF são permitidos.`);
+                return false;
+            }
+    
+            return true;
+        });
+    
+        // Adiciona os novos arquivos ao estado
+        setArquivos(prevArquivos => [...prevArquivos, ...novosArquivos]);
+    }
+
+    console.log(docsProtocolo)
+
+    const removerArquivo = (index) => {
+        setArquivos((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    };
+
+    const removerArquivoAlterado = (index) => {
+        setArquivoAlterado((prevState) => ({
+            ...prevState,
+            docsEncontrados: prevState.docsEncontrados.filter((_, i) => i !== index),
+        }));
+    };
+
+    
 
     let titulo = useRef("");
     let tipo = useRef("");
@@ -242,6 +281,7 @@ export default function FormProtocolo(props){
                 protData: data.current.value,
                 protDescricao: descricao.current.value,
                 usuario: usuario,
+                empresa: empresa
             };
     
             fetch('http://localhost:5000/protocolo', {
@@ -260,26 +300,28 @@ export default function FormProtocolo(props){
                     throw new Error('Erro ao cadastrar protocolo');
                 }
             })
-            .then(data => {
-                const protId = data.result;
-                if (protId) {
-                  
-                    const formData = new FormData();
-                    formData.append("protocolo", protId); 
-                    
-                    arquivos.forEach((arquivo) =>{
-                        formData.append("inputImage", arquivo);
-                    })
-            
-                    return fetch('http://localhost:5000/docsProtocolo', {
-                        mode: 'cors',
-                        credentials: 'include',
-                        method: "PUT",
-                        body: formData
-                    })
-                } else {
-                    throw new Error('ID do protocolo não encontrado');
-                }
+            .then(r => {
+                if(r.result){
+                    const protId = id;
+                    if (protId) {
+    
+                        const formData = new FormData();
+                        formData.append("protocolo", protId); 
+                        
+                        arquivos.forEach((arquivo) =>{
+                            formData.append("inputImage", arquivo);
+                        })
+                
+                        return fetch('http://localhost:5000/docsProtocolo', {
+                            mode: 'cors',
+                            credentials: 'include',
+                            method: "PUT",
+                            body: formData
+                        })
+                    } else {
+                        throw new Error('ID do protocolo não encontrado');
+                    }
+                } 
             })
             .then(res => {
                 if (!res.ok) {
@@ -332,8 +374,7 @@ export default function FormProtocolo(props){
             };
         }
     }, []);
-    
-    console.log(protocolo)
+
     console.log(docsProtocolo)
 
     return (
@@ -426,23 +467,23 @@ export default function FormProtocolo(props){
                         </div>
                     )}
 
-                    {docsProtocolo.length > 0 && (
-                        <div className="row mt-3">
-                            {docsProtocolo.map((doc, index) => (
-                                <div key={index} className="file-item col-md-4">
-                                    <div className="file-preview d-flex align-items-center justify-content-between">
-                                        <p className="m-0 text-truncate">{doc.protDocsNome}</p>
-                                        <button
-                                            type="button"
-                                            onClick={() => removerArquivoSalvo(doc.protDocsId)}
-                                            className="btn btn-link text-danger"
-                                        >
-                                            X
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+                    {arquivoAlterado.docsEncontrados && arquivoAlterado.docsEncontrados.length > 0 && (
+                    <div className="row mt-3">
+                        {arquivoAlterado.docsEncontrados.map((doc, index) => (
+                        <div key={index} className="file-item col-md-4">
+                            <div className="file-preview d-flex align-items-center justify-content-between">
+                            <p className="m-0 text-truncate">{doc.protDocsNome}</p>
+                            <button
+                                type="button"
+                                onClick={() => removerArquivoAlterado(index)}
+                                className="btn btn-link text-danger"
+                            >
+                                X
+                            </button>
+                            </div>
                         </div>
+                        ))}
+                    </div>
                     )}
                 </div>
 

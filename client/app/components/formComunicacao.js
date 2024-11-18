@@ -73,7 +73,7 @@ export default function FormComunicacao(props){
 
     let docsComunicacao = 
     props.docsComunicacao != null ? 
-        props.comunicacao 
+        props.docsComunicacao 
     : 
         {  
             comDocsId: "", comId: "", comDocsNome: ""
@@ -167,15 +167,15 @@ export default function FormComunicacao(props){
                 },
                 body: JSON.stringify(comunicacao)
             })
-            .then(response => {
-                if (response.status === 201) {
-                    return response.json(); // Processa a resposta como JSON
+            .then(r => {
+                if (r.status === 200) {
+                    return r.json(); // Processa a resposta como JSON
                 } else {
                     throw new Error('Erro ao cadastrar comunicação');
                 }
             })
-            .then(data => {
-                const comId = data.result; // Pega o ID da comunicação criada
+            .then(r => {
+                const comId = r.result; // Pega o ID da comunicação criada
                 if (comId) {
                     // Se a comunicação foi cadastrada com sucesso, fazer o segundo fetch para enviar as imagens
                     const formData = new FormData();
@@ -196,10 +196,119 @@ export default function FormComunicacao(props){
                     throw new Error('ID da comunicação não encontrado');
                 }
             })
-            .then(res => {
-                if (!res.ok) {
+            .then(r => {
+                if (!r.ok) {
                     msgRef.current.className = "msgError";
                     msgRef.current.innerHTML = res.msg;
+                }
+                return r.json();
+            })
+            .then(r => {
+                if (r) {
+                    router.push("/admin/comunicacao");
+                } else {
+                    msgRef.current.className = "msgError";
+                    msgRef.current.innerHTML = response.msg;
+                }
+            })
+            .catch(error => {
+                console.error(error.message);
+            });
+        } else {
+            msgRef.current.className = "msgError";
+            msgRef.current.innerHTML = "Preencha todos os campos";
+        }
+    }
+
+    function alterarComunicacao(id) {
+        let ok = true;
+    
+        // Validação dos campos
+        if (titulo.current.value === "") {
+            setErroTitulo(true);
+            ok = false;
+        } else {
+            setErroTitulo(false);
+        }
+    
+        if (canal.current.value === "") {
+            setErroCanal(true);
+            ok = false;
+        } else {
+            setErroCanal(false);
+        }
+    
+        if (data.current.value === "") {
+            setErroData(true);
+            ok = false;
+        } else {
+            setErroData(false);
+        }
+    
+        if (hora.current.value === "") {
+            setErroHora(true);
+            ok = false;
+        } else {
+            setErroHora(false);
+        }
+    
+        msgRef.current.className = '';
+        msgRef.current.innerHTML = '';
+    
+        if (ok) {
+            let comunicacao = {
+                comId: id,
+                comTitulo: titulo.current.value,
+                comCanal: canal.current.value,
+                comData: data.current.value,
+                comHora: hora.current.value,
+                comDescricao: descricao.current.value,
+                usuario: usuario,
+                empresa: empresa
+            };
+        
+            fetch('http://localhost:5000/comunicacao', {
+                mode: 'cors',
+                credentials: 'include',
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify(comunicacao)
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    throw new Error('Erro ao cadastrar comunicacao');
+                }
+            })
+            .then(r => {
+                if (r.result) {
+                    const comId = id;
+                    if (comId) {
+                        const formData = new FormData();
+                        formData.append("comunicacao", comId);
+                        arquivos.forEach((arquivo) => {
+                            formData.append("inputImage", arquivo);
+                        });
+        
+                        return fetch('http://localhost:5000/docsComunicacao', {
+                            mode: 'cors',
+                            credentials: 'include',
+                            method: "PUT",
+                            body: formData
+                        });
+                    } else {
+                        throw new Error('ID da comunicacao não encontrado');
+                    }
+                }
+            })
+            .then(res => {
+                if (!res || !res.ok) {
+                    msgRef.current.className = "msgError";
+                    msgRef.current.innerHTML = res?.msg || "Erro ao processar a requisição.";
+                    throw new Error("Erro na resposta do servidor");
                 }
                 return res.json();
             })
@@ -212,7 +321,9 @@ export default function FormComunicacao(props){
                 }
             })
             .catch(error => {
-                console.error(error.message);
+                console.error("Erro ao alterar comunicação:", error.message);
+                msgRef.current.className = "msgError";
+                msgRef.current.innerHTML = "Ocorreu um erro ao salvar as alterações. Tente novamente.";
             });
         } else {
             msgRef.current.className = "msgError";
@@ -247,6 +358,9 @@ export default function FormComunicacao(props){
             };
         }
     }, []);
+
+    console.log(docsComunicacao)
+    console.log(comunicacao)
 
     return(
         <div className="container mt-1 d-flex justify-content-center">

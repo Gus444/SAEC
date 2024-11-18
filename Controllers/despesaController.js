@@ -75,4 +75,175 @@ export default class DespesaController{
             res.status(500).json({ msg: "Erro ao cadastrar as despesas." });
         }
     }
+
+    async listarDespesasEmp(req,res){
+        try {
+            let { id } = req.params;
+            let despesa = new ControleDespesaModel();
+            let listaDespesa = await despesa.listarPorEmpresa(id);
+            
+            res.status(200).json(listaDespesa);
+
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
+    async listarMeses(req, res){
+        try {
+            let { ano, empresa } = req.params;
+            let mesesDespesa = new ControleDespesaModel()
+            let mesesEncontrados = await mesesDespesa.obterMeses(empresa, ano);
+            if(mesesEncontrados != null){
+                res.status(200).json(mesesEncontrados);
+            }
+            else{
+                res.status(404).json({msg: "Meses não encontrado"});
+            }
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
+    async listarDespesasMes(req, res){
+        try {
+            let { ano, empresa, mes } = req.params;
+            let despesas = new ControleDespesaModel()
+            let despesasEncontradas = await despesas.obterDespesas(empresa, ano, mes);
+            if(despesasEncontradas != null){
+                res.status(200).json(despesasEncontradas);
+            }
+            else{
+                res.status(404).json({msg: "Despesas não encontrado"});
+            }
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
+    async excluirAno(req, res) {
+        try{
+            let despesa = new ControleDespesaModel();
+            let { ano, empresa } = req.params;
+            if(await despesa.obterAnoDelete(empresa, ano) != null) {
+                let result = await despesa.deletarAno(empresa, ano);
+                if(result) {
+                    res.status(200).json({msg: "Exclusão realizada com sucesso!"});
+                }
+                else {
+                    res.status(500).json({msg: "Erro interno de servidor"});
+                }
+            }   
+            else {
+                res.status(404).json({msg: "Faturamento não encontrado para exclusão!"});
+            }
+        }
+        catch(ex) {
+                res.status(500).json(
+                    {msg: "Erro inesperado! Entre em contato com o nosso suporte técnico.",
+                    detalhes: ex.message})
+            
+        }
+
+    }
+
+    async listarDespesaEspecifica(req, res){
+        try {
+            let {id} = req.params;
+            let despesas = new ControleDespesaModel()
+            let despesasEncontradas = await despesas.obterDespesaEspecifica(id);
+            if(despesasEncontradas != null){
+                res.status(200).json(despesasEncontradas);
+            }
+            else{
+                res.status(404).json({msg: "Despesas não encontrado"});
+            }
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
+    async deletarMes(req,res){
+        try{
+            let despesa = new ControleDespesaModel();
+            let { ano, empresa, mes } = req.params;
+            if(await despesa.obterAnoDelete(empresa, ano, mes) != null) {
+                let result = await despesa.deletarAno(empresa, ano);
+                if(result) {
+                    res.status(200).json({msg: "Exclusão realizada com sucesso!"});
+                }
+                else {
+                    res.status(500).json({msg: "Erro interno de servidor"});
+                }
+            }   
+            else {
+                res.status(404).json({msg: "Despesa não encontrado para exclusão!"});
+            }
+        }
+        catch(ex) {
+                res.status(500).json(
+                    {msg: "Erro inesperado! Entre em contato com o nosso suporte técnico.",
+                    detalhes: ex.message})
+            
+        }
+    }
+
+    async deletarDespesaEspecifica(req,res){
+        try {
+            let despesa = new ControleDespesaModel();
+            let { id } = req.params;
+            if(await despesa.obterDespesaEspecifica(id) != null) {
+                let result = await despesa.deletarDespesa(id);
+                if(result) {
+                    res.status(200).json({msg: "Exclusão realizada com sucesso!"});
+                }
+                else {
+                    res.status(500).json({msg: "Erro interno de servidor"});
+                }
+            }
+            else{
+                res.status(404).json({msg: "Despesa não encontrado para exclusão!"});
+            }
+        }
+        catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
+
+
+    async alterarDespesaEsp(req,res){
+        try {
+            if (req.body) {
+                let { conId, compAno, compMes, conData, conDescricao, conValor, empId, protId, tipDespId } = req.body;
+    
+                if (conId && compAno && compMes && conData && conDescricao && conValor && empId > 0 && tipDespId > 0) {
+                    
+                    if(protId == '')
+                        protId = null
+
+                    let despesa = new ControleDespesaModel(empId, compMes, compAno, conDescricao, conData, conValor, protId, tipDespId, conId);
+                    
+                    if (await despesa.obterDespesaEspecifica(conId) != null) {
+                    
+                        let result = await despesa.alterarDespesaEspecifica();
+                        if (result) {
+                            res.status(200).json({ msg: "Despesa atualizado com sucesso!" });
+                        } else {
+                            res.status(500).json({ msg: "Erro interno de servidor" });
+                        } 
+
+                    } else {
+                        res.status(404).json({ msg: "Despesa não encontrado para alteração" });
+                    }
+                } else {
+                    res.status(400).json({ msg: "Existem campos que não foram preenchidos!" });
+                }
+            } else {
+                res.status(400).json({ msg: "Preencha corretamente os dados do usuário!" });
+            }
+
+        } catch (error) {
+            res.status(500).json({msg: "Erro de servidor", detalhes: error.message})
+        }
+    }
 }

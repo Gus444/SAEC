@@ -47,6 +47,12 @@ router.post('/', auth.validar, upload.array("inputImage"), (req,res) =>{
     
     ctrl.cadastrarDocsProtocolo(req,res);
 });
+router.put('/', auth.validar, upload.array("inputImage"), (req,res) =>{
+    // #swagger.tags = ['Alterar documentos Protocolo']
+    // #swagger.summary = 'Alterar Imagem Protocolo'
+
+    ctrl.alterarDocsProtocolo(req,res);
+})
 router.get('/obter/:id', auth.validar, (req,res) => {
     // #swagger.tags = ['Documentos Protocolo']
     // #swagger.summary = 'Retorna baseado em um id'

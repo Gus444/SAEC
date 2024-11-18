@@ -51,6 +51,54 @@ export default class docsProtocoloController {
         }
     }
 
+    async alterarDocsProtocolo(req,res){
+        try {
+            if (req.body && req.files) {
+                let { protocolo } = req.body;
+                
+                if (protocolo > 0) {
+                    const extensoesPermitidas = [".jpg", ".jpeg", ".png", ".pdf"];
+                    const erros = [];
+    
+                    for (const file of req.files) {
+                        let protDocsNome = file.filename; 
+                        const extensaoArquivo = path.extname(file.filename);
+    
+                        if (extensoesPermitidas.includes(extensaoArquivo)) {
+                            let docsProtocolo = new DocsProtocoloModel();
+                            docsProtocolo.protDocsId = 0; 
+                            docsProtocolo.protId = protocolo;
+                            docsProtocolo.protDocsNome = protDocsNome;
+    
+                            const result = await docsProtocolo.gravar();
+                            if (!result) {
+                                erros.push(`Erro ao gravar o documento: ${protDocsNome}`);
+                            }
+                        } else {
+                            erros.push(`Arquivo ${protDocsNome} tem uma extensão não permitida.`);
+                        }
+                    }
+    
+                    if (erros.length > 0) {
+                        return res.status(400).json({ msg: "Ocorreram erros no cadastro de alguns documentos.", erros });
+                    }
+                    
+                    res.status(201).json({ msg: "Documentos cadastrados com sucesso!" });
+                } else {
+                    res.status(400).json({ msg: "Comunicação inválida." });
+                }
+            } else {
+                res.status(400).json({ msg: "Nenhuma comunicação ou arquivo enviado." });
+            }
+        } catch (ex) {
+            console.error(ex); // Log de erro para depuração
+            res.status(500).json({
+                msg: "Erro interno de servidor!",
+                detalhes: ex.message
+            });
+        }
+    }
+
     async obter(req, res) {
         try {
             let { id } = req.params;

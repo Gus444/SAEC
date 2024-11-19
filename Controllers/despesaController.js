@@ -20,6 +20,10 @@ export default class DespesaController{
                 // Percorre cada despesa no array
                 for (let i = 0; i < despesas.length; i++) {
                     let { empresa, ano, mes, data, tipo, descricao, valor, protocolo } = despesas[i];
+
+                    if(protocolo == "Sem Protocolo"){
+                        protocolo = null
+                    }
     
                     // Verifica se todos os campos necessários estão presentes
                     if (!ano || !mes || !tipo || !descricao || !valor || !data || !empresa) {

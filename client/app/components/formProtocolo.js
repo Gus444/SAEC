@@ -111,11 +111,37 @@ export default function FormProtocolo(props){
         setArquivos((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
 
-    const removerArquivoAlterado = (index) => {
-        setArquivoAlterado((prevState) => ({
-            ...prevState,
-            docsEncontrados: prevState.docsEncontrados.filter((_, i) => i !== index),
-        }));
+    const removerArquivoAlterado = async (index) => {
+
+        console.log(index)
+        if(confirm("Tem certeza que deseja deletar este arquivo?")){
+
+            let id = index;
+    
+            try {
+                // Faz a requisição para deletar o arquivo no servidor
+                let response = await fetch(`http://localhost:5000/docsProtocolo/${id}`, {
+                    mode: 'cors',
+                    credentials: 'include',
+                    method: "DELETE",
+                });
+        
+                if (!response.ok) {
+                    throw new Error('Erro ao excluir arquivo');
+                }
+        
+                // Após a exclusão bem-sucedida, atualiza o estado local
+                setArquivoAlterado((prevState) => ({
+                    ...prevState,
+                    docsEncontrados: prevState.docsEncontrados.filter((_, i) => i !== index),
+                }));
+        
+                console.log('Arquivo excluído com sucesso!');
+            } catch (error) {
+                console.error('Erro ao excluir o arquivo:', error);
+            }
+        }
+        
     };
 
     
@@ -475,7 +501,7 @@ export default function FormProtocolo(props){
                             <p className="m-0 text-truncate">{doc.protDocsNome}</p>
                             <button
                                 type="button"
-                                onClick={() => removerArquivoAlterado(index)}
+                                onClick={() => removerArquivoAlterado(doc.protDocsId)}
                                 className="btn btn-link text-danger"
                             >
                                 X

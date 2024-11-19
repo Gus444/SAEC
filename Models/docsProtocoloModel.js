@@ -96,4 +96,27 @@ export default class DocsProtocoloModel{
             return null;
         }
     }
+
+    async obterDocExc(id){
+        let sql = "SELECT * from tb_docsprotocolo WHERE protDocs_id = ?";
+        let valores = [id]
+
+        let row = await banco.ExecutaComando(sql, valores)
+
+        if(row.length > 0){
+            return new DocsProtocoloModel(row[0]["protDocs_id"], row[0]["tb_protocolo_prot_id"],row[0]["docs_nome"])
+        }
+
+        return null;
+    }
+
+    async deletarDocumentoEspecifico(id){
+        let sql = "delete from tb_docsprotocolo where protDocs_id = ?";
+
+        let valores = [id];
+
+        let result = await banco.ExecutaComandoNonQuery(sql,valores);
+
+        return result
+    }
 }

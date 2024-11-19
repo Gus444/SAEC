@@ -19,6 +19,7 @@ export default function usuariosAdmin() {
     let usuariosExibidos = listaUsuarios.filter(usuario => {
         let statusMatch = mostrarInativos || usuario.usuStatus === "Ativo";
         let queryMatch = query === "" || usuario.usuNome.toLowerCase().includes(query.toLowerCase());
+        let relatorioStatus = true
         return statusMatch && queryMatch;
     });
 

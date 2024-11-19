@@ -48,7 +48,7 @@ router.post('/', auth.validar, upload.array("inputImage"), (req,res) =>{
     ctrl.cadastrarDocsProtocolo(req,res);
 });
 router.put('/', auth.validar, upload.array("inputImage"), (req,res) =>{
-    // #swagger.tags = ['Alterar documentos Protocolo']
+    // #swagger.tags = ['Documentos Protocolo']
     // #swagger.summary = 'Alterar Imagem Protocolo'
 
     ctrl.alterarDocsProtocolo(req,res);
@@ -60,6 +60,11 @@ router.get('/obter/:id', auth.validar, (req,res) => {
             "bearerAuth": []
     }] */
     ctrl.obter(req, res);
-})
+});
+router.delete('/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Documentos Protocolo']
+    // #swagger.summary = 'Deletar um protocolo especifico'
+    ctrl.deletar(req,res);
+});
 
 export default router;

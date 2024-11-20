@@ -119,8 +119,8 @@ export default class docsProtocoloController {
         try {
             let { id } = req.params;
             let docs = new DocsProtocoloModel();
-            let docsEncontrados = await docs.obterDocExc(id);
-            if (docsEncontrados && docsEncontrados.length > 0) {
+            let docEncontrado = await docs.obterDocExc(id)
+            if (docEncontrado) {
                 let result = await docs.deletarDocumentoEspecifico(id);
 
                 if(result){

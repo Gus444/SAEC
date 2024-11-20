@@ -39,13 +39,10 @@ export default function FormProtocolo(props){
     });
 
     useEffect(() => {
-
-        if(isAlteracao){
-            if (arquivoAlterado !== docsProtocolo) {
-                setArquivoAlterado(docsProtocolo);
-            }
+        if (isAlteracao && JSON.stringify(arquivoAlterado) !== JSON.stringify(docsProtocolo)) {
+            setArquivoAlterado(docsProtocolo);
         }
-    }, [docsProtocolo, arquivoAlterado]);
+    }, [docsProtocolo, isAlteracao]);
 
     //impede de acessar caso não tenha uma empresa//
     useEffect(() => {
@@ -131,10 +128,11 @@ export default function FormProtocolo(props){
                 }
         
                 // Após a exclusão bem-sucedida, atualiza o estado local
-                setArquivoAlterado((prevState) => ({
-                    ...prevState,
-                    docsEncontrados: prevState.docsEncontrados.filter((_, i) => i !== index),
-                }));
+                setArquivoAlterado((prevState) => {
+                    const updatedDocs = prevState.docsEncontrados.filter(doc => doc.protDocsId !== id);
+                    console.log("Arquivos após a exclusão:", updatedDocs);  // Verificando os arquivos após remoção
+                    return { ...prevState, docsEncontrados: updatedDocs };
+                });
         
                 console.log('Arquivo excluído com sucesso!');
             } catch (error) {

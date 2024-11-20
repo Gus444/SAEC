@@ -29,7 +29,7 @@ export default function MontaTabela(props) {
 
     return (
         <div className="container mt-1">
-            <div className="card p-4 shadow">
+            <div className="card p-3 shadow">
                 <div className="table-responsive">
                     <table className="table table-striped">
                         <thead>

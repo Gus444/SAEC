@@ -1,5 +1,4 @@
 'use client'
-import ListaMeses from "@/app/components/listaMeses";
 import MontaTabelaDespesas from "@/app/components/montaTabelaDespesas";
 import EmpContext from "@/app/context/empContext";
 import UserContext from "@/app/context/userContext";
@@ -24,15 +23,20 @@ export default function alterarMes({params: {id, mesId}}){
         })
         .then(r=> {
             console.log(r);
-            setListaDespesas(r);
+            const listaDespesaComRS = r.map(item => ({
+                ...item,
+                valor: `R$ ${parseFloat(item.valor).toFixed(2).replace('.', ',')}`, // Formata o valor
+            }));
+            
+            setListaDespesas(listaDespesaComRS);
         })
     }
 
     useEffect(() => {
         carregarDespesas(id, mesId);
-    }, [])
+    }, [id, mesId])
 
-    async function excluirDespesa(id) {
+    async function excluirDespesa(despesaId) {
 
         msgRef.current.className = ''
         msgRef.current.innerHTML = ''
@@ -40,7 +44,7 @@ export default function alterarMes({params: {id, mesId}}){
         if(confirm("Tem certeza que deseja excluir este registro?")) {
             if(id > 0) {
                 let ok = false;
-                fetch(`http://localhost:5000/controleDespesa/excluir/${id}`, {
+                fetch(`http://localhost:5000/controleDespesa/excluir/${despesaId}`, {
                     mode: 'cors',
                     credentials: 'include',
                     method: "DELETE",
@@ -53,7 +57,7 @@ export default function alterarMes({params: {id, mesId}}){
                     if(ok) {
                         msgRef.current.className = "msgSucess";
                         msgRef.current.innerHTML = r.msg;
-                        carregarDespesas();
+                        carregarDespesas(id, mesId);
 
                         timeoutId = setTimeout(() => {
                             if (msgRef.current) {

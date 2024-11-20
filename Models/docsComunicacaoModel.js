@@ -96,4 +96,27 @@ export default class DocsComunicacaoModel{
             return null;
         }
     }
+
+    async obterDocExc(id){
+        let sql = "SELECT * from tb_docscomunicacao WHERE comDocs_id = ?";
+        let valores = [id]
+
+        let row = await banco.ExecutaComando(sql, valores)
+
+        if(row.length > 0){
+            return new DocsComunicacaoModel(row[0]["comDocs_id"], row[0]["tb_comunicacao_com_id"],row[0]["comDocs_nome"])
+        }
+
+        return null;
+    }
+
+    async deletarDocumentoEspecifico(id){
+        let sql = "delete from tb_docscomunicacao where comDocs_id = ?";
+
+        let valores = [id];
+
+        let result = await banco.ExecutaComandoNonQuery(sql,valores);
+
+        return result
+    }
 }

@@ -253,6 +253,9 @@ export default function FormDespesa(props){
                 valor: '',
                 protocolo: '',
             }));
+            setSelectedProtocolo(null); // Reseta o protocolo selecionado
+            setSelectedProtocoloTitulo('');
+            setTipoDespesaInput('');
         } else {
             // Mostra mensagem de erro se houver campos inválidos
             if (msgRef.current) {
@@ -314,7 +317,7 @@ export default function FormDespesa(props){
         });
 
         if (msgStatus.current) {
-            msgStatus.current.className = "msgSuccess";
+            msgStatus.current.className = "msgSucess";
             msgStatus.current.innerHTML = "Despesas gravadas com sucesso!";
         }
     
@@ -330,7 +333,7 @@ export default function FormDespesa(props){
         })
         .then(r => {
             if (r.status === 201) {
-                msgStatus.current.className = "msgSuccess";
+                msgStatus.current.className = "msgSucess";
                 msgStatus.current.innerHTML = "Despesas gravadas com sucesso!";
                 setDespesas([]); // Limpa o array de despesas após salvar
                 router.push("/admin/despesa");
@@ -381,7 +384,7 @@ export default function FormDespesa(props){
             </div>
 
             <div className="row">
-            <div className="col-md-3 mb-3 position-relative">
+            <div className="col-md-3 mb-4 position-relative">
                 <label>Tipo de Despesa:</label>
                 <select
                     name="tipo" className={`form-control ${erroTipo ? 'is-invalid' : ''}`}
@@ -487,32 +490,34 @@ export default function FormDespesa(props){
             </div>
 
             {/* Grid/Tabela para exibir despesas adicionadas */}
-            <table className="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Ano</th>
-                        <th>Mês</th>
-                        <th>Descrição</th>
-                        <th>Data</th>
-                        <th>Tipo</th>
-                        <th>Valor</th>
-                        <th>Protocolo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {despesas.map((despesa, index) => (
-                        <tr key={index}>
-                            <td>{despesa.ano}</td>
-                            <td>{despesa.mes}</td>
-                            <td>{despesa.descricao}</td>
-                            <td>{despesa.data}</td>
-                            <td>{despesa.tipo}</td>
-                            <td>{despesa.valor}</td>
-                            <td>{despesa.protocolo}</td>
+            <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #ccc' }}>
+                <table className="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Ano</th>
+                            <th>Mês</th>
+                            <th>Descrição</th>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Protocolo</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {despesas.map((despesa, index) => (
+                            <tr key={index}>
+                                <td>{despesa.ano}</td>
+                                <td>{despesa.mes}</td>
+                                <td>{despesa.descricao}</td>
+                                <td>{despesa.data}</td>
+                                <td>{despesa.tipo}</td>
+                                <td>{despesa.valor}</td>
+                                <td>{despesa.protocolo}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Botões de ação para cancelar ou cadastrar despesas */}
             <div className="d-flex justify-content-between mt-3">

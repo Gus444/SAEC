@@ -61,5 +61,10 @@ router.put('/', auth.validar, upload.array("inputImage"), (req,res) =>{
     
     ctrl.alterarDocsComunicacao(req, res);
 })
+router.delete('/:id', auth.validar, (req,res) => {
+    // #swagger.tags = ['Documentos Comunicacao']
+    // #swagger.summary = 'Deletar um comunicacao especifico'
+    ctrl.deletar(req,res);
+});
 
 export default router;

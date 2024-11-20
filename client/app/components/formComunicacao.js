@@ -7,11 +7,39 @@ import UserContext from "../context/userContext.js";
 
 export default function FormComunicacao(props){
 
+    let comunicacao = 
+    props.comunicacao != null ? 
+        props.comunicacao 
+    : 
+        {  
+            comId: "", comTitulo: "", comCanal: "", comData: "", comHora: "", comDescricao: ""
+        }
+
+    let docsComunicacao = 
+    props.docsComunicacao != null ? 
+        props.docsComunicacao 
+    : 
+        {  
+            comDocsId: "", comId: "", comDocsNome: ""
+        }    
+
+    let isAlteracao = comunicacao.comId != null && comunicacao.comId !== "";
+
     let router = useRouter();
     const { user, setUser } = useContext(UserContext); // usuário que vem do contexto que está logado
     const { emp, setEmp } = useContext(EmpContext); // empresa que vem do localStorage
     const [loading, setLoading] = useState(false);
     const [arquivos, setArquivos] = useState([]);
+
+    let [arquivoAlterado, setArquivoAlterado] = useState({
+        docsEncontrados: [],
+    });
+
+    useEffect(() => {
+        if (isAlteracao && JSON.stringify(arquivoAlterado) !== JSON.stringify(docsComunicacao)) {
+            setArquivoAlterado(docsComunicacao);
+        }
+    }, [docsComunicacao, isAlteracao]);
 
     //impede de acessar caso não tenha uma empresa//
     useEffect(() => {
@@ -63,24 +91,6 @@ export default function FormComunicacao(props){
     const usuario = user.usuId;
     const empresa = emp.empId;
 
-    let comunicacao = 
-    props.comunicacao != null ? 
-        props.comunicacao 
-    : 
-        {  
-            comId: "", comTitulo: "", comCanal: "", comData: "", comHora: "", comDescricao: ""
-        }
-
-    let docsComunicacao = 
-    props.docsComunicacao != null ? 
-        props.docsComunicacao 
-    : 
-        {  
-            comDocsId: "", comId: "", comDocsNome: ""
-        }    
-
-    let isAlteracao = comunicacao.comId != null && comunicacao.comId !== "";
-
     let titulo = useRef("");
     let canal = useRef("");
     let data = useRef("");
@@ -109,6 +119,40 @@ export default function FormComunicacao(props){
         setErroData(false);
         const dataFormatada = formatarData(e.target.value);
         // Aqui você pode salvar `dataFormatada` conforme necessário
+    };
+
+    const removerArquivoAlterado = async (index) => {
+
+        console.log(index)
+        if(confirm("Tem certeza que deseja deletar este arquivo?")){
+
+            let id = index;
+    
+            try {
+                // Faz a requisição para deletar o arquivo no servidor
+                let response = await fetch(`http://localhost:5000/docsComunicacao/${id}`, {
+                    mode: 'cors',
+                    credentials: 'include',
+                    method: "DELETE",
+                });
+        
+                if (!response.ok) {
+                    throw new Error('Erro ao excluir arquivo');
+                }
+        
+                // Após a exclusão bem-sucedida, atualiza o estado local
+                setArquivoAlterado((prevState) => {
+                    const updatedDocs = prevState.docsEncontrados.filter(doc => doc.comDocsId !== id);
+                    console.log("Arquivos após a exclusão:", updatedDocs);  // Verificando os arquivos após remoção
+                    return { ...prevState, docsEncontrados: updatedDocs };
+                });
+        
+                console.log('Arquivo excluído com sucesso!');
+            } catch (error) {
+                console.error('Erro ao excluir o arquivo:', error);
+            }
+        }
+        
     };
 
     function gravarComunicacao() {
@@ -440,6 +484,25 @@ export default function FormComunicacao(props){
                                     </button>
                                 </div>
                             </div>
+                        ))}
+                    </div> 
+                )}
+
+                {arquivoAlterado.docsEncontrados && arquivoAlterado.docsEncontrados.length > 0 && (
+                    <div className="row mt-3">
+                        {arquivoAlterado.docsEncontrados.map((doc, index) => (
+                        <div key={index} className="file-item col-md-4">
+                            <div className="file-preview d-flex align-items-center justify-content-between">
+                            <p className="m-0 text-truncate">{doc.comDocsNome}</p>
+                            <button
+                                type="button"
+                                onClick={() => removerArquivoAlterado(doc.comDocsId)}
+                                className="btn btn-link text-danger"
+                            >
+                                X
+                            </button>
+                            </div>
+                        </div>
                         ))}
                     </div>
                 )}

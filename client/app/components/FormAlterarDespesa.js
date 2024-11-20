@@ -10,6 +10,17 @@ export default function FormAlterarDespesa(props){
     let msgRef = useRef(null);
     let router = useRouter();
 
+    let despesa = 
+    props.despesa != null ? 
+        props.despesa 
+    : 
+        {  
+            compAno: "", compMes: "", conData: "",  
+        }
+
+    let isAlteracao = despesa.conId != null;
+
+    let [loading, setLoading] = useState(true);
     //set de erros
     let [erroAno, setErroAno] = useState(false);
     let [erroMes, setErroMes] = useState(false);
@@ -79,6 +90,20 @@ export default function FormAlterarDespesa(props){
         carregarProtocolo();
         carregarTipoDespesa()
     }, []);
+
+    useEffect(() => {
+        // Atualiza as referências quando os dados de tipo e protocolo estiverem carregados
+        if (despesa?.tipDespId && tipoAlterar.current) {
+          tipoAlterar.current.value = despesa.tipDespId; // Atribui diretamente ao ref
+        }
+        if (despesa?.protId && protocoloAlterar.current) {
+          protocoloAlterar.current.value = despesa.protId; // Atribui diretamente ao ref
+        }
+    
+        if (listaTipoDespesa.length > 0 && listaProtocolo.length > 0) {
+          setLoading(false); // Marca o carregamento como concluído
+        }
+      }, [listaTipoDespesa, listaProtocolo, despesa]);
 
 
     function handleSelectProtocolo(protocolo) {
@@ -223,18 +248,10 @@ export default function FormAlterarDespesa(props){
 
     }
     
-    let despesa = 
-    props.despesa != null ? 
-        props.despesa 
-    : 
-        {  
-            compAno: "", compMes: "", conData: "",  
-        }
-
-    let isAlteracao = despesa.conId != null;
-
     console.log(despesa.tipDespId)
     console.log(despesa.protId)
+    console.log(listaTipoDespesa)
+    console.log(despesa)
 
     return(
         <div className="container mt-1 d-flex justify-content-center">
@@ -293,14 +310,9 @@ export default function FormAlterarDespesa(props){
                 </div>
 
                 <div className="row">
-                <div className="col-md-3 mb-3 position-relative">
+                <div className="col-md-4 mb-3 position-relative">
                 <label>Tipo de Despesa:</label>
-                <select
-                    name="tipo"
-                    ref={tipoAlterar}
-                    className={`form-control ${erroTipo ? 'is-invalid' : ''}`}
-                    defaultValue={despesa?.tipDespId || ""}
-                >
+                <select name="tipo" ref={tipoAlterar} defaultValue={despesa?.tipDespId || ""} className={`form-control ${erroTipo ? 'is-invalid' : ''}`}>
                     <option value="">Selecione</option>
                     {listaTipoDespesa.map((tipo) => (
                         <option key={tipo.tipDespId} value={tipo.tipDespId}>

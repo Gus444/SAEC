@@ -25,11 +25,12 @@ export default function AlterarDespesa({params: {id}}){
         })
         .then(r => r.json())
         .then(r => {
-            const listaComNomes = r.map(item => ({
+            const listaDespesaComRSENomes = r.map(item => ({
                 ...item,
-                nomeMes: obterNomeMes(item.mes) // Adiciona 'nomeMes' sem alterar 'mes'
+                totalDespesa: `R$ ${parseFloat(item.totalDespesa).toFixed(2).replace('.', ',')}`, // Formata o valor
+                nomeMes: obterNomeMes(item.mes) // Adiciona o nome do mês
             }));
-            setListaMeses(listaComNomes);
+            setListaMeses(listaDespesaComRSENomes);
         });
     }
 

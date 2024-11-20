@@ -226,18 +226,23 @@ export default class ControleDespesaModel{
 
     async obterDespesas(empresa, ano, mes){
         let sql = `SELECT 
-                        con_id AS id,
-                        con_descricao AS descricao,
-                        con_data AS data,
-                        con_valor AS valor,
-                        tb_protocolo_prot_id AS protocolo,
-                        tb_TipoDespesa_tipDes_id AS tipoDespesa
-                    FROM 
-                        tb_controledespesas
-                    WHERE 
-                        tb_competencia_tb_empresa_emp_id = ? 
-                        AND tb_competencia_comp_ano = ?
-                        AND tb_competencia_comp_mes = ?`
+                    cd.con_id AS id,
+                    cd.con_descricao AS descricao,
+                    cd.con_data AS data,
+                    cd.con_valor AS valor,
+                    cd.tb_protocolo_prot_id AS protocolo,
+                    td.tipDes_id AS tipoDespesaId,    -- Inclui o ID do tipo de despesa
+                    td.tipDes_descricao AS tipoDespesa -- Inclui o nome do tipo de despesa
+                FROM 
+                    tb_controledespesas cd
+                INNER JOIN 
+                    tb_tipodespesa td
+                ON 
+                    cd.tb_TipoDespesa_tipDes_id = td.tipDes_id
+                WHERE 
+                    cd.tb_competencia_tb_empresa_emp_id = ? 
+                    AND cd.tb_competencia_comp_ano = ?
+                    AND cd.tb_competencia_comp_mes = ?`
 
         let valores = [empresa,ano, mes]
 

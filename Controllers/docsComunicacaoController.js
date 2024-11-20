@@ -111,4 +111,26 @@ export default class docsComunicacaoController {
         }
     }
 
+    async deletar(req,res){
+        try {
+            let { id } = req.params;
+            let docs = new DocsComunicacaoModel();
+            let docEncontrado = await docs.obterDocExc(id)
+            if (docEncontrado) {
+                let result = await docs.deletarDocumentoEspecifico(id);
+
+                if(result){
+                    res.status(200).json({msg:"Exclusão efetuada com sucesso"});
+                }
+                else{
+                    res.status(500).json({msg:"Erro ao excluir o arquivo"});
+                }
+            } else {
+                res.status(404).json({ msg: "Registro não encontrado" });
+            }
+        } catch (error) {
+            console.error(error); // Log de erro para depuração
+            res.status(500).json({ msg: "Erro de servidor", detalhes: error.message });
+        }
+    }
 }

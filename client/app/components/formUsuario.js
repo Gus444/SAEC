@@ -85,6 +85,9 @@ export default function FormUsuario(props){
             if (user.usuNivel != nivel.current.value) {
                 ok = 2;
             }
+            if (user.usuStatus != status.current.value){
+                ok = 3
+            }
         }
         
 
@@ -131,6 +134,10 @@ export default function FormUsuario(props){
         {
             msgRef.current.className = "msgError";
             msgRef.current.innerHTML = "Você não pode alterar o nível do próprio usuário.";
+        }
+        else if(ok == 3){
+            msgRef.current.className = "msgError";
+            msgRef.current.innerHTML = "Você não pode alterar o status do seu próprio usuário.";
         }
     }
 

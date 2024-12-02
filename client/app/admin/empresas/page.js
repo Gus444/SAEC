@@ -301,7 +301,7 @@ export default function empresasAdmin() {
                         }}
                     />
                     <label htmlFor="floatingInput">Buscar</label>
-                </div>
+            </div>
                 <select
                     className="form-select"
                     style={{ width: '200px', marginRight: '10px' }}

@@ -52,12 +52,9 @@ export default function MontaTabelaAnos(props) {
                                                     <Link href={props.alteracao + `/${idExclusao}`} title="ALTERAR" className="btn btn-primary mr-2 mb-2">
                                                         <i className="fas fa-pen"></i>
                                                     </Link>
-                                                    <button onClick={() => props.exclusao(idExclusao)} title="EXCLUIR" className="btn btn-danger mr-2 mb-2">
+                                                    {/* <button onClick={() => props.exclusao(idExclusao)} title="EXCLUIR" className="btn btn-danger mr-2 mb-2">
                                                         <i className="fas fa-trash"></i>
-                                                    </button>
-                                                    <Link href={props.exibir + `/${idExclusao}`} title="EXIBIR" className="btn btn-secondary mr-2 mb-2">
-                                                        <i className="fa-solid fa-scroll"></i>
-                                                    </Link>
+                                                    </button> */}
                                                 </div>
                                             </td>
                                         );

@@ -41,7 +41,7 @@ export default class DespesaController{
                     competencia.compMes = mes; // Mês da despesa
                     competencia.empresa = new EmpresaModel(empresa);
 
-                    let competenciaExiste = await competencia.verifica(ano, empresa);
+                    let competenciaExiste = await competencia.verificaDespesa(ano, empresa, mes);
                     if (!competenciaExiste) {
                         // Caso não exista, cria a competência para o mês da despesa
                         let resultadoCompetencia = await competencia.gravar();
@@ -172,7 +172,7 @@ export default class DespesaController{
             let despesa = new ControleDespesaModel();
             let { ano, empresa, mes } = req.params;
             if(await despesa.obterAnoDelete(empresa, ano, mes) != null) {
-                let result = await despesa.deletarAno(empresa, ano);
+                let result = await despesa.deletarMes(empresa, ano, mes);
                 if(result) {
                     res.status(200).json({msg: "Exclusão realizada com sucesso!"});
                 }

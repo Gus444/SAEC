@@ -55,9 +55,6 @@ export default function ListaMeses(props) {
                                                     <button onClick={() => props.exclusao(idExclusao)} title="EXCLUIR" className="btn btn-danger mr-2 mb-2">
                                                         <i className="fas fa-trash"></i>
                                                     </button>
-                                                    <Link href={props.exibir + `/${idExclusao}`} title="EXIBIR" className="btn btn-secondary mr-2 mb-2">
-                                                        <i className="fa-solid fa-scroll"></i>
-                                                    </Link>
                                                 </div>
                                             </td>
                                         );

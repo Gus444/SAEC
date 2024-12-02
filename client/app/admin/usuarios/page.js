@@ -227,7 +227,7 @@ export default function usuariosAdmin() {
             <h1>Usuarios cadastrados</h1>
             <div>
                 <Link href="/admin/usuarios/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar usuario</Link>
-                <button className="btn btn-primary" style={{marginBottom: "15px"}} onClick={prepararRelatorio}>Salvar PDF</button>
+                <button className="btn btn-primary" style={{marginBottom: "15px", marginLeft: "5px"}} onClick={prepararRelatorio}>Salvar PDF</button>
             </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

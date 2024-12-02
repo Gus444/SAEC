@@ -149,7 +149,9 @@ export default class ControleDespesaModel{
                 WHERE 
                     tb_competencia_tb_empresa_emp_id = ?
                 GROUP BY 
-                    tb_competencia_comp_ano;`
+                    tb_competencia_comp_ano
+                ORDER BY 
+                    tb_competencia_comp_ano DESC;`
 
         let valores = [id]
 

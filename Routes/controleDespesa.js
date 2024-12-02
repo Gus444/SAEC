@@ -48,5 +48,10 @@ router.delete("/excluir/:id", auth.validar, (req,res) => {
     // #swagger.summary = 'Deletar uma despesa especifica'
     ctrl.deletarDespesaEspecifica(req,res);
 });
+router.delete("/excluirMes/:ano/:empresa/:mes", auth.validar, (req,res) => {
+    // #swagger.tags = ['Controle de despesa']
+    // #swagger.summary = 'Deletar um mes'
+    ctrl.deletarMes(req,res);
+});
 
 export default router

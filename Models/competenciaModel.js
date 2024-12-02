@@ -60,4 +60,17 @@ export default class CompetenciaModel {
         }
     }
 
+    async verificaDespesa(ano, empresa, mes){
+        let sql = 'select count(*) as count from tb_competencia where comp_ano = ? and tb_empresa_emp_id = ? and comp_mes = ?'
+        let valores = [ano, empresa, mes]
+
+        let result = await banco.ExecutaComando(sql,valores);
+
+        if (result[0].count > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

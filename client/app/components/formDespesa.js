@@ -346,7 +346,16 @@ export default function FormDespesa(props){
 
     return  (
         <div className="container form-despesa" style={{ width: '900px' }}>
-            <h3 className="text-center mb-4">Cadastrar Despesa</h3>
+
+            <div className="d-flex align-items-center justify-content-center">
+                <h3 className="text-center mb-0">Cadastrar Despesa</h3>
+                <button className="btn btn-link ms-2">
+                    <Link href="./ajudaDespesa" className="btn btn-link ms-2">
+                        <i className="fas fa-circle-info"></i>
+                    </Link>
+                </button>
+            </div>
+
             <div ref={msgRef}></div>
             <div ref={msgStatus}></div>
 

@@ -5,12 +5,14 @@
 
 /* Estilos da sidebar */
 .sidebar {
-    width: 250px; /* Define a largura da sidebar */
-    background-color: #343434; /* Cor de fundo da sidebar */
+    width: 250px; /* Largura da sidebar */
+    background-color: #343434; /* Cor de fundo */
     padding: 20px; /* Espaçamento interno */
     color: white; /* Cor do texto */
     position: fixed; /* Torna a sidebar fixa */
-    height: 100%; /* Faz a sidebar ocupar toda a altura da tela */
+    top: 0;
+    bottom: 0; /* Garante que a sidebar ocupe toda a altura da viewport */
+    overflow-y: auto; /* Adiciona rolagem vertical se o conteúdo exceder a altura */
     transition: width 0.3s ease; /* Transição suave ao minimizar/expandir */
 }
 
@@ -21,8 +23,9 @@
 }
 
 .sidebar.minimized {
-    width: 80px; /* Largura da sidebar quando minimizada */
-    padding: 10px; /* Reduz o padding quando minimizada */
+    width: 80px;
+    padding: 10px;
+    overflow-y: auto; /* Garante que ainda haja rolagem se necessário */
 }
 
 .sidebar.minimized img {

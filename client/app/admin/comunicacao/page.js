@@ -175,9 +175,6 @@ export default function comunicacaoAdmin(){
                 <Link href="/admin/comunicacao/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar comunicação</Link>
                 <button className="btn btn-primary" style={{marginBottom: "15px", marginLeft: "5px"}} onClick={prepararRelatorio}>Salvar PDF</button>
             </div>
-            <div ref={msgRef}>
-
-            </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div className="form-floating mb-3" style={{ marginRight: '10px' }}>
@@ -215,6 +212,10 @@ export default function comunicacaoAdmin(){
                     <button onClick={buscarComunicacao} className="btn btn-primary" style={{ width: '100px' }}><i className="fa-solid fa-magnifying-glass"></i></button>
             </div>        
 
+            <div ref={msgRef}>
+
+            </div>
+            
             <div>
                 <MontaTabela alteracao={"/admin/comunicacao/alteracao"}  exclusao={excluirComunicacao} exibir={"/admin/comunicacao/exibir"} lista={filteredComunicacao} cabecalhos={["id","Titulo", "Canal", "Data", "Hora", "Usuario", "Empresa"]} propriedades={['comId', 'comTitulo', 'comCanal', 'comData', 'comHora', "usuario.usuNome", "empresa.empNome"]} ></MontaTabela>
             </div>

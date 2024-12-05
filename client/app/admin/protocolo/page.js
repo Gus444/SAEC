@@ -151,7 +151,6 @@ export default function comunicacaoAdmin() {
                         <th style="border: 1px solid black; padding: 8px;">Titulo</th>
                         <th style="border: 1px solid black; padding: 8px;">Tipo</th>
                         <th style="border: 1px solid black; padding: 8px;">Data</th>
-                        <th style="border: 1px solid black; padding: 8px;">Descrição</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -162,7 +161,6 @@ export default function comunicacaoAdmin() {
                             <td style="border: 1px solid black; padding: 8px;">${protocolo.protTitulo}</td>
                             <td style="border: 1px solid black; padding: 8px;">${protocolo.protTipo}</td>
                             <td style="border: 1px solid black; padding: 8px;">${protocolo.protData}</td>
-                            <td style="border: 1px solid black; padding: 8px;">${protocolo.protDescricao}</td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -189,9 +187,6 @@ export default function comunicacaoAdmin() {
             <div>
                 <Link href="/admin/protocolo/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar protocolo</Link>
                 <button className="btn btn-primary" style={{marginBottom: "15px", marginLeft: "5px"}} onClick={prepararRelatorio}>Salvar PDF</button>
-            </div>
-            <div ref={msgRef}>
-
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -240,6 +235,10 @@ export default function comunicacaoAdmin() {
                         <option value="Entregue">Entregue</option>
                     </select>
                     <button onClick={buscarProtocolo} className="btn btn-primary" style={{ width: '100px' }}><i className="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <div ref={msgRef}>
+
             </div>
 
             <div>

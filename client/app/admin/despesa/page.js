@@ -162,7 +162,14 @@ export default function despesaAdmin(){
 
     return (
         <div>
-            <h1>Lista de Anos Despesa</h1>
+            <div style={{display: 'flex'}}>
+                <h1>Lista de Anos Despesa</h1>
+                <Link href="/admin/despesa/ajudaDespesa" className="btn btn-link ms-2">
+                        <i className="fas fa-circle-info fa-2x"></i>
+                </Link>
+            </div>
+            
+            
             <div>
                 <Link href="/admin/despesa/cadastro" style={{marginBottom: "15px"}} className="btn btn-primary">Cadastrar Despesa</Link>
                 <button className="btn btn-primary" style={{marginBottom: "15px", marginLeft: "5px"}} onClick={prepararRelatorio}>Salvar PDF</button>

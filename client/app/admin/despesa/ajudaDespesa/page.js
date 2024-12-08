@@ -4,7 +4,7 @@ export default function ajudaDespesa(){
 
     
     return (
-        <div className="container my-5">
+        <div className="container form-despesa">
             <h1 className="text-center mb-4">Ajuda - Cadastrar Despesa</h1>
             <div>
                 <section className="mb-4">
@@ -55,17 +55,30 @@ export default function ajudaDespesa(){
                 <section className="mb-4">
                     <h2 className="mb-2">Exemplo</h2>
                     <p>Abaixo está um exemplo de preenchimento:</p>
-                    <ul>
-
-                        <li><strong>Ano:</strong> 2024</li>
-                        <li><strong>Mês:</strong> Novembro</li>
-                        <li><strong>Data:</strong> 30/11/2024</li>
-                        <li><strong>Tipo de Despesa:</strong> Transporte</li>
-                        <li><strong>Protocolo:</strong> 52</li>
-                        <li><strong>Descrição:</strong> Corrida de táxi</li>
-                        <li><strong>Valor:</strong> R$ 45,00</li>
-                        
-                    </ul>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                            <th>Ano</th>
+                            <th>Mês</th>
+                            <th>Data</th>
+                            <th>Tipo de Despesa</th>
+                            <th>Protocolo</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td>2024</td>
+                            <td>Novembro</td>
+                            <td>30/11/2024</td>
+                            <td>Transporte</td>
+                            <td>52</td>
+                            <td>Corrida de táxi</td>
+                            <td>R$ 45,00</td>
+                            </tr>
+                        </tbody>
+                        </table>
                 </section>
 
                 <section className="mb-4">
@@ -78,6 +91,131 @@ export default function ajudaDespesa(){
                             <strong>Solução:</strong> Use o botão <i className="fas fa-plus"></i> para adicionar um novo tipo.
                         </li>
                     </ul>
+                </section>
+
+                <br></br>
+                <section className="mb-4">
+                    <h1 className="mb-2">Para cadastrar</h1><br></br>
+                    
+                    <div className="mb-4">
+                        <h3>Passo 1: Clique no botão "Cadastrar Despesa"</h3>
+                        <img 
+                            alt="Botão de cadastrar despesa" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/ajudaDespesaCadastro.png" 
+                        />
+                        <p className="text-muted">Clique no botão destacado na imagem para abrir o formulário de cadastro de despesas.</p>
+                    </div>
+
+                    <div>
+                        <h3>Passo 2: Preencha a tela de cadastro</h3>
+                        <img 
+                            alt="Tela de cadastro de despesas" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/telaCadastro.png" 
+                        />
+                        <p className="text-muted">Complete os campos obrigatórios como Tipo de Despesa, Ano, Mês, Data, Valor, e Descrição antes de adicionar ao grid no botão <button className="btn btn-success mb-4">Adicionar</button></p>
+                    </div>
+
+                    <div>
+                        <h3>Passo 3: Grid preenchdio e Salvar</h3>
+                        <img 
+                            alt="Tela de cadastro de despesas" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/gridPreenchido.png" 
+                        />
+                        <p className="text-muted">Após preencher todos os campos e adicionar ao grid o usuário pode cadastrar essa depesa clicando no botão <button className="btn btn-primary">Cadastrar</button>, mas caso queira adicionar mais registros basta repetir o passo anterior</p>
+                    </div>
+
+                    <div>
+                        <h3>Passo 4: Lista de despesas cadastradas</h3>
+                        <img 
+                            alt="Tela de cadastro de despesas" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/listaDespesa.png" 
+                        /><hr></hr>
+                        <img 
+                            alt="Tela de cadastro de despesas" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/listaDespesaMes.png" 
+                        />
+                        <hr></hr>
+                        <img 
+                            alt="Tela de cadastro de despesas" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/listaDespesaEspecifica.png" 
+                        />
+                        <p className="text-muted">Ao clicar em cadastrar, a depesa cadastrada será listada por ano com o valor total do ano e tambem para mês, para vizualizar cada nivel apenas clicar em <button className="btn btn-primary mr-2 mb-2"><i className="fas fa-pen"></i></button> </p>
+                    </div>
+                </section>
+
+                <br></br>
+                <section className="mb-4">
+                    <h1 className="mb-2">Para alterar</h1><br></br>
+                    
+                    <div className="mb-4">
+                        <h3>Passo 1: clique no icone <button className="btn btn-primary mr-2 mb-2"><i className="fas fa-pen"></i></button> </h3>
+                        <img 
+                            alt="Botão de cadastrar despesa" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/listaAlterarAnos.png" 
+                        />
+                        <hr></hr>
+                        <img 
+                            alt="Tela de cadastro de despesas" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/listaAlterarMeses.png" 
+                        />
+                        <hr></hr>
+                        <img 
+                            alt="Tela de cadastro de despesas" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/listaDespesaEspecificaAlterar.png" 
+                        />
+                        <hr></hr>
+                        <img 
+                            alt="Tela de cadastro de despesas" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/alterarDespesaEspecifica.png" 
+                        />
+                       <p className="text-muted">Prossiga clicando nos icones destacados na imagem até encontrar a despesa que deseja alterar, <button className="btn btn-primary mr-2 mb-2"><i className="fas fa-pen"></i></button></p>
+                    </div>
+
+                </section>
+
+                <section className="mb-4">
+                    <h1 className="mb-2">Para excluir</h1><br></br>
+                    
+                    <div className="mb-4">
+                        <h3>Passo 1: clique no icone <button className="btn btn-primary mr-2 mb-2"><i className="fas fa-pen"></i></button> </h3>
+                        <img 
+                            alt="Botão de cadastrar despesa" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/listaAlterarAnos.png" 
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <h3>Passo 2: Excluir Mês </h3>
+                        <img 
+                            alt="Botão de cadastrar despesa" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/listaAlterarMeses.png" 
+                        />
+                        <p>Caso deseje excluir um mês cadastrado anteriormente, apenas clicar em <button className="btn btn-danger mr-2 mb-2"><i className="fas fa-trash"></i></button>, isso fara com que
+                        todos os lançamentos deste mês sejam apagados</p>
+                    </div>
+
+                    <div className="mb-4">
+                        <h3>Passo 3: Excluir despesa especifica</h3>
+                        <img 
+                            alt="Botão de cadastrar despesa" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/apagarDespesaEspecifica.png" 
+                        />
+                        <p>Caso deseje excluir um laçamento efetuado em algum mês especifico, apenas clicar no icone destacado na imagem, <button className="btn btn-danger mr-2 mb-2"><i className="fas fa-trash"></i></button></p>
+                    </div>
+                
                 </section>
             </div>
         </div>

@@ -349,11 +349,9 @@ export default function FormDespesa(props){
 
             <div className="d-flex align-items-center justify-content-center">
                 <h3 className="text-center mb-0">Cadastrar Despesa</h3>
-                <button className="btn btn-link ms-2">
                     <Link href="./ajudaDespesa" className="btn btn-link ms-2">
-                        <i className="fas fa-circle-info"></i>
+                        <i className="fas fa-circle-info fa-2x"></i>
                     </Link>
-                </button>
             </div>
 
             <div ref={msgRef}></div>

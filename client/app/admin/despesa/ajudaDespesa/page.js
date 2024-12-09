@@ -217,6 +217,41 @@ export default function ajudaDespesa(){
                     </div>
                 
                 </section>
+
+                <section className="mb-4">
+                    <h1 className="mb-2">Possiveis Erros</h1><br></br>
+                    
+                    <div className="mb-4">
+                        <h3>Erro ao adicionar ao grid</h3>
+                        <img 
+                            alt="Botão de cadastrar despesa" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/erroAdicionar.png" 
+                        />
+                        <p>Este erro ocorre quando o usuário tenta adicionar alguma despesa no grid com os campos obrigatórios vazios, a solução para este problema é preencher corretamente todos os campos</p>
+                    </div>
+
+                    <div className="mb-4">
+                        <h3>Erro ao cadastrar</h3>
+                        <img 
+                            alt="Botão de cadastrar despesa" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/erroCadastrar.png" 
+                        />
+                        <p>Este erro ocorre após o usuário tentar cadastrar a despesa sem ter adicionado nenhuma despesa ao grid, o minimo de despesas para poder cadastrar é no minimo uma</p>
+                    </div>
+
+                    <div className="mb-4">
+                        <h3>Ano invalido</h3>
+                        <img 
+                            alt="Botão de cadastrar despesa" 
+                            style={{ width: '900px', height: 'auto', border: '1px solid #ccc', borderRadius: '8px' }} 
+                            src="/img/ajudaDespesaImg/anoInvalido.png" 
+                        />
+                        <p>Este erro ocorre quando o usuário informa algum ano superior ao atual ou inferior a 2000, anos neste formato são invalidos</p>
+                    </div>
+                
+                </section>
             </div>
         </div>
     );
